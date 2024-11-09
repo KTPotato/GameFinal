@@ -4,79 +4,72 @@ using UnityEngine;
 
 public class NaturSpawn : MonoBehaviour
 {
-    [SerializeField] private GameObject cylinderObject; // Cylinder 오브젝트를 지정
-    [SerializeField] private List<GameObject> prefabs; // 배치할 프리팹 리스트
-    [SerializeField] private int spawnCount = 50; // 생성할 오브젝트 수
-    [SerializeField] private float minimumDistance = 2f; // 오브젝트 사이 최소 거리
+    public GameObject[] prefabs;                // 랜덤으로 생성할 프리팹 배열
+    public int spawnCount = 10;                 // 생성할 개수
+    public Transform ground;                    // Cylinder 바닥 오브젝트
+    public float minDistanceBetweenPrefabs = 2.0f; // 프리팹 간의 최소 거리
 
-    private float cylinderRadius;
-    private float cylinderHeight;
-    private List<Vector3> spawnedPositions = new List<Vector3>(); // 이미 생성된 위치들
+    private List<Vector3> spawnPositions = new List<Vector3>(); // 이미 사용된 위치 저장
+    private Collider groundCollider;
 
-    private void Start()
+    void Start()
     {
-        // Cylinder의 반지름과 높이 가져오기
-        MeshRenderer renderer = cylinderObject.GetComponent<MeshRenderer>();
-        cylinderRadius = renderer.bounds.extents.x; // X축 반지름
-        cylinderHeight = renderer.bounds.size.y; // Y축 높이
+        groundCollider = ground.GetComponent<Collider>();
+        if (groundCollider == null)
+        {
+            Debug.LogError("Ground object needs a Collider component.");
+            return;
+        }
 
-        SpawnPrefabsOnCylinder();
+        SpawnPrefabsOnGround();
     }
 
-    private void SpawnPrefabsOnCylinder()
+    void SpawnPrefabsOnGround()
     {
-        int attempts = 0;
-
-        for (int i = 0; i < spawnCount; i++)
+        if (prefabs.Length == 0)
         {
-            Vector3 randomPosition = Vector3.zero; // 초기화
-            bool positionFound = false;
+            Debug.LogWarning("Prefabs array is not set!");
+            return;
+        }
 
-            // 최대 시도 횟수 (무한 루프 방지)
-            while (attempts < 100)
+        int spawnedCount = 0;
+
+        while (spawnedCount < spawnCount)
+        {
+            Vector3 spawnPosition = GetRandomPositionWithinCollider();
+
+            // 겹침 방지를 위한 거리 검사
+            bool canSpawn = true;
+            foreach (Vector3 pos in spawnPositions)
             {
-                randomPosition = GetRandomPositionOnCylinder();
-
-                // 기존 위치들과의 거리 검사
-                if (IsPositionValid(randomPosition))
+                if (Vector3.Distance(pos, spawnPosition) < minDistanceBetweenPrefabs)
                 {
-                    spawnedPositions.Add(randomPosition); // 유효한 위치를 목록에 추가
-                    positionFound = true;
+                    canSpawn = false;
                     break;
                 }
-                attempts++;
             }
 
-            // 유효한 위치가 발견되었을 때만 프리팹 생성
-            if (positionFound)
+            // 최소 거리 조건을 만족하면 프리팹을 생성
+            if (canSpawn)
             {
-                GameObject prefab = prefabs[Random.Range(0, prefabs.Count)];
-                Instantiate(prefab, randomPosition, Quaternion.identity);
+                GameObject randomPrefab = prefabs[Random.Range(0, prefabs.Length)];
+                Instantiate(randomPrefab, spawnPosition, Quaternion.identity);
+                spawnPositions.Add(spawnPosition); // 위치 저장
+                spawnedCount++;
             }
         }
     }
 
-    private Vector3 GetRandomPositionOnCylinder()
+    Vector3 GetRandomPositionWithinCollider()
     {
-        float angle = Random.Range(0, 2 * Mathf.PI);
-        float distance = Random.Range(0, cylinderRadius);
+        // Collider의 바운드 계산
+        Bounds bounds = groundCollider.bounds;
 
-        float x = cylinderObject.transform.position.x + distance * Mathf.Cos(angle);
-        float z = cylinderObject.transform.position.z + distance * Mathf.Sin(angle);
-        float y = cylinderObject.transform.position.y + cylinderHeight / 2;
+        // Collider의 범위 내에서 랜덤 위치 선택
+        float randomX = Random.Range(bounds.min.x, bounds.max.x);
+        float randomZ = Random.Range(bounds.min.z, bounds.max.z);
+        float yPosition = bounds.center.y; // 높이는 Collider의 중심을 기준으로 설정
 
-        return new Vector3(x, y, z);
-    }
-
-    private bool IsPositionValid(Vector3 position)
-    {
-        foreach (Vector3 existingPosition in spawnedPositions)
-        {
-            if (Vector3.Distance(existingPosition, position) < minimumDistance)
-            {
-                return false; // 최소 거리 조건을 만족하지 않으면 false 반환
-            }
-        }
-        return true; // 모든 위치와의 거리를 만족하면 true 반환
+        return new Vector3(randomX, yPosition, randomZ);
     }
 }
