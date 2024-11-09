@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class Nested_Scrool_Manager : MonoBehaviour
 {
@@ -32,7 +33,7 @@ public class Nested_Scrool_Manager : MonoBehaviour
         nextButton1.onClick.AddListener(MoveToNext);
         previousButton1.onClick.AddListener(MoveToPrevious);
 
-        GameStart.onClick.AddListener(UpdateCharacterPanels);
+        GameStart.onClick.AddListener(OnGameStart);
     }
 
     void Update()
@@ -60,16 +61,14 @@ public class Nested_Scrool_Manager : MonoBehaviour
             targetPos = pos[targetIndex];
         }
     }
-
-    // 현재 인덱스에 해당하는 캐릭터 패널만 활성화
-    void UpdateCharacterPanels()
+    void OnGameStart()
     {
-        for (int i = 0; i < characterPanels.Length; i++)
-        {
-            if (i == targetIndex)
-                characterPanels[i].SetActive(true);
-            else
-                characterPanels[i].SetActive(false);
-        }
+        // 현재 활성화된 캐릭터 패널 인덱스 저장
+        PlayerPrefs.SetInt("ActiveCharacterIndex", targetIndex);
+        PlayerPrefs.Save();
+
+        // 다음 씬으로 이동
+        SceneManager.LoadScene("jjh2"); // "NextSceneName"을 이동할 씬 이름으로 변경
     }
+
 }
