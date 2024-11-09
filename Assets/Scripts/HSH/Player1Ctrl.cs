@@ -37,6 +37,8 @@ public class Player1Ctrl : MonoBehaviour
         v = v * Mathf.Sqrt(1 - (h * h / 2));
         h = h * Mathf.Sqrt(1 - (v * v / 2));
         movedir = Vector3.forward * v + Vector3.right * h;
+        
+        
 
         //ƒı≈Õ∫‰
         PlayerMove();
