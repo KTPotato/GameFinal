@@ -318,6 +318,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1226674914}
+  - component: {fileID: 1226674915}
   m_Layer: 0
   m_Name: Ground
   m_TagString: Untagged
@@ -341,6 +342,27 @@ Transform:
   - {fileID: 2040888398}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1226674915
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1226674913}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5d5615107ba64994384fa7507aa74367, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cylinderObject: {fileID: 2040888397}
+  prefabs:
+  - {fileID: 1296487970245184, guid: f4f82206765cef54ca8f19ce34136e8a, type: 3}
+  - {fileID: 1478007673441398, guid: 7747cd3716304194fb26aa4e29900eb1, type: 3}
+  - {fileID: 1560257132984952, guid: 5cbae0602ce9acf41a98fda3a353569a, type: 3}
+  - {fileID: 1560257132984952, guid: 5cbae0602ce9acf41a98fda3a353569a, type: 3}
+  - {fileID: 1560257132984952, guid: 5cbae0602ce9acf41a98fda3a353569a, type: 3}
+  spawnCount: 50
+  minimumDistance: 2
 --- !u!1 &2040888397
 GameObject:
   m_ObjectHideFlags: 0
