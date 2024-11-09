@@ -33,7 +33,7 @@ public class PlayerCameraCtrl : MonoBehaviour
         transform.LookAt(player.position + Vector3.up * 1.0f);
         */
 
-        //≈æ∫‰
+        //ƒı≈Õ∫‰
         transform.position = new Vector3(player.position.x, player.position.y + topHeight, player.position.z + topDis);
         transform.LookAt(player.position + Vector3.up * 1.0f);
 

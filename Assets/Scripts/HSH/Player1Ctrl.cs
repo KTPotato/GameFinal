@@ -17,6 +17,7 @@ public class Player1Ctrl : MonoBehaviour
     private Plane plane; //rayÀÇ Ãæµ¹À» È®ÀÎÇÒ ¹Ù´Ú
 
     public GameObject bullet;
+    public Transform firePos;
 
     // Start is called before the first frame update
     void Start()
@@ -37,11 +38,14 @@ public class Player1Ctrl : MonoBehaviour
         //3ÀÎÄª
         //FpsMove();
 
-        //Å¾ºä
+        //ÄõÅÍºä
         TopMove();
 
         //ÃÑ½î±â
-        if()
+        if (Input.GetMouseButton(0))
+        {
+            Instantiate(bullet, firePos.position, Quaternion.identity);
+        }
     }
 
     void FpsMove()//3ÀÎÄª
