@@ -17,6 +17,10 @@ public class Player1Ctrl : MonoBehaviour
 
     public GameObject bullet;
     public Transform firePos;
+    public int iters = 299;
+    public int firespeed = 300;
+
+    public float PlayerHealth;
 
     // Start is called before the first frame update
     void Start()
@@ -38,10 +42,7 @@ public class Player1Ctrl : MonoBehaviour
         PlayerMove();
 
         //ÃÑ½î±â
-        if (Input.GetMouseButton(0))
-        {
-            Instantiate(bullet, firePos.position, transform.rotation);
-        }
+        FireBullet();
     }
     void PlayerMove()//Å¾ºä
     {
@@ -55,5 +56,22 @@ public class Player1Ctrl : MonoBehaviour
             Vector3 direction = mouseRay.GetPoint(distance) - transform.position;
             transform.rotation = Quaternion.LookRotation(new Vector3(direction.x, 0, direction.z));
         }
+    }
+
+    void FireBullet()
+    {
+        if(iters % firespeed == 0)
+        {
+            if (Input.GetMouseButton(0))
+            {
+                Instantiate(bullet, firePos.position, transform.rotation);
+                iters = 0;
+            }
+        }
+        if(iters == firespeed)
+        {
+            return;
+        }
+        iters++;
     }
 }
