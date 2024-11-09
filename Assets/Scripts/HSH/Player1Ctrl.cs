@@ -16,6 +16,8 @@ public class Player1Ctrl : MonoBehaviour
     private Ray mouseRay; //¸¶¿ì½º ray
     private Plane plane; //rayÀÇ Ãæµ¹À» È®ÀÎÇÒ ¹Ù´Ú
 
+    public GameObject bullet;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -32,14 +34,14 @@ public class Player1Ctrl : MonoBehaviour
         h = h * Mathf.Sqrt(1 - (v * v / 2));
         movedir = Vector3.forward * v + Vector3.right * h;
 
-
         //3ÀÎÄª
         //FpsMove();
-        
-
 
         //Å¾ºä
         TopMove();
+
+        //ÃÑ½î±â
+        if()
     }
 
     void FpsMove()//3ÀÎÄª
