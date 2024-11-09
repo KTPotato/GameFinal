@@ -44,7 +44,7 @@ public class Player1Ctrl : MonoBehaviour
         //ÃÑ½î±â
         if (Input.GetMouseButton(0))
         {
-            Instantiate(bullet, firePos.position, Quaternion.identity);
+            Instantiate(bullet, firePos.position, transform.rotation);
         }
     }
 

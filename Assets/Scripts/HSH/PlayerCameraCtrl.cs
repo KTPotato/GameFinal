@@ -6,12 +6,11 @@ using static UnityEngine.GraphicsBuffer;
 
 public class PlayerCameraCtrl : MonoBehaviour
 {
-    private float distance = 8;
-    private float height = 3;
+    private float distance = -15;
+    private float height = 10;
     private float dampingTrace = 20;
 
-    private float topDis = -3;
-    private float topHeight = 15;
+
 
     public Transform player;
 
@@ -24,17 +23,8 @@ public class PlayerCameraCtrl : MonoBehaviour
     // Update is called once per frame
     void LateUpdate()
     {
-        /*
-        //3ÀÎÄª
-        transform.position = Vector3.Lerp(transform.position,
-        player.position - player.forward * distance + Vector3.up * height,
-                                          Time.deltaTime * dampingTrace);
-
-        transform.LookAt(player.position + Vector3.up * 1.0f);
-        */
-
         //ÄõÅÍºä
-        transform.position = new Vector3(player.position.x, player.position.y + topHeight, player.position.z + topDis);
+        transform.position = new Vector3(player.position.x, player.position.y + height, player.position.z + distance);
         transform.LookAt(player.position + Vector3.up * 1.0f);
 
     }
