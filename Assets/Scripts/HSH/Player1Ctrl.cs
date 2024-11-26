@@ -41,10 +41,16 @@ public class Player1Ctrl : MonoBehaviour
     }
     void PlayerMove()
     {
+        if(Hp <= 0) return;
+
         v = Input.GetAxisRaw("Vertical");
         h = Input.GetAxisRaw("Horizontal");
         //v = v * Mathf.Sqrt(1 - (h * h / 2));
         //h = h * Mathf.Sqrt(1 - (v * v / 2));
+
+        
+        
+
         movedir = Vector3.forward * v + Vector3.right * h;
 
         //플레이어 이동
@@ -65,9 +71,10 @@ public class Player1Ctrl : MonoBehaviour
         {
             if (Input.GetMouseButton(0))
             {
-                GameObject bullet = GetComponent<GameObject>();
-                bullet.GetComponent<BulletCtrl>().Pdmg = dmg;
-                Instantiate(bullet, firePos.position, transform.rotation);
+                if (Hp <= 0) return;
+                GameObject newBullet = Instantiate(bullet, firePos.position, transform.rotation);
+                newBullet.GetComponent<BulletCtrl>().Pdmg = dmg;
+                ani.Play("Attack01",-1,0);
                 iters = 0;
             }
         }

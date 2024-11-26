@@ -5,7 +5,7 @@ using UnityEngine;
 public class BulletCtrl : MonoBehaviour
 {
     private Rigidbody rb;
-    public float Pdmg = 1;
+    public float Pdmg;
     public float bulletSpeed = 100;
     // Start is called before the first frame update
     void Start()
