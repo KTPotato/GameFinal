@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Player1Ctrl : MonoBehaviour
 {
@@ -26,10 +27,13 @@ public class Player1Ctrl : MonoBehaviour
     public float Hp = 100;
     public float dmg = 1;
 
+    public Slider HpBarSlider;
+
     // Start is called before the first frame update
     void Start()
     {
         ani = GetComponent<Animator>();
+        CheckHp();
     }
 
     // Update is called once per frame
@@ -38,6 +42,7 @@ public class Player1Ctrl : MonoBehaviour
         PlayerMove();
         FireBullet();
         Die();
+        CheckHp();
     }
     void PlayerMove()
     {
@@ -48,8 +53,17 @@ public class Player1Ctrl : MonoBehaviour
         //v = v * Mathf.Sqrt(1 - (h * h / 2));
         //h = h * Mathf.Sqrt(1 - (v * v / 2));
 
+        if (v != 0 || h != 0)
+        {
+            ani.SetBool("move", true);
+        }else if(v == 0 && h == 0)
+        {
+            ani.SetBool("move", false);
+        }
         
-        
+
+
+
 
         movedir = Vector3.forward * v + Vector3.right * h;
 
@@ -72,9 +86,11 @@ public class Player1Ctrl : MonoBehaviour
             if (Input.GetMouseButton(0))
             {
                 if (Hp <= 0) return;
-                GameObject newBullet = Instantiate(bullet, firePos.position, transform.rotation);
-                newBullet.GetComponent<BulletCtrl>().Pdmg = dmg;
-                ani.Play("Attack01",-1,0);
+
+                ani.Play("Attack01", -1, 0);
+                Invoke("CreateBullet", 0.1f);
+                
+                
                 iters = 0;
             }
         }
@@ -83,6 +99,11 @@ public class Player1Ctrl : MonoBehaviour
             return;
         }
         iters++;
+    }
+    void CreateBullet()
+    {
+        GameObject newBullet = Instantiate(bullet, firePos.position, transform.rotation);
+        newBullet.GetComponent<BulletCtrl>().Pdmg = dmg;
     }
 
     void Die()
@@ -102,11 +123,17 @@ public class Player1Ctrl : MonoBehaviour
         //GetHit
         if (other.tag == "EnemyBullet")
         {
+            if(Hp <= 0) return;
             Hp -= other.GetComponent<EBulletCtrl>().Edmg;
             Destroy(other.gameObject);
             ani.Play("GetHit");
 
+
         }
     }
-
+    public void CheckHp()
+    {
+        if (HpBarSlider != null)
+            HpBarSlider.value = Hp / maxHp;
+    }
 }

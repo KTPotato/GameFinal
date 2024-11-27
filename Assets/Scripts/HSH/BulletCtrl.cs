@@ -6,7 +6,7 @@ public class BulletCtrl : MonoBehaviour
 {
     private Rigidbody rb;
     public float Pdmg;
-    public float bulletSpeed = 100;
+    public float bulletSpeed = 500;
     // Start is called before the first frame update
     void Start()
     {
@@ -14,7 +14,7 @@ public class BulletCtrl : MonoBehaviour
 
         rb.AddForce(transform.forward * bulletSpeed);
         
-        Destroy(gameObject, 3);
+        //Destroy(gameObject, 3);
     }
 
     // Update is called once per frame
