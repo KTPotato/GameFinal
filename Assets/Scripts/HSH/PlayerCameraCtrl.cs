@@ -23,10 +23,19 @@ public class PlayerCameraCtrl : MonoBehaviour
     // Update is called once per frame
     void LateUpdate()
     {
-        //ƒı≈Õ∫‰
-        transform.position = new Vector3(player.position.x, player.position.y + height, player.position.z + distance);
-        transform.LookAt(player.position + Vector3.up * 1.0f);
+        if (player != null) 
+        {
+            //ƒı≈Õ∫‰
+            transform.position = new Vector3(player.position.x, player.position.y + height, player.position.z + distance);
+            transform.LookAt(player.position + Vector3.up * 1.0f);
+        }
+        else
+        {
+            transform.position = transform.position;
+        }
+        
 
+        
     }
 
 }

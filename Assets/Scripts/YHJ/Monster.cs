@@ -13,9 +13,12 @@ public class MonsterTurtleShell : MonoBehaviour
     private int iters = 0;
     private int _updateInterval = 10; // 10 프레임마다 업데이트
 
+    private Animator _animator;
+
     void Start()
     {
         _monster = GetComponent<NavMeshAgent>();
+        _animator = GetComponent<Animator>();
         _target = GameObject.FindWithTag("Player");
         _lastKnownPosition = transform.position;
         _lockOn = false;
@@ -61,6 +64,21 @@ public class MonsterTurtleShell : MonoBehaviour
             _monster.destination = transform.position;
         }
 
+        // 애니메이션 상태 업데이트
+        UpdateAnimations();
+
         iters++;
+    }
+
+    void UpdateAnimations()
+    {
+        // 이동 상태에 따른 애니메이션
+        bool isWalking = _monster.velocity.magnitude > 0.1f;
+        _animator.SetBool("isWalking", isWalking);
+
+        // 공격 상태를 확인
+        float distanceToTarget = Vector3.Distance(transform.position, _target.transform.position);
+        bool isAttacking = _lockOn && distanceToTarget < 2.0f; // 공격 범위 예: 2.0f
+        _animator.SetBool("isAttacking", isAttacking);
     }
 }

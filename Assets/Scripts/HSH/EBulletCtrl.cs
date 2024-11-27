@@ -2,10 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BulletCtrl : MonoBehaviour
+public class EBulletCtrl : MonoBehaviour
 {
     private Rigidbody rb;
-    public float Pdmg;
+    public float Edmg = 1;
     public float bulletSpeed = 100;
     // Start is called before the first frame update
     void Start()
@@ -13,13 +13,13 @@ public class BulletCtrl : MonoBehaviour
         rb = GetComponent<Rigidbody>();
 
         rb.AddForce(transform.forward * bulletSpeed);
-        
-        Destroy(gameObject, 3);
+
+        //Destroy(gameObject, 3);
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 }

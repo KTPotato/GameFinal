@@ -9,7 +9,7 @@ public class Player1Ctrl : MonoBehaviour
     private float v = 0;
     private float h = 0;
     private Vector3 movedir = Vector3.zero;
-    private Animation _ani;
+    private Animator ani;
 
 
     private Ray mouseRay; //∏∂øÏΩ∫ ray
@@ -17,37 +17,42 @@ public class Player1Ctrl : MonoBehaviour
 
     public GameObject bullet;
     public Transform firePos;
-    public int iters = 299;
+    public double iters = 299;
     public int firespeed = 300;
 
     public float PlayerHealth;
 
+    public float maxHp = 100;
+    public float Hp = 100;
+    public float dmg = 1;
+
     // Start is called before the first frame update
     void Start()
     {
-        _ani = GetComponent<Animation>();
+        ani = GetComponent<Animator>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        //¿Ãµø
-        v = Input.GetAxis("Vertical");
-        h = Input.GetAxis("Horizontal");
-        v = v * Mathf.Sqrt(1 - (h * h / 2));
-        h = h * Mathf.Sqrt(1 - (v * v / 2));
-        movedir = Vector3.forward * v + Vector3.right * h;
-        
-        
-
-        //ƒı≈Õ∫‰
         PlayerMove();
-
-        //√—ΩÓ±‚
         FireBullet();
+        Die();
     }
-    void PlayerMove()//≈æ∫‰
+    void PlayerMove()
     {
+        if(Hp <= 0) return;
+
+        v = Input.GetAxisRaw("Vertical");
+        h = Input.GetAxisRaw("Horizontal");
+        //v = v * Mathf.Sqrt(1 - (h * h / 2));
+        //h = h * Mathf.Sqrt(1 - (v * v / 2));
+
+        
+        
+
+        movedir = Vector3.forward * v + Vector3.right * h;
+
         //«√∑π¿ÃæÓ ¿Ãµø
         transform.position += movedir * speed * Time.deltaTime;
         //«√∑π¿ÃæÓ »∏¿¸
@@ -66,7 +71,10 @@ public class Player1Ctrl : MonoBehaviour
         {
             if (Input.GetMouseButton(0))
             {
-                Instantiate(bullet, firePos.position, transform.rotation);
+                if (Hp <= 0) return;
+                GameObject newBullet = Instantiate(bullet, firePos.position, transform.rotation);
+                newBullet.GetComponent<BulletCtrl>().Pdmg = dmg;
+                ani.Play("Attack01",-1,0);
                 iters = 0;
             }
         }
@@ -76,4 +84,29 @@ public class Player1Ctrl : MonoBehaviour
         }
         iters++;
     }
+
+    void Die()
+    {
+        if(transform.position.y < -10)
+        {
+            Hp = 0;
+        }
+        if (Hp <= 0)
+        {
+            Destroy(gameObject, 3);
+            ani.Play("Die");
+        }
+    }
+    private void OnTriggerEnter(Collider other)
+    {
+        //GetHit
+        if (other.tag == "EnemyBullet")
+        {
+            Hp -= other.GetComponent<EBulletCtrl>().Edmg;
+            Destroy(other.gameObject);
+            ani.Play("GetHit");
+
+        }
+    }
+
 }
