@@ -3,12 +3,16 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class MonsterTurtleShell : MonoBehaviour
+public class Monster : MonoBehaviour
 {
     private NavMeshAgent _monster;
     private GameObject _target;
     private Vector3 _lastKnownPosition;
     private bool _lockOn;
+
+    public float health = 50f;
+    public float attackRange = 1.5f; // 공격 범위
+    public float stoppingDistance = 0.5f; // 몬스터가 이동을 멈추는 거리
 
     private int iters = 0;
     private int _updateInterval = 10; // 10 프레임마다 업데이트
@@ -29,56 +33,67 @@ public class MonsterTurtleShell : MonoBehaviour
         // 일정 주기로 시야 검사
         if (iters % _updateInterval == 0)
         {
-            Ray ray = new Ray(transform.position, _target.transform.position - transform.position);
-            RaycastHit hit;
-
-            // 플레이어가 시야에 있는지 확인
-            if (Physics.Raycast(ray, out hit))
-            {
-                if (hit.transform.CompareTag("Player"))
-                {
-                    // 플레이어가 시야에 들어오면 추적 시작
-                    _lockOn = true;
-                    _lastKnownPosition = _target.transform.position;
-                    _monster.destination = _lastKnownPosition;
-                }
-                else
-                {
-                    // 시야에서 벗어나면 마지막 위치로 이동
-                    _lockOn = false;
-                    _monster.destination = _lastKnownPosition;
-                }
-            }
+            CheckVisibility();
         }
 
-        // 플레이어가 시야에 있을 때는 계속해서 추적
+        // 플레이어가 시야에 있을 때는 추적
         if (_lockOn)
         {
             _lastKnownPosition = _target.transform.position;
-            _monster.destination = _lastKnownPosition;
-        }
+            float distanceToPlayer = Vector3.Distance(transform.position, _lastKnownPosition);
 
-        // 마지막 위치에 도달 시 멈춤
-        if (!_lockOn && Vector3.Distance(transform.position, _lastKnownPosition) < 0.5f)
+            if (distanceToPlayer > attackRange) // 공격 범위 바깥이면 이동
+            {
+                _monster.isStopped = false;
+                _monster.destination = _lastKnownPosition;
+                _animator.SetBool("isWalking", true);
+                _animator.SetBool("isAttacking", false);
+            }
+            else // 공격 범위 안이면 멈추고 공격
+            {
+                _monster.isStopped = true;
+                _animator.SetBool("isWalking", false);
+                _animator.SetBool("isAttacking", true);
+            }
+        }
+        else
         {
-            _monster.destination = transform.position;
-        }
+            // 시야를 잃었고 마지막 위치에 도달했을 경우 멈춤
+            if (Vector3.Distance(transform.position, _lastKnownPosition) < stoppingDistance)
+            {
+                _monster.isStopped = true;
+                _animator.SetBool("isWalking", false);
+            }
+            else
+            {
+                _monster.isStopped = false;
+                _monster.destination = _lastKnownPosition;
+                _animator.SetBool("isWalking", true);
+            }
 
-        // 애니메이션 상태 업데이트
-        UpdateAnimations();
+            _animator.SetBool("isAttacking", false);
+        }
 
         iters++;
     }
 
-    void UpdateAnimations()
+    void CheckVisibility()
     {
-        // 이동 상태에 따른 애니메이션
-        bool isWalking = _monster.velocity.magnitude > 0.1f;
-        _animator.SetBool("isWalking", isWalking);
+        Ray ray = new Ray(transform.position, _target.transform.position - transform.position);
+        RaycastHit hit;
 
-        // 공격 상태를 확인
-        float distanceToTarget = Vector3.Distance(transform.position, _target.transform.position);
-        bool isAttacking = _lockOn && distanceToTarget < 2.0f; // 공격 범위 예: 2.0f
-        _animator.SetBool("isAttacking", isAttacking);
+        // 플레이어가 시야에 있는지 확인
+        if (Physics.Raycast(ray, out hit))
+        {
+            if (hit.transform.CompareTag("Player"))
+            {
+                _lockOn = true;
+                _lastKnownPosition = _target.transform.position;
+            }
+            else
+            {
+                _lockOn = false;
+            }
+        }
     }
 }
