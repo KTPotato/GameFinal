@@ -13,26 +13,25 @@ public class NaturSpawn : MonoBehaviour
     }
 
     public PrefabData[] prefabsWithY;            // 프리팹과 Y 값 및 생성 개수 포함된 배열
-    public Transform ground;                     // Cylinder 오브젝트
+    public MeshCollider ground;                 // MeshCollider 오브젝트
     public float minDistanceBetweenPrefabs = 2.0f; // 프리팹 간 최소 거리
     public float minDistanceBetweenDifferentPrefabs = 3.0f; // 서로 다른 프리팹 간 최소 거리
 
-    private float cylinderRadius;                // Cylinder 반지름
-    private Vector3 cylinderCenter;              // Cylinder 중심
     private List<Vector3> spawnPositions = new List<Vector3>(); // 이미 배치된 위치
 
     void Start()
     {
-        var cylinderCollider = ground.GetComponent<Collider>();
-        if (cylinderCollider == null)
+        if (ground == null)
         {
-            Debug.LogError("Ground object needs a Collider component.");
+            Debug.LogError("Ground object needs a MeshCollider component.");
             return;
         }
 
-        // Cylinder 중심과 반지름 계산
-        cylinderRadius = ground.localScale.x * 0.5f;
-        cylinderCenter = ground.position;
+        if (!ground.sharedMesh)
+        {
+            Debug.LogError("Ground object does not have a valid shared mesh.");
+            return;
+        }
 
         SpawnPrefabsRandomly();
     }
@@ -51,13 +50,12 @@ public class NaturSpawn : MonoBehaviour
 
             while (spawnedCount < prefabData.spawnCount)
             {
-                // 원형 범위 내 무작위 위치 생성
-                Vector3 randomPosition = GetRandomPositionWithinCircle();
+                // Mesh 내 랜덤 위치 생성
+                Vector3 randomPosition = GetRandomPositionOnMesh();
 
                 // 거리 검사 (겹치지 않게 배치)
                 bool canSpawn = true;
 
-                // 동일한 프리팹 간 거리 검사
                 foreach (Vector3 pos in spawnPositions)
                 {
                     if (Vector3.Distance(pos, randomPosition) < minDistanceBetweenPrefabs)
@@ -67,21 +65,14 @@ public class NaturSpawn : MonoBehaviour
                     }
                 }
 
-                // 다른 프리팹 간 거리 검사
                 if (canSpawn)
                 {
-                    foreach (PrefabData otherPrefabData in prefabsWithY)
+                    foreach (Vector3 pos in spawnPositions)
                     {
-                        if (otherPrefabData.prefab != prefabData.prefab)
+                        if (Vector3.Distance(pos, randomPosition) < minDistanceBetweenDifferentPrefabs)
                         {
-                            foreach (Vector3 pos in spawnPositions)
-                            {
-                                if (Vector3.Distance(pos, randomPosition) < minDistanceBetweenDifferentPrefabs)
-                                {
-                                    canSpawn = false;
-                                    break;
-                                }
-                            }
+                            canSpawn = false;
+                            break;
                         }
                     }
                 }
@@ -97,16 +88,26 @@ public class NaturSpawn : MonoBehaviour
         }
     }
 
-    Vector3 GetRandomPositionWithinCircle()
+    Vector3 GetRandomPositionOnMesh()
     {
-        // 원형 영역 내 무작위 점 생성
-        float angle = Random.Range(0, Mathf.PI * 2); // 각도
-        float distance = Random.Range(0, cylinderRadius); // 반지름 내 거리
+        Mesh mesh = ground.sharedMesh;
+        Vector3[] vertices = mesh.vertices;
+        int[] triangles = mesh.triangles;
 
-        float x = cylinderCenter.x + Mathf.Cos(angle) * distance;
-        float z = cylinderCenter.z + Mathf.Sin(angle) * distance;
-        float y = cylinderCenter.y; // 높이는 Cylinder 중심 기준 (각각의 프리팹에 맞는 Y로 설정됨)
+        // 임의의 삼각형 선택
+        int triangleIndex = Random.Range(0, triangles.Length / 3) * 3;
 
-        return new Vector3(x, y, z);
+        // 삼각형을 이루는 세 점
+        Vector3 p1 = ground.transform.TransformPoint(vertices[triangles[triangleIndex]]);
+        Vector3 p2 = ground.transform.TransformPoint(vertices[triangles[triangleIndex + 1]]);
+        Vector3 p3 = ground.transform.TransformPoint(vertices[triangles[triangleIndex + 2]]);
+
+        // 삼각형 내부의 임의의 점 계산 (Barycentric 좌표)
+        float r1 = Mathf.Sqrt(Random.value);
+        float r2 = Random.value;
+
+        Vector3 randomPoint = (1 - r1) * p1 + (r1 * (1 - r2)) * p2 + (r1 * r2) * p3;
+
+        return randomPoint;
     }
 }
