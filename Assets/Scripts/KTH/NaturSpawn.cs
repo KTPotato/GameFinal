@@ -16,6 +16,7 @@ public class NaturSpawn : MonoBehaviour
     public MeshCollider ground;                 // MeshCollider 오브젝트
     public float minDistanceBetweenPrefabs = 2.0f; // 프리팹 간 최소 거리
     public float minDistanceBetweenDifferentPrefabs = 3.0f; // 서로 다른 프리팹 간 최소 거리
+    public float borderOffset = 2.0f;            // 맵 경계로부터의 최소 거리
 
     private List<Vector3> spawnPositions = new List<Vector3>(); // 이미 배치된 위치
 
@@ -94,20 +95,42 @@ public class NaturSpawn : MonoBehaviour
         Vector3[] vertices = mesh.vertices;
         int[] triangles = mesh.triangles;
 
-        // 임의의 삼각형 선택
-        int triangleIndex = Random.Range(0, triangles.Length / 3) * 3;
+        // Mesh의 경계 (Bounds) 가져오기
+        Bounds bounds = mesh.bounds;
+        Vector3 boundsCenter = ground.transform.TransformPoint(bounds.center);
+        Vector3 boundsSize = bounds.size * ground.transform.localScale.x; // 스케일 반영
 
-        // 삼각형을 이루는 세 점
-        Vector3 p1 = ground.transform.TransformPoint(vertices[triangles[triangleIndex]]);
-        Vector3 p2 = ground.transform.TransformPoint(vertices[triangles[triangleIndex + 1]]);
-        Vector3 p3 = ground.transform.TransformPoint(vertices[triangles[triangleIndex + 2]]);
+        Vector3 p1, p2, p3;
+        Vector3 randomPoint;
+        int attempts = 0;
 
-        // 삼각형 내부의 임의의 점 계산 (Barycentric 좌표)
-        float r1 = Mathf.Sqrt(Random.value);
-        float r2 = Random.value;
+        do
+        {
+            int triangleIndex = Random.Range(0, triangles.Length / 3) * 3;
 
-        Vector3 randomPoint = (1 - r1) * p1 + (r1 * (1 - r2)) * p2 + (r1 * r2) * p3;
+            // 삼각형을 이루는 세 점
+            p1 = ground.transform.TransformPoint(vertices[triangles[triangleIndex]]);
+            p2 = ground.transform.TransformPoint(vertices[triangles[triangleIndex + 1]]);
+            p3 = ground.transform.TransformPoint(vertices[triangles[triangleIndex + 2]]);
+
+            // 삼각형 내부 랜덤 점 생성 (중심부 우선)
+            float r1 = Mathf.Sqrt(Random.Range(0.2f, 1.0f)); // 중심부에 가깝도록 범위 제한
+            float r2 = Random.Range(0.2f, 1.0f);
+            randomPoint = (1 - r1) * p1 + (r1 * (1 - r2)) * p2 + (r1 * r2) * p3;
+
+            // 경계 거리 조건 확인
+            attempts++;
+        } while (!IsPointInsideBounds(randomPoint, boundsCenter, boundsSize, borderOffset) && attempts < 10);
 
         return randomPoint;
+    }
+
+    // 경계 내부에 있는지 확인
+    bool IsPointInsideBounds(Vector3 point, Vector3 center, Vector3 size, float borderOffset)
+    {
+        float halfX = size.x / 2 - borderOffset;
+        float halfZ = size.z / 2 - borderOffset;
+
+        return Mathf.Abs(point.x - center.x) <= halfX && Mathf.Abs(point.z - center.z) <= halfZ;
     }
 }

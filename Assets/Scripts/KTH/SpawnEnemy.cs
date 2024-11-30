@@ -4,35 +4,37 @@ using UnityEngine;
 
 public class SpawnEnemy : MonoBehaviour
 {
-    public GameObject enemyPrefab; // 몬스터 프리팹
+    public List<GameObject> enemyPrefabs; // 소환할 몬스터 프리팹 리스트
     public GameObject spawnPointPrefab; // 스폰 포인트 프리팹
     public int numberOfSpawnPoints = 5; // 생성할 스폰 포인트 개수
     public int enemiesPerSpawnPoint = 3; // 각 스폰 포인트당 몬스터 개수
     public Vector2 spawnArea = new Vector2(10f, 10f); // 스폰 범위
     public string enemyTag = "Enemy"; // 몬스터 태그
+    public float spawnYPosition = 1.0f; // 고정된 y 좌표
 
     private List<GameObject> spawnPoints = new List<GameObject>();
+    private int currentPhase = 0; // 현재 소환 단계 (0: 첫 번째 프리팹, 1: 두 번째 프리팹, 2: 혼합)
     private bool isSpawning = false;
 
     void Start()
     {
-        if (spawnPointPrefab == null || enemyPrefab == null)
+        if (spawnPointPrefab == null || enemyPrefabs == null || enemyPrefabs.Count < 2)
         {
-            Debug.LogError("SpawnPointPrefab 또는 EnemyPrefab이 설정되지 않았습니다.");
+            Debug.LogError("SpawnPointPrefab 또는 EnemyPrefabs가 설정되지 않았거나, 적어도 2개의 프리팹이 필요합니다.");
             return;
         }
 
         GenerateSpawnPoints();
-        SpawnAllEnemies();
+        SpawnNextPhase();
     }
 
     void Update()
     {
-        // 몬스터가 모두 제거되었는지 확인하고 다시 소환
+        // 모든 몬스터가 제거되었는지 확인하고 다음 단계로 진행
         if (!isSpawning && GameObject.FindGameObjectsWithTag(enemyTag).Length == 0)
         {
-            Debug.Log("모든 몬스터가 제거되었습니다. 다시 소환합니다.");
-            SpawnAllEnemies();
+            Debug.Log("모든 몬스터가 제거되었습니다. 다음 단계로 진행합니다.");
+            SpawnNextPhase();
         }
     }
 
@@ -43,7 +45,7 @@ public class SpawnEnemy : MonoBehaviour
         {
             Vector3 randomPosition = new Vector3(
                 Random.Range(-spawnArea.x, spawnArea.x),
-                0,
+                spawnYPosition, // 고정된 y 값
                 Random.Range(-spawnArea.y, spawnArea.y)
             );
 
@@ -52,14 +54,45 @@ public class SpawnEnemy : MonoBehaviour
         }
     }
 
-    // 모든 스폰 포인트에서 몬스터를 소환
-    void SpawnAllEnemies()
+    // 다음 단계 소환 처리
+    void SpawnNextPhase()
     {
-        StartCoroutine(SpawnEnemiesCoroutine());
+        if (currentPhase > 2) // 3단계를 완료하면 더 이상 소환하지 않음
+        {
+            Debug.Log("모든 단계를 완료했습니다. 소환이 종료됩니다.");
+            return;
+        }
+
+        switch (currentPhase)
+        {
+            case 0:
+                SpawnAllEnemies(enemyPrefabs[0]); // 첫 번째 프리팹 소환
+                break;
+            case 1:
+                SpawnAllEnemies(enemyPrefabs[1]); // 두 번째 프리팹 소환
+                break;
+            case 2:
+                SpawnMixedEnemies(enemyPrefabs[0], enemyPrefabs[1]); // 두 프리팹 섞어서 소환
+                break;
+        }
+
+        currentPhase++;
     }
 
-    // 코루틴을 사용하여 몬스터를 한 번에 소환
-    IEnumerator SpawnEnemiesCoroutine()
+    // 모든 스폰 포인트에서 특정 프리팹 몬스터를 소환
+    void SpawnAllEnemies(GameObject prefab)
+    {
+        StartCoroutine(SpawnEnemiesCoroutine(prefab));
+    }
+
+    // 모든 스폰 포인트에서 두 개의 프리팹 몬스터를 섞어서 소환
+    void SpawnMixedEnemies(GameObject prefab1, GameObject prefab2)
+    {
+        StartCoroutine(SpawnMixedEnemiesCoroutine(prefab1, prefab2));
+    }
+
+    // 특정 프리팹으로 몬스터를 소환
+    IEnumerator SpawnEnemiesCoroutine(GameObject prefab)
     {
         isSpawning = true;
 
@@ -68,9 +101,33 @@ public class SpawnEnemy : MonoBehaviour
             for (int i = 0; i < enemiesPerSpawnPoint; i++)
             {
                 Vector3 position = spawnPoint.transform.position;
-                GameObject enemy = Instantiate(enemyPrefab, position, Quaternion.identity);
-                enemy.tag = enemyTag; // 몬스터에 태그 지정
+                position.y = spawnYPosition;
+                GameObject enemy = Instantiate(prefab, position, Quaternion.identity);
+                enemy.tag = enemyTag;
                 yield return new WaitForSeconds(0.1f); // 소환 간 약간의 지연 시간
+            }
+        }
+
+        isSpawning = false;
+    }
+
+    // 두 개의 프리팹을 섞어서 몬스터를 소환
+    IEnumerator SpawnMixedEnemiesCoroutine(GameObject prefab1, GameObject prefab2)
+    {
+        isSpawning = true;
+
+        foreach (GameObject spawnPoint in spawnPoints)
+        {
+            for (int i = 0; i < enemiesPerSpawnPoint; i++)
+            {
+                Vector3 position = spawnPoint.transform.position;
+                position.y = spawnYPosition;
+
+                // 프리팹을 번갈아가며 소환
+                GameObject prefabToSpawn = (i % 2 == 0) ? prefab1 : prefab2;
+                GameObject enemy = Instantiate(prefabToSpawn, position, Quaternion.identity);
+                enemy.tag = enemyTag;
+                yield return new WaitForSeconds(0.1f);
             }
         }
 
