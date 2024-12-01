@@ -18,8 +18,7 @@ public class Player1Ctrl : MonoBehaviour
 
     public GameObject bullet;
     public Transform firePos;
-    public double iters = 299;
-    public int firespeed = 300;
+    public float firespeed = 1f;
 
     public float PlayerHealth;
 
@@ -28,6 +27,11 @@ public class Player1Ctrl : MonoBehaviour
     public float dmg = 1;
 
     public Slider HpBarSlider;
+    public int playerLevel = 0;
+    public int crossfireLevel = 1;
+    public float fan_fireLevel = 0;
+
+    private bool isAttack = false;
 
     // Start is called before the first frame update
     void Start()
@@ -47,58 +51,89 @@ public class Player1Ctrl : MonoBehaviour
     void PlayerMove()
     {
         if(Hp <= 0) return;
-
+        
         v = Input.GetAxisRaw("Vertical");
         h = Input.GetAxisRaw("Horizontal");
         //v = v * Mathf.Sqrt(1 - (h * h / 2));
         //h = h * Mathf.Sqrt(1 - (v * v / 2));
 
-        if (v != 0 || h != 0)
+        movedir = Vector3.forward * v + Vector3.right * h;
+ 
+        if (isAttack == true)
         {
-            ani.SetBool("move", true);
-        }else if(v == 0 && h == 0)
-        {
+            //플레이어 회전
+            mouseRay = Camera.main.ScreenPointToRay(Input.mousePosition);
+            plane = new Plane(Vector3.up, Vector3.up);
+            if (plane.Raycast(mouseRay, out float distance))
+            {
+                Vector3 direction = mouseRay.GetPoint(distance) - transform.position;
+                transform.rotation = Quaternion.LookRotation(new Vector3(direction.x, 0, direction.z));
+            }
             ani.SetBool("move", false);
         }
-        
-
-
-
-
-        movedir = Vector3.forward * v + Vector3.right * h;
-
-        //플레이어 이동
-        transform.position += movedir * speed * Time.deltaTime;
-        //플레이어 회전
-        mouseRay = Camera.main.ScreenPointToRay(Input.mousePosition);
-        plane = new Plane(Vector3.up, Vector3.up);
-        if (plane.Raycast(mouseRay, out float distance))
+        else
         {
-            Vector3 direction = mouseRay.GetPoint(distance) - transform.position;
-            transform.rotation = Quaternion.LookRotation(new Vector3(direction.x, 0, direction.z));
+            transform.position += movedir * speed * Time.deltaTime;
+            
+            if (v != 0 || h != 0) 
+            {
+                transform.rotation = Quaternion.LookRotation(movedir);
+                ani.SetBool("move", true);
+            }
+            else if (v == 0 && h == 0) 
+            {
+                mouseRay = Camera.main.ScreenPointToRay(Input.mousePosition);
+                plane = new Plane(Vector3.up, Vector3.up);
+                if (plane.Raycast(mouseRay, out float distance))
+                {
+                    Vector3 direction = mouseRay.GetPoint(distance) - transform.position;
+                    transform.rotation = Quaternion.LookRotation(new Vector3(direction.x, 0, direction.z));
+                }
+                ani.SetBool("move", false);
+            }
         }
+        
     }
 
     void FireBullet()
     {
-        if(iters % firespeed == 0)
+        if(Input.GetMouseButton(0) && !isAttack && Hp > 0)
         {
-            if (Input.GetMouseButton(0))
-            {
-                if (Hp <= 0) return;
+            StartCoroutine(crossAttack());
+        }
 
-                ani.Play("Attack01", -1, 0);
-                Invoke("CreateBullet", 0.1f);
-                
-                
-                iters = 0;
-            }
-        }
-        if(iters == firespeed)
+    }
+    IEnumerator crossAttack()
+    {
+        isAttack = true;
+        ani.Play("Attack01", -1, 0);
+        yield return new WaitForSeconds(0.1f);
+        //CreateBullet();
+        for(int i =  0; i < crossfireLevel; i++)
         {
-            return;
+            if (crossfireLevel > 1) 
+            {
+                Vector3 vec = Vector3.zero;
+                vec -= Vector3.right * 0.5f * crossfireLevel / 2;
+                vec += Vector3.right * 0.5f * i;
+                GameObject Bullet = Instantiate(bullet, firePos.position +vec, transform.rotation);
+                /*Vector3 bulletPos = firePos.transform.position;
+                bulletPos.x -= 1 * crossfireLevel / 2;
+                bulletPos.x += 1 * i;
+                Bullet.transform.rotation = transform.rotation;
+                Bullet.transform.position += bulletPos;*/
+                Bullet.GetComponent<BulletCtrl>().Pdmg = dmg;
+            }
+            else
+            {
+                GameObject Bullet = Instantiate(bullet, firePos.position, transform.rotation);
+                Bullet.GetComponent<BulletCtrl>().Pdmg = dmg;
+            }
+            
         }
-        iters++;
+
+        yield return new WaitForSeconds(firespeed - 0.1f);
+        isAttack = false;
     }
     void CreateBullet()
     {
