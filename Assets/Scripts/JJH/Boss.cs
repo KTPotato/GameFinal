@@ -1,7 +1,7 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using System.Collections.Generic;
 using UnityEngine.AI;
+using UnityEngine;
+using System.Collections;
 
 public class Boss : MonoBehaviour
 {
@@ -12,29 +12,31 @@ public class Boss : MonoBehaviour
 
     private bool isDead = false;
 
-    // 타겟 리스트를 매 프레임마다 새로 초기화
     public List<GameObject> allTargets = new List<GameObject>();
 
-    public float attackRange = 10f;
+    public float attackRange = 5f;
     public float attackCooldown = 3f;
     private float lastAttackTime = 0f;
 
     public bool isAttacking = false;
+    public bool isTakingHit = false; // GetHit 상태 플래그
 
-    public GameObject rockPrefab;  // 돌의 프리팹
-    public Transform throwPoint;  // 돌을 던질 위치
+    public GameObject rockPrefab;
+    public Transform throwPoint;
+
+    private bool canTakeHit = true;
+    public float hitCooldown = 2f;
 
     public void Start()
     {
         bossagent = GetComponent<NavMeshAgent>();
         animator = GetComponent<Animator>();
-
         Hp = 100;
     }
 
     public void Update()
     {
-        if (isDead) return;
+        if (isDead || isTakingHit) return; // GetHit 상태일 때 모든 동작 차단
 
         if (Hp <= 0)
         {
@@ -42,17 +44,13 @@ public class Boss : MonoBehaviour
             return;
         }
 
-        // 모든 타겟 리스트를 매 프레임마다 새로 초기화
         allTargets.Clear();
-
-        // 플레이어 타겟 찾기
         GameObject[] player = GameObject.FindGameObjectsWithTag("Player");
         allTargets.AddRange(player);
 
         float minmumdistance = float.MaxValue;
         Transform target = null;
 
-        // 가까운 타겟 찾기
         foreach (GameObject obj in allTargets)
         {
             if (obj.GetInstanceID() == gameObject.GetInstanceID()) continue;
@@ -66,29 +64,28 @@ public class Boss : MonoBehaviour
             }
         }
 
-        // 타겟이 있을 때
         if (target != null)
         {
-            animator.SetBool("Walk", true);  // 타겟이 있을 때만 걷기 상태로 전환
+            bossagent.isStopped = false;
+            animator.SetBool("Walk", true);
             bossagent.SetDestination(target.position);
 
-            // 공격 범위 내에 있을 때만 공격
             if (minmumdistance <= attackRange && Time.time - lastAttackTime >= attackCooldown)
             {
+                bossagent.isStopped = true;
                 if (Random.value > 0.5f)
                 {
-                    Attack1(target); // 돌 던지기
+                    Attack1(target);
                 }
                 else
                 {
-                    Attack2(target); // 펀치
+                    Attack2(target);
                 }
             }
         }
         else
         {
-            // 타겟이 없으면 Idle 상태로 전환
-            animator.SetBool("Walk", false); // 걷기 상태를 false로 설정
+            animator.SetBool("Walk", false);
             animator.SetTrigger("Idle");
         }
     }
@@ -98,13 +95,9 @@ public class Boss : MonoBehaviour
         if (isAttacking) return;
 
         isAttacking = true;
-
-        if (target.CompareTag("Player"))
-        {
-            animator.SetBool("Walk", false);
-            animator.SetTrigger("Throw");  // 돌 던지기 애니메이션 트리거
-            ThrowRock(target.position);
-        }
+        animator.SetBool("Walk", false);
+        animator.SetTrigger("Throw");
+        ThrowRock(target.position);
 
         lastAttackTime = Time.time;
         StartCoroutine(ResetAttackState());
@@ -115,12 +108,8 @@ public class Boss : MonoBehaviour
         if (isAttacking) return;
 
         isAttacking = true;
-
-        if (target.CompareTag("Player"))
-        {
-            animator.SetBool("Walk", false);
-            animator.SetTrigger("Punch"); // 펀치 애니메이션 트리거
-        }
+        animator.SetBool("Walk", false);
+        animator.SetTrigger("Punch");
 
         lastAttackTime = Time.time;
         StartCoroutine(ResetAttackState());
@@ -128,27 +117,45 @@ public class Boss : MonoBehaviour
 
     private void ThrowRock(Vector3 targetPosition)
     {
+        StartCoroutine(ThrowRockAfterDelay(targetPosition));
+    }
+
+    private IEnumerator ThrowRockAfterDelay(Vector3 targetPosition) // 반환 형식 수정
+    {
+        yield return new WaitForSeconds(1.5f); // 대기
+
         if (rockPrefab != null && throwPoint != null)
         {
+            // 돌 생성
             GameObject rock = Instantiate(rockPrefab, throwPoint.position, Quaternion.identity);
             Rigidbody rb = rock.GetComponent<Rigidbody>();
 
             if (rb != null)
             {
-                Vector3 direction = (targetPosition - throwPoint.position).normalized;
-                rb.AddForce(direction * 10f, ForceMode.Impulse); // 던지는 힘 조절
+                // 반대 방향으로 돌 던지기
+                Vector3 direction = (throwPoint.position - targetPosition).normalized;
+                rb.AddForce(direction * 15f, ForceMode.Impulse);
+
+                // 회전 효과 추가
+                Vector3 randomTorque = new Vector3(
+                    Random.Range(-10f, 10f),
+                    Random.Range(-10f, 10f),
+                    Random.Range(-10f, 10f)
+                );
+                rb.AddTorque(randomTorque, ForceMode.Impulse);
             }
 
-            Destroy(rock, 5f); // 5초 후 돌 제거
+            // 5초 후에 돌 제거
+            Destroy(rock, 5f);
         }
     }
+
 
     private IEnumerator ResetAttackState()
     {
         yield return new WaitForSeconds(1f);
-
         isAttacking = false;
-        animator.SetBool("Walk", true); // `Walk` 상태로 복귀
+        animator.SetBool("Walk", true);
     }
 
     private void Die()
@@ -162,12 +169,35 @@ public class Boss : MonoBehaviour
         Destroy(gameObject, 2f);
     }
 
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.collider.CompareTag("Bullet"))
+        {
+            TakeDamage(1);
+            Debug.Log("앙 맞았띠");
+        }
+    }
+
     public void TakeDamage(float damage)
     {
-        if (isDead) return;
+        if (isDead || isTakingHit) return;
 
         Hp -= damage;
-        animator.SetBool("Walk",false);
-        animator.SetTrigger("GetHit"); // GetHit 상태로 전환
+
+        if (canTakeHit)
+        {
+            canTakeHit = false;
+            isTakingHit = true; // GetHit 상태 활성화
+            animator.SetBool("Walk", false);
+            animator.SetTrigger("GetHit");
+            StartCoroutine(ResetHitState());
+        }
+    }
+
+    private IEnumerator ResetHitState()
+    {
+        yield return new WaitForSeconds(hitCooldown);
+        isTakingHit = false; // GetHit 상태 해제
+        canTakeHit = true;
     }
 }
