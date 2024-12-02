@@ -2450,12 +2450,15 @@ MonoBehaviour:
   rotspeed: 100
   bullet: {fileID: 5589122061519832824, guid: 74786f1f9d0bbdb4fb4232ad099d7111, type: 3}
   firePos: {fileID: 997221096769331078}
-  iters: 9
-  firespeed: 100
+  firespeed: 1
   PlayerHealth: 0
   maxHp: 100
   Hp: 100
   dmg: 3
+  HpBarSlider: {fileID: 0}
+  playerLevel: 0
+  crossfireLevel: 1
+  fan_fireLevel: 0
 --- !u!54 &8093795343876254317
 Rigidbody:
   m_ObjectHideFlags: 0
