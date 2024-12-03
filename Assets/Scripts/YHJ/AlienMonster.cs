@@ -55,7 +55,7 @@ public class AlienMonster : MonoBehaviour
         if (attackTimer >= attackCooldown)
         {
             // 발사체 생성
-            GameObject projectile = Instantiate(projectilePrefab, firePoint.position, Quaternion.identity);
+            GameObject projectile = Instantiate(projectilePrefab, firePoint.position, firePoint.rotation);
 
             // 발사체의 방향 설정
             Vector3 direction = (player.position - firePoint.position).normalized;
@@ -71,6 +71,7 @@ public class AlienMonster : MonoBehaviour
             attackTimer = 0f; // 타이머 초기화
         }
     }
+
 
     void UpdateAnimations()
     {
