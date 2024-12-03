@@ -11,21 +11,29 @@ public class Boss : MonoBehaviour
     private Animator animator;
 
     private bool isDead = false;
+    private bool isAttacking = false;
+    private bool isTakingHit = false; // GetHit 상태 플래그
+    private bool canTakeHit = true; // 피격 가능한지 여부
+    private bool isPatternPaused = false; // 패턴이 일시 중단되었는지 여부
+    private bool isPatternLocked = false; // 패턴을 다시 끊지 않도록 할 변수
+    private float patternLockTime = 10f; // 패턴이 끊기지 않는 시간 (10초)
+    private float patternPauseTime = 2f; // 피격 후 패턴 일시 중단 시간 (2초)
+
+    // 공격 관련 변수
+    private float attackRange = 4.5f;
+    private float attackCooldown = 3f;
+    private float lastAttackTime = 0f;
 
     public List<GameObject> allTargets = new List<GameObject>();
 
-    public float attackRange = 5f;
-    public float attackCooldown = 3f;
-    private float lastAttackTime = 0f;
-
-    public bool isAttacking = false;
-    public bool isTakingHit = false; // GetHit 상태 플래그
-
+    // 공격 애니메이션 변수
+    public bool isAttackingAnimation = false;
     public GameObject rockPrefab;
     public Transform throwPoint;
+    public Transform throwPoint2;
 
-    private bool canTakeHit = true;
-    public float hitCooldown = 2f;
+    // 상태 관리
+    public float hitCooldown = 10f;
 
     public void Start()
     {
@@ -45,54 +53,78 @@ public class Boss : MonoBehaviour
         }
 
         allTargets.Clear();
-        GameObject[] player = GameObject.FindGameObjectsWithTag("Player");
-        allTargets.AddRange(player);
+        GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
+        allTargets.AddRange(players);
 
-        float minmumdistance = float.MaxValue;
+        float minimumDistance = float.MaxValue;
         Transform target = null;
 
+        // 가장 가까운 타겟 찾기
         foreach (GameObject obj in allTargets)
         {
             if (obj.GetInstanceID() == gameObject.GetInstanceID()) continue;
 
             float distance = Vector3.Distance(transform.position, obj.transform.position);
 
-            if (distance < minmumdistance)
+            if (distance < minimumDistance)
             {
-                minmumdistance = distance;
+                minimumDistance = distance;
                 target = obj.transform;
             }
         }
 
+        // 타겟이 있을 경우 행동
         if (target != null)
         {
-            bossagent.isStopped = false;
-            animator.SetBool("Walk", true);
-            bossagent.SetDestination(target.position);
-
-            if (minmumdistance <= attackRange && Time.time - lastAttackTime >= attackCooldown)
+            if (minimumDistance <= attackRange)
             {
+                // 공격 범위 안에 있는 경우
                 bossagent.isStopped = true;
-                if (Random.value > 0.5f)
+                animator.SetBool("Walk", false);
+                // 공격 가능 여부 체크
+                if (!isAttacking && Time.time - lastAttackTime >= attackCooldown && !isPatternPaused)
                 {
-                    Attack1(target);
+                    int attackPattern = Random.Range(0, 3); // 3가지 공격 패턴 중 하나를 랜덤으로 선택
+                    if (attackPattern == 0)
+                    {
+                        Attack1(target);
+                    }
+                    else if (attackPattern == 1)
+                    {
+                        Attack2(target);
+                    }
+                    else
+                    {
+                        Attack3(target); // 추가된 Punch 패턴
+                    }
                 }
-                else
-                {
-                    Attack2(target);
-                }
+            }
+            else
+            {
+                // 공격 범위 밖에 있는 경우
+                bossagent.isStopped = false;
+                animator.SetBool("Walk", true);
+                bossagent.SetDestination(target.position);
             }
         }
         else
         {
+            // 타겟이 없는 경우
             animator.SetBool("Walk", false);
             animator.SetTrigger("Idle");
+            bossagent.isStopped = true;
+        }
+
+        // 공격 애니메이션이 끝났는지 확인
+        if (!animator.GetCurrentAnimatorStateInfo(0).IsName("Attack") && !isAttacking)
+        {
+            animator.SetBool("Walk", true); // 공격 후 Walk로 돌아가기
         }
     }
 
-    private void Attack1(Transform target)
+    private void Attack1(Transform target) // ThrowRock
     {
-        if (isAttacking) return;
+        if (isAttacking || isPatternPaused) return;
 
         isAttacking = true;
         animator.SetBool("Walk", false);
@@ -103,9 +135,22 @@ public class Boss : MonoBehaviour
         StartCoroutine(ResetAttackState());
     }
 
-    private void Attack2(Transform target)
+    private void Attack2(Transform target) // ThrowRock2 (세 개의 돌 던지기)
     {
-        if (isAttacking) return;
+        if (isAttacking || isPatternPaused) return;
+
+        isAttacking = true;
+        animator.SetBool("Walk", false);
+        animator.SetTrigger("Throw");
+        ThrowRock2(target.position);
+
+        lastAttackTime = Time.time;
+        StartCoroutine(ResetAttackState());
+    }
+
+    private void Attack3(Transform target) // Punch
+    {
+        if (isAttacking || isPatternPaused) return;
 
         isAttacking = true;
         animator.SetBool("Walk", false);
@@ -115,28 +160,25 @@ public class Boss : MonoBehaviour
         StartCoroutine(ResetAttackState());
     }
 
-    private void ThrowRock(Vector3 targetPosition)
+    private void ThrowRock(Vector3 targetPosition) // 기존 던지기
     {
-        StartCoroutine(ThrowRockAfterDelay(targetPosition));
+        StartCoroutine(ThrowRockInStraightLine());
     }
 
-    private IEnumerator ThrowRockAfterDelay(Vector3 targetPosition) // 반환 형식 수정
+    private IEnumerator ThrowRockInStraightLine()
     {
-        yield return new WaitForSeconds(1.5f); // 대기
+        yield return new WaitForSeconds(1.5f);
 
         if (rockPrefab != null && throwPoint != null)
         {
-            // 돌 생성
             GameObject rock = Instantiate(rockPrefab, throwPoint.position, Quaternion.identity);
             Rigidbody rb = rock.GetComponent<Rigidbody>();
 
             if (rb != null)
             {
-                // 반대 방향으로 돌 던지기
-                Vector3 direction = (throwPoint.position - targetPosition).normalized;
+                Vector3 direction = throwPoint.forward;
                 rb.AddForce(direction * 15f, ForceMode.Impulse);
 
-                // 회전 효과 추가
                 Vector3 randomTorque = new Vector3(
                     Random.Range(-10f, 10f),
                     Random.Range(-10f, 10f),
@@ -145,17 +187,67 @@ public class Boss : MonoBehaviour
                 rb.AddTorque(randomTorque, ForceMode.Impulse);
             }
 
-            // 5초 후에 돌 제거
             Destroy(rock, 5f);
         }
     }
 
+    private void ThrowRock2(Vector3 targetPosition)
+    {
+        StartCoroutine(ThrowRocksAfterDelay(targetPosition));
+    }
+
+    private IEnumerator ThrowRocksAfterDelay(Vector3 targetPosition)
+    {
+        yield return new WaitForSeconds(0.3f);
+
+        if (rockPrefab != null && throwPoint2 != null)
+        {
+            GameObject rock = Instantiate(rockPrefab, throwPoint2.position, Quaternion.identity);
+            Rigidbody rb = rock.GetComponent<Rigidbody>();
+
+            rock.transform.localScale *= 0.5f;
+
+            Vector3 startMovePosition = rock.transform.position;
+            Vector3 targetMovePosition = transform.position + new Vector3(0, 1.5f, -3.5f);
+
+            float moveDuration = 1.2f;
+            float timeElapsed = 0f;
+
+            while (timeElapsed < moveDuration)
+            {
+                rock.transform.position = Vector3.Lerp(startMovePosition, targetMovePosition, timeElapsed / moveDuration);
+                timeElapsed += Time.deltaTime;
+                yield return null;
+            }
+
+            rock.transform.position = targetMovePosition;
+
+            Vector3 direction = throwPoint2.forward;
+
+            if (rb != null)
+            {
+                rb.AddForce(direction * 15f, ForceMode.Impulse);
+
+                Vector3 randomTorque = new Vector3(
+                    Random.Range(-10f, 10f),
+                    Random.Range(-10f, 10f),
+                    Random.Range(-10f, 10f)
+                );
+                rb.AddTorque(randomTorque, ForceMode.Impulse);
+            }
+
+            Destroy(rock, 5f);
+        }
+    }
 
     private IEnumerator ResetAttackState()
     {
         yield return new WaitForSeconds(1f);
         isAttacking = false;
-        animator.SetBool("Walk", true);
+        if (!animator.GetCurrentAnimatorStateInfo(0).IsName("Attack"))
+        {
+            animator.SetBool("Walk", true); // 공격 후 Walk로 복귀
+        }
     }
 
     private void Die()
@@ -174,7 +266,6 @@ public class Boss : MonoBehaviour
         if (collision.collider.CompareTag("Bullet"))
         {
             TakeDamage(1);
-            Debug.Log("앙 맞았띠");
         }
     }
 
@@ -183,21 +274,34 @@ public class Boss : MonoBehaviour
         if (isDead || isTakingHit) return;
 
         Hp -= damage;
-
-        if (canTakeHit)
+        Debug.Log("맞음");
+        if (!isPatternLocked)
         {
-            canTakeHit = false;
-            isTakingHit = true; // GetHit 상태 활성화
-            animator.SetBool("Walk", false);
-            animator.SetTrigger("GetHit");
-            StartCoroutine(ResetHitState());
+            if (canTakeHit)
+            {
+                canTakeHit = false;
+                isTakingHit = true; // GetHit 상태 활성화
+                animator.SetBool("Walk", false);
+                animator.SetTrigger("GetHit");
+                Debug.Log("패턴중지");
+                // 패턴 진행 중 일시적으로 패턴을 멈추고 일정 시간 동안 패턴이 끊어지지 않도록 설정
+                StartCoroutine(LockPatternForDuration(patternLockTime));
+                StartCoroutine(TakeDamageCooldown());
+            }
         }
     }
 
-    private IEnumerator ResetHitState()
+    private IEnumerator LockPatternForDuration(float duration)
     {
-        yield return new WaitForSeconds(hitCooldown);
-        isTakingHit = false; // GetHit 상태 해제
-        canTakeHit = true;
+        isPatternLocked = true;
+        yield return new WaitForSeconds(duration);
+        isPatternLocked = false; // 일정 시간이 지나면 패턴을 다시 끊을 수 있음
+    }
+
+    private IEnumerator TakeDamageCooldown()
+    {
+        yield return new WaitForSeconds(patternPauseTime); // 일정 시간 동안 피격 후 패턴이 끊어지지 않도록 유지
+        canTakeHit = true; // 다시 피격 가능하도록 설정
+        isTakingHit = false; // GetHit 상태 비활성화
     }
 }
