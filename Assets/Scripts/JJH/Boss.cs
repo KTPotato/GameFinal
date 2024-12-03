@@ -20,7 +20,7 @@ public class Boss : MonoBehaviour
     private float patternPauseTime = 2f; // 피격 후 패턴 일시 중단 시간 (2초)
 
     // 공격 관련 변수
-    private float attackRange = 4.5f;
+    private float attackRange = 3f;
     private float attackCooldown = 3f;
     private float lastAttackTime = 0f;
 
@@ -44,7 +44,7 @@ public class Boss : MonoBehaviour
 
     public void Update()
     {
-        if (isDead || isTakingHit) return; // GetHit 상태일 때 모든 동작 차단
+        if (isDead || isTakingHit) return; // 죽거나 피격 중이라면 더 이상 진행하지 않습니다.
 
         if (Hp <= 0)
         {
@@ -113,6 +113,7 @@ public class Boss : MonoBehaviour
             animator.SetBool("Walk", false);
             animator.SetTrigger("Idle");
             bossagent.isStopped = true;
+            return; // 플레이어 죽일시 멈춤
         }
 
         // 공격 애니메이션이 끝났는지 확인
@@ -132,6 +133,7 @@ public class Boss : MonoBehaviour
         ThrowRock(target.position);
 
         lastAttackTime = Time.time;
+        bossagent.speed = 0; // 공격 중에 멈추기
         StartCoroutine(ResetAttackState());
     }
 
@@ -141,10 +143,11 @@ public class Boss : MonoBehaviour
 
         isAttacking = true;
         animator.SetBool("Walk", false);
-        animator.SetTrigger("Throw");
-        ThrowRock2(target.position);
+        animator.SetTrigger("Punch");
+        Punch2(target.position); // Punch2로 변경
 
         lastAttackTime = Time.time;
+        bossagent.speed = 0; // 공격 중에 멈추기
         StartCoroutine(ResetAttackState());
     }
 
@@ -157,6 +160,7 @@ public class Boss : MonoBehaviour
         animator.SetTrigger("Punch");
 
         lastAttackTime = Time.time;
+        bossagent.speed = 0; // 공격 중에 멈추기
         StartCoroutine(ResetAttackState());
     }
 
@@ -191,62 +195,73 @@ public class Boss : MonoBehaviour
         }
     }
 
-    private void ThrowRock2(Vector3 targetPosition)
+    private void Punch2(Vector3 targetPosition)
     {
-        StartCoroutine(ThrowRocksAfterDelay(targetPosition));
+        StartCoroutine(Punch2AfterDelay(targetPosition));  // Punch2를 시작하는 메서드
     }
 
-    private IEnumerator ThrowRocksAfterDelay(Vector3 targetPosition)
+    private IEnumerator Punch2AfterDelay(Vector3 targetPosition)
     {
-        yield return new WaitForSeconds(0.3f);
+        yield return new WaitForSeconds(0.3f);  // 약간의 지연 후 공격
 
         if (rockPrefab != null && throwPoint2 != null)
         {
+            // Punch2 패턴으로 돌 던지기 시작
             GameObject rock = Instantiate(rockPrefab, throwPoint2.position, Quaternion.identity);
             Rigidbody rb = rock.GetComponent<Rigidbody>();
 
             rock.transform.localScale *= 0.5f;
 
-            Vector3 startMovePosition = rock.transform.position;
-            Vector3 targetMovePosition = transform.position + new Vector3(0, 1.5f, -3.5f);
+            // 돌의 앞 방향은 항상 일정함
+            Vector3 throwDirection = transform.forward;
 
-            float moveDuration = 1.2f;
-            float timeElapsed = 0f;
+            // 1초 뒤에 돌을 5개로 쪼개서 날리기
+            yield return new WaitForSeconds(0.7f);
 
-            while (timeElapsed < moveDuration)
+            Destroy(rock);  // 원본 돌 파괴
+
+            // 분리된 돌 5개 생성
+            for (int i = 0; i < 5; i++)
             {
-                rock.transform.position = Vector3.Lerp(startMovePosition, targetMovePosition, timeElapsed / moveDuration);
-                timeElapsed += Time.deltaTime;
-                yield return null;
+                GameObject splitRock = Instantiate(rockPrefab, rock.transform.position, Quaternion.identity);
+                Rigidbody splitRb = splitRock.GetComponent<Rigidbody>();
+
+                splitRock.transform.localScale *= 0.5f;
+
+                if (splitRb != null)
+                {
+                    // 돌이 날아가는 방향은 항상 앞방향으로 고정
+                    Vector3 splitDirection = throwDirection + new Vector3(Random.Range(-1f, 1f), 0, Random.Range(-1f, 1f));
+                    splitDirection = splitDirection.normalized;
+
+                    splitRb.AddForce(splitDirection * 15f, ForceMode.Impulse);
+
+                    // 회전하는 효과를 주기 위해 랜덤한 토크 추가
+                    Vector3 randomTorque = new Vector3(
+                        Random.Range(-10f, 10f),
+                        Random.Range(-10f, 10f),
+                        Random.Range(-10f, 10f)
+                    );
+                    splitRb.AddTorque(randomTorque, ForceMode.Impulse);
+                }
+
+                Destroy(splitRock, 5f);
             }
-
-            rock.transform.position = targetMovePosition;
-
-            Vector3 direction = throwPoint2.forward;
-
-            if (rb != null)
-            {
-                rb.AddForce(direction * 15f, ForceMode.Impulse);
-
-                Vector3 randomTorque = new Vector3(
-                    Random.Range(-10f, 10f),
-                    Random.Range(-10f, 10f),
-                    Random.Range(-10f, 10f)
-                );
-                rb.AddTorque(randomTorque, ForceMode.Impulse);
-            }
-
-            Destroy(rock, 5f);
         }
     }
 
     private IEnumerator ResetAttackState()
     {
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(1f);  // 공격 애니메이션이 끝날 때까지 기다립니다.
+
         isAttacking = false;
+
+        // 공격 애니메이션이 끝났다면 보스를 다시 이동 가능하게 설정
         if (!animator.GetCurrentAnimatorStateInfo(0).IsName("Attack"))
         {
-            animator.SetBool("Walk", true); // 공격 후 Walk로 복귀
+            animator.SetBool("Walk", true); // 이동 애니메이션 활성화
+            yield return new WaitForSeconds(0.7f);
+            bossagent.speed = 2.5f; // 다시 이동
         }
     }
 
