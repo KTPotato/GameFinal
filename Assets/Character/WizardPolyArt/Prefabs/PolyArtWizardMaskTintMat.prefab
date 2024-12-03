@@ -346,8 +346,7 @@ Transform:
   m_LocalPosition: {x: 0.9774399, y: -0.068750516, z: -1.0184432}
   m_LocalScale: {x: 100, y: 100.000046, z: 100.00007}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 997221096769331078}
+  m_Children: []
   m_Father: {fileID: 4994864222783348}
   m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
 --- !u!33 &33268015674448316
@@ -2388,6 +2387,7 @@ Transform:
   m_Children:
   - {fileID: 4725913906824530}
   - {fileID: 4989975649075766}
+  - {fileID: 997221096769331078}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!95 &95805638432926132
@@ -2457,7 +2457,7 @@ MonoBehaviour:
   dmg: 3
   HpBarSlider: {fileID: 0}
   playerLevel: 0
-  crossfireLevel: 1
+  crossfireLevel: 3
   fan_fireLevel: 0
 --- !u!54 &8093795343876254317
 Rigidbody:
@@ -2672,10 +2672,10 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4474085792090444261}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -1.07, z: 0}
+  m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: -0.000008621216, y: 0.74, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 4113376185143854}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_Father: {fileID: 4063552230360950}
+  m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
