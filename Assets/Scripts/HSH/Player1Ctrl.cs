@@ -52,10 +52,10 @@ public class Player1Ctrl : MonoBehaviour
     {
         if(Hp <= 0) return;
         
-        v = Input.GetAxisRaw("Vertical");
-        h = Input.GetAxisRaw("Horizontal");
-        //v = v * Mathf.Sqrt(1 - (h * h / 2));
-        //h = h * Mathf.Sqrt(1 - (v * v / 2));
+        v = Input.GetAxis("Vertical");
+        h = Input.GetAxis("Horizontal");
+        v = v * Mathf.Sqrt(1 - (h * h / 2));
+        h = h * Mathf.Sqrt(1 - (v * v / 2));
 
         movedir = Vector3.forward * v + Vector3.right * h;
  
@@ -99,29 +99,29 @@ public class Player1Ctrl : MonoBehaviour
     {
         if(Input.GetMouseButton(0) && !isAttack && Hp > 0)
         {
-            StartCoroutine(crossAttack());
+            StartCoroutine(Attack());
+
         }
 
     }
-    IEnumerator crossAttack()
+    IEnumerator Attack()
     {
         isAttack = true;
         ani.Play("Attack01", -1, 0);
         yield return new WaitForSeconds(0.1f);
-        //CreateBullet();
+        
+        //crossAttack
         for(int i =  0; i < crossfireLevel; i++)
         {
             if (crossfireLevel > 1) 
             {
-                Vector3 vec = Vector3.zero;
-                vec -= Vector3.right * 0.5f * crossfireLevel / 2;
-                vec += Vector3.right * 0.5f * i;
-                GameObject Bullet = Instantiate(bullet, firePos.position +vec, transform.rotation);
-                /*Vector3 bulletPos = firePos.transform.position;
-                bulletPos.x -= 1 * crossfireLevel / 2;
-                bulletPos.x += 1 * i;
-                Bullet.transform.rotation = transform.rotation;
-                Bullet.transform.position += bulletPos;*/
+                
+                // 로컬 좌표계에서의 오프셋 계산
+                Vector3 localOffset = Vector3.right * 0.5f * (i - (crossfireLevel - 1) / 2.0f);
+
+                // 로컬 좌표계에서 월드 좌표계로 변환
+                Vector3 spawnPosition = firePos.transform.TransformPoint(localOffset + firePos.localPosition);
+                GameObject Bullet = Instantiate(bullet, spawnPosition, transform.rotation);
                 Bullet.GetComponent<BulletCtrl>().Pdmg = dmg;
             }
             else
@@ -131,16 +131,28 @@ public class Player1Ctrl : MonoBehaviour
             }
             
         }
+        //fan_Attack
+        if(fan_fireLevel >= 1)
+        {
+            for(int i = 1; i <= fan_fireLevel; i++)
+            {
+                float angle = i * (90 / (fan_fireLevel + 1));
+                Quaternion rotation = transform.rotation * Quaternion.Euler(0, angle, 0);
+                GameObject Bullet = Instantiate(bullet, firePos.position, rotation);
+                Bullet.GetComponent<BulletCtrl>().Pdmg = dmg;
+            }
+            for (int i = 1; i <= fan_fireLevel; i++)
+            {
+                float angle = -1 * i * (90 / (fan_fireLevel + 1));
+                Quaternion rotation = transform.rotation * Quaternion.Euler(0, angle, 0);
+                GameObject Bullet = Instantiate(bullet, firePos.position, rotation);
+                Bullet.GetComponent<BulletCtrl>().Pdmg = dmg;
+            }
+        }
 
         yield return new WaitForSeconds(firespeed - 0.1f);
         isAttack = false;
     }
-    void CreateBullet()
-    {
-        GameObject newBullet = Instantiate(bullet, firePos.position, transform.rotation);
-        newBullet.GetComponent<BulletCtrl>().Pdmg = dmg;
-    }
-
     void Die()
     {
         if(transform.position.y < -10)
