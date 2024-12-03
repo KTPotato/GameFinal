@@ -6,7 +6,7 @@ public class EBulletCtrl : MonoBehaviour
 {
     private Rigidbody rb;
     public float Edmg = 1;
-    public float bulletSpeed = 500;
+    public float bulletSpeed = 300;
     // Start is called before the first frame update
     void Start()
     {
