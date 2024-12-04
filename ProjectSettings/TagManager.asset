@@ -9,6 +9,8 @@ TagManager:
   - EnemyBullet
   - Bullet
   - Enemy
+  - PlayerBullet
+  - SpawnPrefab
   layers:
   - Default
   - TransparentFX

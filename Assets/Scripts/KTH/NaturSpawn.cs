@@ -43,10 +43,22 @@ public class NaturSpawn : MonoBehaviour
             return;
         }
 
+        // 맵에 이미 배치된 프리팹의 위치를 가져옴
+        InitializeSpawnPositions();
+
         SpawnPrefabsRandomly();
 
         // NavMesh 업데이트
         navMeshSurface.BuildNavMesh();
+    }
+
+    void InitializeSpawnPositions()
+    {
+        GameObject[] existingPrefabs = GameObject.FindGameObjectsWithTag("SpawnPrefab"); // 미리 정의된 태그 사용
+        foreach (GameObject prefab in existingPrefabs)
+        {
+            spawnPositions.Add(prefab.transform.position);
+        }
     }
 
     void SpawnPrefabsRandomly()
@@ -73,18 +85,6 @@ public class NaturSpawn : MonoBehaviour
                     {
                         canSpawn = false;
                         break;
-                    }
-                }
-
-                if (canSpawn)
-                {
-                    foreach (Vector3 pos in spawnPositions)
-                    {
-                        if (Vector3.Distance(pos, randomPosition) < minDistanceBetweenDifferentPrefabs)
-                        {
-                            canSpawn = false;
-                            break;
-                        }
                     }
                 }
 

@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 4221287095477146647}
   m_Layer: 0
   m_Name: winter well
-  m_TagString: Untagged
+  m_TagString: SpawnPrefab
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -28,9 +28,9 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3744655282175016395}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: 0.94231397, z: -0, w: 0.33473033}
+  m_LocalRotation: {x: 0, y: 0.9423148, z: 0, w: 0.33472803}
   m_LocalPosition: {x: 14.22, y: 4.227, z: 6.26}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.012499999, y: 1, z: 0.012499999}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}

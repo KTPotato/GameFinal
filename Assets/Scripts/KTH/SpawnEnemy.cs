@@ -11,16 +11,19 @@ public class SpawnEnemy : MonoBehaviour
     public Vector2 spawnArea = new Vector2(10f, 10f); // 스폰 범위
     public string enemyTag = "Enemy"; // 몬스터 태그
     public float spawnYPosition = 1.0f; // 고정된 y 좌표
+    public GameObject portalPrefab; // 포탈 프리팹
+    public GameObject ground; // Ground 오브젝트 참조
 
     private List<GameObject> spawnPoints = new List<GameObject>();
     private int currentPhase = 0; // 현재 소환 단계 (0: 첫 번째 프리팹, 1: 두 번째 프리팹, 2: 혼합)
     private bool isSpawning = false;
+    private bool portalSpawned = false; // 포탈 생성 여부
 
     void Start()
     {
-        if (spawnPointPrefab == null || enemyPrefabs == null || enemyPrefabs.Count < 2)
+        if (spawnPointPrefab == null || enemyPrefabs == null || enemyPrefabs.Count < 2 || portalPrefab == null || ground == null)
         {
-            Debug.LogError("SpawnPointPrefab 또는 EnemyPrefabs가 설정되지 않았거나, 적어도 2개의 프리팹이 필요합니다.");
+            Debug.LogError("필수 프리팹 또는 오브젝트가 설정되지 않았습니다.");
             return;
         }
 
@@ -59,7 +62,8 @@ public class SpawnEnemy : MonoBehaviour
     {
         if (currentPhase > 2) // 3단계를 완료하면 더 이상 소환하지 않음
         {
-            Debug.Log("모든 단계를 완료했습니다. 소환이 종료됩니다.");
+            Debug.Log("모든 단계를 완료했습니다. 포탈을 생성합니다.");
+            SpawnPortal();
             return;
         }
 
@@ -77,6 +81,39 @@ public class SpawnEnemy : MonoBehaviour
         }
 
         currentPhase++;
+    }
+
+    // 포탈 생성
+    void SpawnPortal()
+    {
+        if (portalSpawned)
+        {
+            Debug.Log("포탈은 이미 생성되었습니다.");
+            return;
+        }
+
+        if (ground != null)
+        {
+            Renderer groundRenderer = ground.GetComponent<Renderer>();
+            if (groundRenderer != null)
+            {
+                // Ground 중앙 위치 계산
+                Vector3 groundCenter = groundRenderer.bounds.center;
+
+                // 포탈 생성
+                Instantiate(portalPrefab, groundCenter, Quaternion.identity);
+                portalSpawned = true; // 포탈 생성 플래그 설정
+                Debug.Log("포탈이 생성되었습니다!");
+            }
+            else
+            {
+                Debug.LogError("Ground 오브젝트에 Renderer 컴포넌트가 없습니다.");
+            }
+        }
+        else
+        {
+            Debug.LogError("Ground 오브젝트가 설정되지 않았습니다.");
+        }
     }
 
     // 모든 스폰 포인트에서 특정 프리팹 몬스터를 소환
