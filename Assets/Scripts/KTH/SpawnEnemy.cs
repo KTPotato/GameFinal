@@ -13,6 +13,7 @@ public class SpawnEnemy : MonoBehaviour
     public float spawnYPosition = 1.0f; // 고정된 y 좌표
     public GameObject portalPrefab; // 포탈 프리팹
     public GameObject ground; // Ground 오브젝트 참조
+    public float portalYPosition = 1.0f; // 포탈의 y 좌표 설정
 
     private List<GameObject> spawnPoints = new List<GameObject>();
     private int currentPhase = 0; // 현재 소환 단계 (0: 첫 번째 프리팹, 1: 두 번째 프리팹, 2: 혼합)
@@ -100,8 +101,11 @@ public class SpawnEnemy : MonoBehaviour
                 // Ground 중앙 위치 계산
                 Vector3 groundCenter = groundRenderer.bounds.center;
 
+                // 포탈 생성 위치 설정 (사용자가 지정한 Y 값으로 변경)
+                Vector3 portalPosition = new Vector3(groundCenter.x, portalYPosition, groundCenter.z);
+
                 // 포탈 생성
-                Instantiate(portalPrefab, groundCenter, Quaternion.identity);
+                Instantiate(portalPrefab, portalPosition, Quaternion.identity);
                 portalSpawned = true; // 포탈 생성 플래그 설정
                 Debug.Log("포탈이 생성되었습니다!");
             }

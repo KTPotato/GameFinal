@@ -990,6 +990,8 @@ MonoBehaviour:
   spawnArea: {x: 25, y: 25}
   enemyTag: Enemy
   spawnYPosition: 1
+  portalPrefab: {fileID: 3280519133390621005, guid: a71be3e7990efb040a07565c43cbb198, type: 3}
+  ground: {fileID: 2143239388}
 --- !u!64 &2143239391
 MeshCollider:
   m_ObjectHideFlags: 0
