@@ -6,9 +6,18 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Scenes/jjh2.unity
+    guid: 4e0aefb24e6ea6440a85d047c360849f
+  - enabled: 1
     path: Assets/Scenes/jjh.unity
     guid: 3fb55c726b27edc43b605cb01ac75d56
   - enabled: 1
-    path: Assets/Scenes/jjh2.unity
-    guid: 4e0aefb24e6ea6440a85d047c360849f
+    path: Assets/Scenes/GameScene.unity
+    guid: 9fc0d4010bbf28b4594072e72b8655ab
+  - enabled: 1
+    path: Assets/Scenes/Kang 1.unity
+    guid: b82229bb862f63b4c8b0002223a4cdbf
+  - enabled: 1
+    path: Assets/Scenes/Kang 2.unity
+    guid: 83c41a249e3f3784fa92fa1448fcad82
   m_configObjects: {}
