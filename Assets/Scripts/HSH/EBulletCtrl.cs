@@ -14,7 +14,7 @@ public class EBulletCtrl : MonoBehaviour
 
         rb.AddForce(transform.forward * bulletSpeed);
 
-        //Destroy(gameObject, 3);
+        Destroy(gameObject, 3f);
     }
 
     // Update is called once per frame
