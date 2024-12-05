@@ -32,6 +32,7 @@ public class Boss_Golem : MonoBehaviour
     public GameObject rockPrefab;
     public Transform throwPoint;
     public Transform throwPoint2;
+    public GameObject PunchPoint;
 
     // 상태 관리
     public float hitCooldown = 10f;
@@ -175,15 +176,36 @@ public class Boss_Golem : MonoBehaviour
 
     private void Attack3(Transform target) // Punch
     {
-        if (isAttacking || isPatternPaused) return;
+        if (isAttacking || isPatternPaused || PunchPoint == null) return;
 
+        // 공격 상태 설정
         isAttacking = true;
         animator.SetBool("Walk", false);
         animator.SetTrigger("Punch");
+        Punch(target.position);
 
+        // 공격 중 상태 설정
         lastAttackTime = Time.time;
-        bossagent.speed = 0; // 공격 중에 멈추기
+        bossagent.speed = 0; // 공격 중 멈춤
+
+        // 일정 시간 후 상태 초기화 및 PunchPoint 비활성화
         StartCoroutine(ResetAttackState());
+    }
+    private void Punch(Vector3 targetPosition)
+    {
+        StartCoroutine(ResetPunchState());
+    }
+    // Punch 공격 상태 초기화 코루틴
+    private IEnumerator ResetPunchState()
+    {
+        PunchPoint.SetActive(true);
+        yield return new WaitForSeconds(1.5f); // PunchPoint 유지 시간 (1.5초)
+
+        // PunchPoint 비활성화
+        if (PunchPoint != null)
+        {
+            PunchPoint.SetActive(false);
+        }
     }
 
     private void ThrowRock(Vector3 targetPosition) // 기존 던지기

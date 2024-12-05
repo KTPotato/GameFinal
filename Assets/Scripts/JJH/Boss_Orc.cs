@@ -38,7 +38,9 @@ public class Boss_Orc : MonoBehaviour
     private Queue<int> recentPatterns = new Queue<int>(); // 최근 패턴 기록
     private int maxRepeat = 2; // 동일 패턴 최대 반복 횟수
 
-    // blend tree 써서 멀면 달리고 가까우면 걷기로 해야됨 
+    public GameObject PunchPoint;
+    public GameObject AXEPoint;
+    
     public void Start()
     {
         bossagent = GetComponent<NavMeshAgent>();
@@ -76,26 +78,48 @@ public class Boss_Orc : MonoBehaviour
             }
         }
 
+        // 타겟 거리 기반으로 WR_Point 업데이트
+        if (target != null)
+        {
+            float distanceToTarget = Vector3.Distance(transform.position, target.position);
+
+            // 거리 조건에 따라 WR_Point 값 업데이트
+            if (distanceToTarget > 10f)
+            {
+                animator.SetFloat("WR_Point", 0.7f);
+                bossagent.speed = 10f;
+            }
+            else
+            {
+                animator.SetFloat("WR_Point", 0.2f);
+                bossagent.speed = 2f;
+            }
+        }
+        else
+        {
+            animator.SetFloat("WR_Point", 0.2f); // 기본값 설정
+        }
+
         if (target != null)
         {
             if (minimumDistance <= attackRange)
             {
                 bossagent.isStopped = true;
                 animator.SetBool("Walk", false);
-
+                
                 if (!isAttacking && Time.time - lastAttackTime >= attackCooldown && !isPatternPaused)
                 {
                     int attackPattern = GetNextAttackPattern();
                     switch (attackPattern)
                     {
                         case 0:
-                            Attack1(); // Auto 평타
+                            Attack1(target); // Auto 평타
                             break;
                         case 1:
                             Attack2(target); // 도끼 던지기
                             break;
                         case 2:
-                            Attack3(); // 도끼 휘두르기
+                            Attack3(target); // 도끼 휘두르기
                             break;
                     }
                 }
@@ -121,6 +145,7 @@ public class Boss_Orc : MonoBehaviour
         }
     }
 
+
     private int GetNextAttackPattern()
     {
         int attackPattern;
@@ -139,15 +164,31 @@ public class Boss_Orc : MonoBehaviour
         return attackPattern;
     }
 
-    private void Attack1() // Auto 평타
+    private void Attack1(Transform target) // Auto 평타
     {
         if (isAttacking || isPatternPaused) return;
 
         isAttacking = true;
         animator.SetTrigger("Auto");
-
+        Punch(target.position);
         lastAttackTime = Time.time;
         StartCoroutine(ResetAttackState());
+    }
+    private void Punch(Vector3 targetPosition)
+    {
+        StartCoroutine(ResetPunchState());
+    }
+    // Punch 공격 상태 초기화 코루틴
+    private IEnumerator ResetPunchState()
+    {
+        AXEPoint.SetActive(true);
+        yield return new WaitForSeconds(1.2f); // PunchPoint 유지 시간 (1.2초)
+
+        // PunchPoint 비활성화
+        if (AXEPoint != null)
+        {
+            AXEPoint.SetActive(false);
+        }
     }
 
     private void Attack2(Transform target) // 도끼 던지기
@@ -163,17 +204,35 @@ public class Boss_Orc : MonoBehaviour
         StartCoroutine(ResetAttackState());
     }
 
-    private void Attack3() // 도끼 휘두르기
+    private void Attack3(Transform target) // 도끼 휘두르기
     {
         if (isAttacking || isPatternPaused) return;
 
         isAttacking = true;
         animator.SetTrigger("Swing");
+        PunchAndSwing(target.position);
 
         lastAttackTime = Time.time;
         StartCoroutine(ResetAttackState());
     }
 
+    private void PunchAndSwing(Vector3 targetPosition)
+    {
+        StartCoroutine(ResetSwingState());
+    }
+    private IEnumerator ResetSwingState()
+    {
+        PunchPoint.SetActive(true);
+        AXEPoint.SetActive(true);
+        yield return new WaitForSeconds(1.2f); // PunchPoint 유지 시간 (1.2초)
+
+        // PunchPoint 비활성화
+        if (PunchPoint != null)
+        {
+            PunchPoint.SetActive(false);
+            AXEPoint.SetActive(false);
+        }
+    }
     private void ThrowAxe(Vector3 targetPosition)
     {
         if (axePrefab != null && throwPoint != null)
