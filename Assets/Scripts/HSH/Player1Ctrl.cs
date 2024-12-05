@@ -30,7 +30,8 @@ public class Player1Ctrl : MonoBehaviour
     public int playerLevel = 0;
     public int playerExp = 0;
     public int crossfireLevel = 1;
-    public float fan_fireLevel = 0;
+    public int fan_fireLevel = 0;
+    public int spinballLevel = 0;
 
     private bool isAttack = false;
 
@@ -189,4 +190,5 @@ public class Player1Ctrl : MonoBehaviour
         if (HpBarSlider != null)
             HpBarSlider.value = Hp / maxHp;
     }
+
 }
