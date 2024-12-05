@@ -2457,7 +2457,7 @@ MonoBehaviour:
   dmg: 3
   HpBarSlider: {fileID: 0}
   playerLevel: 0
-  crossfireLevel: 3
+  crossfireLevel: 1
   fan_fireLevel: 0
 --- !u!54 &8093795343876254317
 Rigidbody:
