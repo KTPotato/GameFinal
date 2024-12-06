@@ -920,10 +920,9 @@ MonoBehaviour:
   bossagent: {fileID: 0}
   Hp: 0
   allTargets: []
-  isAttackingAnimation: 0
+  hitCooldown: 10
   axePrefab: {fileID: 1384599918884536, guid: d5780c26e1f23b24fbae8791850eb06b, type: 3}
   throwPoint: {fileID: 8294515500629596576}
-  hitCooldown: 10
   PunchPoint: {fileID: 3977597367896963126}
   AXEPoint: {fileID: 3377253554882255268}
 --- !u!195 &770332685319287434

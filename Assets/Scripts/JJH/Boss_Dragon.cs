@@ -1,10 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.AI;
-using System.Linq;
+using static UnityEditor.IMGUI.Controls.PrimitiveBoundsHandle;
 
-public class Boss_Orc : MonoBehaviour
+public class Boss_Dragon : MonoBehaviour
 {
     public NavMeshAgent bossagent;
     public float Hp;
@@ -15,17 +16,20 @@ public class Boss_Orc : MonoBehaviour
     private bool isAttacking = false;
     private bool isTakingHit = false; // GetHit 상태 플래그
     private bool canTakeHit = true; // 피격 가능한지 여부
+    private bool isFlying = false; // Fly 상태
+    private bool canDefend = true; // 방어 가능 여부
     private bool isPatternPaused = false; // 패턴이 일시 중단되었는지 여부
     private bool isPatternLocked = false; // 패턴을 다시 끊지 않도록 할 변수
     private float patternLockTime = 10f; // 패턴이 끊기지 않는 시간 (10초)
     private float patternPauseTime = 2f; // 피격 후 패턴 일시 중단 시간 (2초)
 
     // 공격 관련 변수
-    private float attackRange = 3f;
+    private float attackRange = 9f;
     private float attackCooldown = 3f;
     private float lastAttackTime = 0f;
 
     public List<GameObject> allTargets = new List<GameObject>();
+
 
     // 상태 관리
     public float hitCooldown = 10f;
@@ -33,20 +37,29 @@ public class Boss_Orc : MonoBehaviour
     private Queue<int> recentPatterns = new Queue<int>(); // 최근 패턴 기록
     private int maxRepeat = 2; // 동일 패턴 최대 반복 횟수
 
+    public GameObject Flame;
+    public Transform FlamePoint;
 
-    public GameObject axePrefab; // 도끼 프리팹
-    public Transform throwPoint;
+    public GameObject BitePoint;
+    public GameObject DrivePoint;
+    public GameObject DefendPoint;
 
-    public GameObject PunchPoint;
-    public GameObject AXEPoint;
-    
-    public void Start()
+    private bool isInitialized = false;
+
+    private void Start()
     {
         bossagent = GetComponent<NavMeshAgent>();
         animator = GetComponent<Animator>();
-        Hp = 100;
+        Hp = 200;
+        StartCoroutine(InitializeAfterDelay());
     }
-
+    private IEnumerator InitializeAfterDelay()
+    {
+        bossagent.speed = 0;
+        yield return new WaitForSeconds(3f); // 3초 대기
+        bossagent.speed = 3.5f;
+        isInitialized = true;
+    }
     public void Update()
     {
         if (isDead || isTakingHit) return;
@@ -82,16 +95,19 @@ public class Boss_Orc : MonoBehaviour
         {
             float distanceToTarget = Vector3.Distance(transform.position, target.position);
 
-            // 거리 조건에 따라 WR_Point 값 업데이트
-            if (distanceToTarget > 10f)
+            // 초기화가 완료되었을 때만 스피드를 업데이트
+            if (isInitialized)
             {
-                animator.SetFloat("WR_Point", 0.7f);
-                bossagent.speed = 10f;
-            }
-            else
-            {
-                animator.SetFloat("WR_Point", 0.2f);
-                bossagent.speed = 2f;
+                if (distanceToTarget > 20f)
+                {
+                    animator.SetFloat("WR_Point", 0.7f);
+                    bossagent.speed = 10f;
+                }
+                else
+                {
+                    animator.SetFloat("WR_Point", 0.2f);
+                    bossagent.speed = 2f;
+                }
             }
         }
         else
@@ -105,20 +121,20 @@ public class Boss_Orc : MonoBehaviour
             {
                 bossagent.isStopped = true;
                 animator.SetBool("Walk", false);
-                
+
                 if (!isAttacking && Time.time - lastAttackTime >= attackCooldown && !isPatternPaused)
                 {
                     int attackPattern = GetNextAttackPattern();
                     switch (attackPattern)
                     {
                         case 0:
-                            Attack1(target); // Auto 평타
+                            Attack1(target); // Bite 물기
                             break;
                         case 1:
-                            Attack2(target); // 도끼 던지기
+                            Attack2(target); // Driving 박치기
                             break;
                         case 2:
-                            Attack3(target); // 도끼 휘두르기
+                            Attack3(target); // Flame 불뿜기
                             break;
                     }
                 }
@@ -154,7 +170,10 @@ public class Boss_Orc : MonoBehaviour
             attackPattern = Random.Range(0, 3);
         } while (recentPatterns.Count >= maxRepeat && recentPatterns.All(p => p == attackPattern));
 
+        // 패턴 큐에 패턴 추가
         recentPatterns.Enqueue(attackPattern);
+
+        // 큐 크기 초과시 앞의 패턴을 제거
         if (recentPatterns.Count > maxRepeat)
         {
             recentPatterns.Dequeue();
@@ -163,163 +182,136 @@ public class Boss_Orc : MonoBehaviour
         return attackPattern;
     }
 
-    private void Attack1(Transform target) // Auto 평타
+    private void Attack1(Transform target) // 물기
     {
         if (isAttacking || isPatternPaused) return;
 
         isAttacking = true;
-        animator.SetTrigger("Auto");
-        Punch(target.position);
+        animator.SetTrigger("Bite");
+        Bite(target.position);
         lastAttackTime = Time.time;
         StartCoroutine(ResetAttackState());
     }
-    private void Punch(Vector3 targetPosition)
+    private void Bite(Vector3 targetPosition)
     {
-        StartCoroutine(ResetPunchState());
+        StartCoroutine(ResetBiteState());
     }
-    // Punch 공격 상태 초기화 코루틴
-    private IEnumerator ResetPunchState()
+    private IEnumerator ResetBiteState()
     {
-        AXEPoint.SetActive(true);
-        yield return new WaitForSeconds(1.2f); // PunchPoint 유지 시간 (1.2초)
+        BitePoint.SetActive(true);
+        yield return new WaitForSeconds(1.1f);
 
-        // PunchPoint 비활성화
-        if (AXEPoint != null)
+        if(BitePoint != null)
         {
-            AXEPoint.SetActive(false);
+            BitePoint.SetActive(false);
         }
     }
-
-    private void Attack2(Transform target) // 도끼 던지기
+    private void Attack2(Transform target) // 박치기
     {
         if (isAttacking || isPatternPaused) return;
 
         isAttacking = true;
-        animator.SetTrigger("Swing");
-
-        ThrowAxe(target.position);
-
+        animator.SetTrigger("Driving");
+        Drive(target.position);
+      
         lastAttackTime = Time.time;
         StartCoroutine(ResetAttackState());
     }
+    private void Drive(Vector3 targetPosition)
+    {
+        StartCoroutine(ResetDriveState());
+    }
+    private IEnumerator ResetDriveState()
+    {
+        DrivePoint.SetActive(true);
+        yield return new WaitForSeconds(2.3f);
 
-    private void Attack3(Transform target) // 도끼 휘두르기
+        if (DrivePoint != null)
+        {
+            DrivePoint.SetActive(false);
+        }
+    }
+
+    private void Attack3(Transform target) // 불뿜기
     {
         if (isAttacking || isPatternPaused) return;
 
         isAttacking = true;
-        animator.SetTrigger("Swing");
-        PunchAndSwing(target.position);
+        animator.SetTrigger("Flame");
+        Under_Flame(target.position);
 
         lastAttackTime = Time.time;
+
         StartCoroutine(ResetAttackState());
     }
 
-    private void PunchAndSwing(Vector3 targetPosition)
+    private void Under_Flame(Vector3 targetPosition)
     {
-        StartCoroutine(ResetSwingState());
-    }
-    private IEnumerator ResetSwingState()
-    {
-        PunchPoint.SetActive(true);
-        AXEPoint.SetActive(true);
-        yield return new WaitForSeconds(1.2f); // PunchPoint 유지 시간 (1.2초)
-
-        // PunchPoint 비활성화
-        if (PunchPoint != null)
-        {
-            PunchPoint.SetActive(false);
-            AXEPoint.SetActive(false);
-        }
-    }
-    private void ThrowAxe(Vector3 targetPosition)
-    {
-        if (axePrefab != null && throwPoint != null)
-        {
-            StartCoroutine(ThrowAndReturnAxe());
-        }
+        StartCoroutine(ResetUnder_FlameState());
     }
 
-    private IEnumerator ThrowAndReturnAxe()
+    private IEnumerator ResetUnder_FlameState()
     {
-        yield return new WaitForSeconds(0.8f); 
+        yield return new WaitForSeconds(0.6f);
 
-        GameObject axe = Instantiate(axePrefab, throwPoint.position, Quaternion.identity);
+        // FlamePoint의 방향을 기준으로 2 units 더 나가게 하기
+        Vector3 adjustedPosition = FlamePoint.position + FlamePoint.forward; 
+        Quaternion adjustedRotation = FlamePoint.rotation * Quaternion.Euler(15f, 90f, 0f); // 45도 오른쪽 회전 추가
 
-        // Z축으로 90도 회전 설정
-        axe.transform.rotation = Quaternion.Euler(axe.transform.rotation.eulerAngles + new Vector3(0, 0, 90));
+        // 2f 더 나가게 된 위치와 회전값으로 FlameEffect 생성
+        GameObject flameEffect = Instantiate(Flame, adjustedPosition, adjustedRotation);
 
-        Rigidbody rb = axe.GetComponent<Rigidbody>();
-
-        // 충돌 무시
-        Collider axeCollider = axe.GetComponent<Collider>();
-        Collider throwPointCollider = throwPoint.GetComponent<Collider>();
-        if (axeCollider != null && throwPointCollider != null)
-        {
-            Physics.IgnoreCollision(axeCollider, throwPointCollider);
-        }
-
-        if (rb != null)
-        {
-            Vector3 forwardDirection = throwPoint.forward; // 던지는 방향
-            rb.velocity = Vector3.zero; // 초기 속도 설정
-            rb.AddForce(forwardDirection * 20f, ForceMode.Impulse); // 앞으로 날리기
-
-            // 날아가는 동안 x축 회전
-            StartCoroutine(RotateAxeXAxis(axe));
-
-            // 도끼가 일정 시간 후 돌아오도록 설정
-            yield return new WaitForSeconds(1.5f); // 일정 시간 동안 날아감
-
-            rb.velocity = Vector3.zero; // 속도 초기화
-            rb.angularVelocity = Vector3.zero; // 회전 초기화
-
-            // 보스의 현재 위치를 목표로 설정
-            Vector3 returnPosition = throwPoint.position;
-
-            // 돌아오는 방향 계산
-            Vector3 returnDirection = (returnPosition - axe.transform.position).normalized;
-            rb.AddForce(returnDirection * 15f, ForceMode.Impulse); // 돌아오는 힘
-
-            // 돌아오는 동안 위치를 지속적으로 체크하여 도착 시 파괴
-            StartCoroutine(DestroyAxeOnReturn(axe, returnPosition));
-        }
+        // FlameEffect가 FlamePoint를 계속 따라가도록 설정 (회전 포함)
+        StartCoroutine(MoveFlameToPoint(flameEffect));
     }
 
-    private IEnumerator RotateAxeXAxis(GameObject axe)
+    private IEnumerator MoveFlameToPoint(GameObject flameEffect)
     {
-        Rigidbody rb = axe.GetComponent<Rigidbody>();
-        while (axe != null)
+        float timeToMove = 1.5f; 
+        float elapsedTime = 0f;
+
+        // 지속적으로 FlamePoint를 따라가도록 이동
+        while (elapsedTime < timeToMove)
         {
-            if (rb != null)
-            {
-                rb.angularVelocity = new Vector3(0, 10f, 0); // x축으로만 회전
-            }
+            // FlamePoint의 현재 위치를 추적 (회전은 45도 추가된 값을 사용)
+            Vector3 targetPosition = FlamePoint.position + FlamePoint.forward;
+            Quaternion targetRotation = FlamePoint.rotation * Quaternion.Euler(15f, -90f, 0f);
+            targetPosition.x -= 1.6f;
+            targetPosition.y -= 0.4f;
+            // Lerp를 사용하여 flameEffect가 FlamePoint로 이동하도록 설정
+            flameEffect.transform.position = Vector3.Lerp(flameEffect.transform.position, targetPosition, elapsedTime / timeToMove);
+            flameEffect.transform.rotation = Quaternion.Slerp(flameEffect.transform.rotation, targetRotation, elapsedTime / timeToMove);
+
+            elapsedTime += Time.deltaTime;
+
             yield return null;
         }
+
+        // FlamePoint 위치와 회전에 정확히 도달
+        flameEffect.transform.position = FlamePoint.position + FlamePoint.forward; 
+        flameEffect.transform.rotation = FlamePoint.rotation * Quaternion.Euler(15f, -90f, 0f); 
+
+        Destroy(flameEffect, 0.5f);
     }
 
-    private IEnumerator DestroyAxeOnReturn(GameObject axe, Vector3 targetPosition)
-    {
-        while (axe != null)
-        {
-            // 도끼가 목표 위치 근처에 도달했는지 확인
-            if (Vector3.Distance(axe.transform.position, targetPosition) < 0.5f)
-            {
-                Destroy(axe); // 도끼 파괴
-                break;
-            }
-            yield return null;
-        }
-    }
+
 
 
 
     private IEnumerator ResetAttackState()
     {
-        yield return new WaitForSeconds(1f);
+        // 공격 애니메이션이 끝날 때까지 기다리기
+        while (animator.GetCurrentAnimatorStateInfo(0).IsName("Bite") ||
+               animator.GetCurrentAnimatorStateInfo(0).IsName("Driving") ||
+               animator.GetCurrentAnimatorStateInfo(0).IsName("Flame"))
+        {
+            yield return null;
+        }
 
+        // 애니메이션이 끝나면 공격이 끝났으므로 상태 리셋
         isAttacking = false;
+
+        // 공격 후 이동 상태로 돌아가기
         if (!animator.GetCurrentAnimatorStateInfo(0).IsName("Attack"))
         {
             animator.SetBool("Walk", true);
@@ -327,6 +319,7 @@ public class Boss_Orc : MonoBehaviour
             bossagent.speed = 2.5f;
         }
     }
+
 
     private void Die()
     {
