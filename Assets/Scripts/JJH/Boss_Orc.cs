@@ -171,6 +171,7 @@ public class Boss_Orc : MonoBehaviour
         animator.SetTrigger("Auto");
         Punch(target.position);
         lastAttackTime = Time.time;
+        bossagent.speed = 0; // 공격 중에 멈추기
         StartCoroutine(ResetAttackState());
     }
     private void Punch(Vector3 targetPosition)
@@ -200,6 +201,7 @@ public class Boss_Orc : MonoBehaviour
         ThrowAxe(target.position);
 
         lastAttackTime = Time.time;
+        bossagent.speed = 0; // 공격 중에 멈추기
         StartCoroutine(ResetAttackState());
     }
 
@@ -212,6 +214,7 @@ public class Boss_Orc : MonoBehaviour
         PunchAndSwing(target.position);
 
         lastAttackTime = Time.time;
+        bossagent.speed = 0; // 공격 중에 멈추기
         StartCoroutine(ResetAttackState());
     }
 
