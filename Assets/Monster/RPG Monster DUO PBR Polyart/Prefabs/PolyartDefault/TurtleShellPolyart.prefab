@@ -896,7 +896,7 @@ GameObject:
   - component: {fileID: 1037099009224839978}
   - component: {fileID: 4677290397317558448}
   - component: {fileID: 7573858576185575157}
-  - component: {fileID: 538684343390014702}
+  - component: {fileID: 6310223321176424285}
   m_Layer: 0
   m_Name: TurtleShellPolyart
   m_TagString: Enemy
@@ -1004,10 +1004,10 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 80
   m_CollisionDetection: 0
---- !u!64 &538684343390014702
-MeshCollider:
+--- !u!65 &6310223321176424285
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -1024,10 +1024,9 @@ MeshCollider:
   m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 0}
+  serializedVersion: 3
+  m_Size: {x: 1.0755997, y: 1.5197308, z: 0.9942579}
+  m_Center: {x: -0.037799835, y: 0.2598654, z: -0.0028710365}
 --- !u!1 &6861681153245785469
 GameObject:
   m_ObjectHideFlags: 0

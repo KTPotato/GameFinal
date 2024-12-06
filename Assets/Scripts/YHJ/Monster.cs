@@ -9,7 +9,7 @@ public class Monster : MonoBehaviour
     private GameObject _target;
     private Animator _animator;
 
-    public float health = 50f;
+    public float health = 50f; // 몬스터 체력
     public float attackRange = 1.5f; // 공격 범위
     public float detectionRange = 10f; // 플레이어를 감지하는 범위
 
@@ -37,12 +37,10 @@ public class Monster : MonoBehaviour
 
         if (distanceToPlayer <= detectionRange)
         {
-            // 플레이어를 감지하고 추적
             _lockOn = true;
         }
         else
         {
-            // 플레이어 감지 범위를 벗어나면 추적 중지
             _lockOn = false;
         }
 
@@ -53,24 +51,40 @@ public class Monster : MonoBehaviour
 
             if (distanceToPlayer > attackRange)
             {
-                // 공격 범위 밖: 이동
                 _animator.SetBool("isWalking", true);
                 _animator.SetBool("isAttacking", false);
             }
             else
             {
-                // 공격 범위 안: 공격
-                _monster.isStopped = true; // 멈춤
+                _monster.isStopped = true;
                 _animator.SetBool("isWalking", false);
                 _animator.SetBool("isAttacking", true);
             }
         }
         else
         {
-            // 플레이어를 감지하지 못하면 멈춤
             _monster.isStopped = true;
             _animator.SetBool("isWalking", false);
             _animator.SetBool("isAttacking", false);
         }
+    }
+
+    // 몬스터가 데미지를 받을 때 호출되는 메서드
+    public void TakeDamage(float damage)
+    {
+        health -= damage; // 체력 감소
+        Debug.Log($"Monster took {damage} damage. Remaining health: {health}");
+
+        if (health <= 0)
+        {
+            Die(); // 체력이 0 이하일 경우 죽음 처리
+        }
+    }
+
+    // 몬스터 사망 처리
+    private void Die()
+    {
+        Debug.Log("Monster died!");
+        Destroy(gameObject); // 몬스터 오브젝트 파괴
     }
 }

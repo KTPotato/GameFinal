@@ -12,6 +12,9 @@ TagManager:
   - PlayerBullet
   - SpawnPrefab
   - EXP
+  - FxTemporaire
+  - AlienMonster
+  - TurtleMonster
   layers:
   - Default
   - TransparentFX
