@@ -1153,7 +1153,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &4989975649075766
 Transform:
@@ -2365,6 +2365,7 @@ GameObject:
   - component: {fileID: 136275810615880682}
   - component: {fileID: 8563843694225299286}
   - component: {fileID: 8093795343876254317}
+  - component: {fileID: 6672389439319035342}
   m_Layer: 0
   m_Name: PolyArtWizardMaskTintMat
   m_TagString: Player
@@ -2454,11 +2455,13 @@ MonoBehaviour:
   PlayerHealth: 0
   maxHp: 100
   Hp: 100
-  dmg: 3
+  dmg: 20
   HpBarSlider: {fileID: 0}
   playerLevel: 0
+  playerExp: 0
   crossfireLevel: 1
   fan_fireLevel: 0
+  spinballLevel: 0
 --- !u!54 &8093795343876254317
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -2486,6 +2489,28 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 122
   m_CollisionDetection: 0
+--- !u!195 &6672389439319035342
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1953271650171834}
+  m_Enabled: 1
+  m_AgentTypeID: 0
+  m_Radius: 0.5
+  m_Speed: 3.5
+  m_Acceleration: 8
+  avoidancePriority: 50
+  m_AngularSpeed: 120
+  m_StoppingDistance: 0
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 2
+  m_BaseOffset: 0
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 4
 --- !u!1 &1956949540428108
 GameObject:
   m_ObjectHideFlags: 0
