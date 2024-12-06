@@ -12,6 +12,7 @@ public class AlienMonster : MonoBehaviour
     public Transform firePoint;         // 발사체가 나가는 위치
     public float attackCooldown = 1f;   // 공격 쿨타임
     public float health;        // 몬스터 체력
+    public GameObject exp;
     
 
     private NavMeshAgent agent;         // NavMeshAgent 컴포넌트
@@ -105,6 +106,14 @@ public class AlienMonster : MonoBehaviour
     private void Die()
     {
         Debug.Log("AlienMonster died!");
+        //int Rand = Random.Range(5, 8);
+        //for (int i = 0; i < Rand; i++)
+        //{
+        //    Instantiate(exp);
+        //}
+        
         Destroy(gameObject); // 몬스터 오브젝트 파괴
+
+
     }
 }

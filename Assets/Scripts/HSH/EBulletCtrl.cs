@@ -13,10 +13,10 @@ public class EBulletCtrl : MonoBehaviour
         rb = GetComponent<Rigidbody>();
 
         rb.AddForce(transform.forward * bulletSpeed);
-        Debug.Log("Bullet created. Will be destroyed in 3 seconds.");
+        //Debug.Log("Bullet created. Will be destroyed in 3 seconds.");
 
         Destroy(gameObject, 3f);
-        Debug.Log("Bullet destroyed!");
+        //Debug.Log("Bullet destroyed!");
     }
 
     void Update()
