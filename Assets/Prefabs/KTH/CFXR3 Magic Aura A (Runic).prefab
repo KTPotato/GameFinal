@@ -14656,7 +14656,7 @@ GameObject:
   - component: {fileID: 3280519133390621041}
   - component: {fileID: 1875327783095926856}
   - component: {fileID: 5729123097837416106}
-  - component: {fileID: 4841348657930672733}
+  - component: {fileID: 6963633598723587582}
   m_Layer: 0
   m_Name: CFXR3 Magic Aura A (Runic)
   m_TagString: Untagged
@@ -19667,7 +19667,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bdafa6296a4359b468396780511b5e0a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!65 &4841348657930672733
+--- !u!65 &6963633598723587582
 BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -19686,8 +19686,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 2.4425, y: 2.4825, z: 2.4425}
-  m_Center: {x: 0, y: 0.6200001, z: -0.000000059604645}
+  m_Size: {x: 1.4917511, y: 2.5193713, z: 1.3379202}
+  m_Center: {x: -0.0018289089, y: 0.6384357, z: 0.017969633}
 --- !u!1 &3280519133430969738
 GameObject:
   m_ObjectHideFlags: 0
@@ -19732,7 +19732,7 @@ Light:
   m_Type: 2
   m_Shape: 0
   m_Color: {r: 0.99215686, g: 0.81830066, b: 0.47058818, a: 1}
-  m_Intensity: 2.9305463
+  m_Intensity: 2.8180945
   m_Range: 4
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208

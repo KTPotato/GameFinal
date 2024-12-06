@@ -28,8 +28,10 @@ public class Player1Ctrl : MonoBehaviour
 
     public Slider HpBarSlider;
     public int playerLevel = 0;
+    public int playerExp = 0;
     public int crossfireLevel = 1;
-    public float fan_fireLevel = 0;
+    public int fan_fireLevel = 0;
+    public int spinballLevel = 0;
 
     private bool isAttack = false;
 
@@ -174,8 +176,13 @@ public class Player1Ctrl : MonoBehaviour
             Hp -= other.GetComponent<EBulletCtrl>().Edmg;
             Destroy(other.gameObject);
             ani.Play("GetHit");
+        }
 
-
+        //getEXP
+        if(other.tag == "EXP")
+        {
+            playerExp += other.GetComponent<Exp>().exp;
+            Debug.Log(playerExp);
         }
     }
     public void CheckHp()
@@ -183,4 +190,5 @@ public class Player1Ctrl : MonoBehaviour
         if (HpBarSlider != null)
             HpBarSlider.value = Hp / maxHp;
     }
+
 }

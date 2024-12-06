@@ -11,6 +11,7 @@ TagManager:
   - Enemy
   - PlayerBullet
   - SpawnPrefab
+  - EXP
   layers:
   - Default
   - TransparentFX
