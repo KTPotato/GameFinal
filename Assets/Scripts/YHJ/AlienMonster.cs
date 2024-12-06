@@ -12,10 +12,12 @@ public class AlienMonster : MonoBehaviour
     public Transform firePoint;         // 발사체가 나가는 위치
     public float attackCooldown = 1f;   // 공격 쿨타임
     public float health;        // 몬스터 체력
+    
 
     private NavMeshAgent agent;         // NavMeshAgent 컴포넌트
     private float attackTimer = 0f;     // 공격 타이머
     private Animator _animator;
+
 
     void Start()
     {
@@ -64,9 +66,27 @@ public class AlienMonster : MonoBehaviour
                 rb.velocity = direction * 50f; // 발사체 속도 설정
             }
 
+            // 충돌 비활성화
+            //Collider projectileCollider = projectile.GetComponent<Collider>();
+            //Collider alienCollider = GetComponent<Collider>();
+            //if (projectileCollider != null && alienCollider != null)
+            //{
+            //    Physics.IgnoreCollision(projectileCollider, alienCollider);
+            //}
+
             attackTimer = 0f; // 타이머 초기화
         }
     }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.tag == "PlayerBullet")
+        {
+            TakeDamage(other.GetComponent<BulletCtrl>().Pdmg);
+            Destroy(other.gameObject);
+        }
+    }
+
 
     // 몬스터가 데미지를 받을 때 호출되는 메서드
     public void TakeDamage(float damage)

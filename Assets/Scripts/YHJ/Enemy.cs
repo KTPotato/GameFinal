@@ -19,7 +19,7 @@ public class Enemy : MonoBehaviour
         mat=GetComponent<MeshRenderer>().material;
     }
 
-    void OnTrisggerEnter(Collider other)
+    void OnTriggerEnter(Collider other)
     {
         if (other.tag == "PlayerBullet")
         {
