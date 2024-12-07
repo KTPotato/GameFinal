@@ -15,6 +15,10 @@ TagManager:
   - FxTemporaire
   - AlienMonster
   - TurtleMonster
+  - HpBar
+  - HpBarText
+  - ExpBar
+  - ExpBarText
   layers:
   - Default
   - TransparentFX

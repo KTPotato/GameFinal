@@ -21,7 +21,7 @@ public class spinballPosCtrl : MonoBehaviour
         ballLevel = player.GetComponent<Player1Ctrl>().spinballLevel;
         transform.position = player.transform.position + new Vector3(0,0.7f,0);
         transform.Rotate(transform.up);
-        if(transform.childCount < ballLevel * 2)
+        if(transform.childCount != ballLevel * 2)
         {
             if (ballLevel >= 1)
             {

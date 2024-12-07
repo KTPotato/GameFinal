@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -11,6 +12,7 @@ public class Player1Ctrl : MonoBehaviour
     private float h = 0;
     private Vector3 movedir = Vector3.zero;
     private Animator ani;
+    private Rigidbody rb;
 
 
     private Ray mouseRay; //마우스 ray
@@ -26,20 +28,27 @@ public class Player1Ctrl : MonoBehaviour
     public float Hp = 100;
     public float dmg = 1;
 
-    public Slider HpBarSlider;
     public int playerLevel = 0;
-    public int playerExp = 0;
+    public float playerExp = 0;
+    public float playerMaxExp = 100;
     public int crossfireLevel = 1;
     public int fan_fireLevel = 0;
     public int spinballLevel = 0;
 
     private bool isAttack = false;
+    private bool canMove = true;
+
+    [SerializeField]private Image hpImage;
+    [SerializeField] private TMP_Text hpText;
+    [SerializeField] private Image expImage;
+    [SerializeField] private TMP_Text expText;
+
+
 
     // Start is called before the first frame update
     void Start()
     {
         ani = GetComponent<Animator>();
-        CheckHp();
     }
 
     // Update is called once per frame
@@ -48,7 +57,8 @@ public class Player1Ctrl : MonoBehaviour
         PlayerMove();
         FireBullet();
         Die();
-        CheckHp();
+        HpCheck();
+        EXPCheck();
     }
     void PlayerMove()
     {
@@ -61,7 +71,7 @@ public class Player1Ctrl : MonoBehaviour
 
         movedir = Vector3.forward * v + Vector3.right * h;
  
-        if (isAttack == true)
+        if (canMove == false)
         {
             //플레이어 회전
             mouseRay = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -109,8 +119,9 @@ public class Player1Ctrl : MonoBehaviour
     IEnumerator Attack()
     {
         isAttack = true;
+        canMove = false;
         ani.Play("Attack01", -1, 0);
-        yield return new WaitForSeconds(0.1f);
+        yield return new WaitForSeconds(0.01f);
         
         //crossAttack
         for(int i =  0; i < crossfireLevel; i++)
@@ -151,8 +162,10 @@ public class Player1Ctrl : MonoBehaviour
                 Bullet.GetComponent<BulletCtrl>().Pdmg = dmg;
             }
         }
+        yield return new WaitForSeconds(0.3f);
+        canMove = true;
 
-        yield return new WaitForSeconds(firespeed - 0.1f);
+        yield return new WaitForSeconds(firespeed);
         isAttack = false;
     }
     void Die()
@@ -185,10 +198,16 @@ public class Player1Ctrl : MonoBehaviour
             Debug.Log(playerExp);
         }
     }
-    public void CheckHp()
+    void HpCheck()
     {
-        if (HpBarSlider != null)
-            HpBarSlider.value = Hp / maxHp;
+        hpImage.fillAmount = Hp / maxHp;
+        hpText.text = Hp.ToString() + "/" + maxHp.ToString();
+
+    }
+    void EXPCheck()
+    {
+        expImage.fillAmount = playerExp / playerMaxExp;
+        expText.text = "Lv" + playerLevel.ToString();
     }
 
 }
