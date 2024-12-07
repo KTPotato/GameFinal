@@ -38,7 +38,12 @@ public class Player1Ctrl : MonoBehaviour
     private bool canMove = true;
     public bool isLevelUp = false;
 
-    [SerializeField]private Image hpImage;
+
+    private GameObject GO_hpImage;
+    private GameObject GO_hpText;
+    private GameObject GO_expImage;
+    private GameObject GO_expText;
+    [SerializeField] private Image hpImage;
     [SerializeField] private TMP_Text hpText;
     [SerializeField] private Image expImage;
     [SerializeField] private TMP_Text expText;
@@ -46,9 +51,32 @@ public class Player1Ctrl : MonoBehaviour
 
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         ani = GetComponent<Animator>();
+
+        GO_hpImage = GameObject.FindGameObjectWithTag("HpBar");
+        GO_hpText = GameObject.FindGameObjectWithTag("HpBarText");
+        GO_expImage = GameObject.FindGameObjectWithTag("ExpBar");
+        GO_expText = GameObject.FindGameObjectWithTag("ExpBarText");
+
+        if (hpImage == null)
+        {
+            Debug.Log("hpimage");
+            hpImage = GO_hpImage.GetComponent<Image>();
+        }
+        if (hpText == null)
+        {
+            hpText = GO_hpText.GetComponent<TMP_Text>();
+        }
+        if (expImage == null)
+        {
+            expImage = GO_expImage.GetComponent<Image>();
+        }
+        if (expText == null)
+        {
+            expText = GO_expText.GetComponent<TMP_Text>();
+        }
     }
 
     // Update is called once per frame
@@ -62,15 +90,15 @@ public class Player1Ctrl : MonoBehaviour
     }
     void PlayerMove()
     {
-        if(Hp <= 0) return;
-        
+        if (Hp <= 0) return;
+
         v = Input.GetAxis("Vertical");
         h = Input.GetAxis("Horizontal");
         v = v * Mathf.Sqrt(1 - (h * h / 2));
         h = h * Mathf.Sqrt(1 - (v * v / 2));
 
         movedir = Vector3.forward * v + Vector3.right * h;
- 
+
         if (canMove == false)
         {
             //플레이어 회전
@@ -86,13 +114,13 @@ public class Player1Ctrl : MonoBehaviour
         else
         {
             transform.position += movedir * speed * Time.deltaTime;
-            
-            if (v != 0 || h != 0) 
+
+            if (v != 0 || h != 0)
             {
                 transform.rotation = Quaternion.LookRotation(movedir);
                 ani.SetBool("move", true);
             }
-            else if (v == 0 && h == 0) 
+            else if (v == 0 && h == 0)
             {
                 mouseRay = Camera.main.ScreenPointToRay(Input.mousePosition);
                 plane = new Plane(Vector3.up, Vector3.up);
@@ -104,11 +132,11 @@ public class Player1Ctrl : MonoBehaviour
                 ani.SetBool("move", false);
             }
         }
-        
+
     }
     void FireBullet()
     {
-        if(Input.GetMouseButton(0) && !isAttack && Hp > 0)
+        if (Input.GetMouseButton(0) && !isAttack && Hp > 0)
         {
             StartCoroutine(Attack());
 
@@ -121,13 +149,13 @@ public class Player1Ctrl : MonoBehaviour
         canMove = false;
         ani.Play("Attack01", -1, 0);
         yield return new WaitForSeconds(0.01f);
-        
+
         //crossAttack
-        for(int i =  0; i < crossfireLevel; i++)
+        for (int i = 0; i < crossfireLevel; i++)
         {
-            if (crossfireLevel > 1) 
+            if (crossfireLevel > 1)
             {
-                
+
                 // 로컬 좌표계에서의 오프셋 계산
                 Vector3 localOffset = Vector3.right * 0.5f * (i - (crossfireLevel - 1) / 2.0f);
 
@@ -141,12 +169,12 @@ public class Player1Ctrl : MonoBehaviour
                 GameObject Bullet = Instantiate(bullet, firePos.position, transform.rotation);
                 Bullet.GetComponent<BulletCtrl>().Pdmg = dmg;
             }
-            
+
         }
         //fan_Attack
-        if(fan_fireLevel >= 1)
+        if (fan_fireLevel >= 1)
         {
-            for(int i = 1; i <= fan_fireLevel; i++)
+            for (int i = 1; i <= fan_fireLevel; i++)
             {
                 float angle = i * (90 / (fan_fireLevel + 1));
                 Quaternion rotation = transform.rotation * Quaternion.Euler(0, angle, 0);
@@ -169,7 +197,7 @@ public class Player1Ctrl : MonoBehaviour
     }
     void Die()
     {
-        if(transform.position.y < -10)
+        if (transform.position.y < -10)
         {
             Hp = 0;
         }
@@ -184,20 +212,70 @@ public class Player1Ctrl : MonoBehaviour
         //GetHit
         if (other.tag == "EnemyBullet")
         {
-            if(Hp <= 0) return;
-            Hp -= other.GetComponent<EBulletCtrl>().Edmg;
-            Destroy(other.gameObject);
+            if (Hp <= 0) return;
+            if (other.gameObject.name == "HP_Rock(Clone)")
+            {
+                Hp -= other.GetComponent<G_Stone>().dmg;
+
+            }
+            else if (other.gameObject.name == "HP_Golem")
+            {
+                Hp -= other.GetComponent<Boss_Golem>().dmg;
+            }
+            else if (other.gameObject.name == "PunchPoint")
+            {
+                Hp -= other.GetComponent<G_Stone>().dmg;
+            }
+            else if (other.gameObject.name == "Bloody_Axe(Clone)")
+            {
+                Hp -= other.GetComponent<O_Axe>().dmg;
+            }
+            else if (other.gameObject.name == "GruntHP")
+            {
+                Hp -= other.GetComponent<Boss_Orc>().dmg;
+            }
+            else if (other.gameObject.name == "AXEPoint")
+            {
+                Hp -= other.GetComponent<O_Axe>().dmg;
+            }
+            else if (other.gameObject.name == "PunchPoint2")
+            {
+                Hp -= other.GetComponent<O_Axe>().dmg;
+            }
+            else if (other.gameObject.name == "Red")
+            {
+                Hp -= other.GetComponent<Boss_Dragon>().dmg;
+            }
+            else if (other.gameObject.name == "BitePoint")
+            {
+                Hp -= other.GetComponent<D_Fire>().dmg;
+            }
+            else if (other.gameObject.name == "DrivePoint")
+            {
+                Hp -= other.GetComponent<D_Fire>().dmg;
+            }
+            else if (other.gameObject.name == "CFXR Fire Breath(Clone)")
+            {
+                Hp -= other.GetComponent<D_Fire>().dmg;
+            }
+            else if (other.gameObject.name == "EnemyBullet(Clone)")
+            {
+                Debug.Log("맞음");
+
+                Hp -= other.GetComponent<EBulletCtrl>().Edmg;
+                Destroy(other.gameObject);
+            }
             ani.Play("GetHit");
         }
 
         //getEXP
-        if(other.tag == "EXP")
+        if (other.tag == "EXP")
         {
-            if(playerExp < playerMaxExp)
+            if (playerExp < playerMaxExp)
             {
                 playerExp += other.GetComponent<Exp>().exp;
             }
-            else if(playerExp >= playerMaxExp)
+            else if (playerExp >= playerMaxExp)
             {
                 playerLevel += 1;
                 playerExp -= playerMaxExp;
@@ -210,14 +288,15 @@ public class Player1Ctrl : MonoBehaviour
     }
     void HpCheck()
     {
+        if (hpImage == null) return;
         hpImage.fillAmount = Hp / maxHp;
         hpText.text = Hp.ToString() + "/" + maxHp.ToString();
 
     }
     void EXPCheck()
     {
+        if (expImage == null) return;
         expImage.fillAmount = playerExp / playerMaxExp;
         expText.text = "Lv" + playerLevel.ToString();
     }
-
 }
