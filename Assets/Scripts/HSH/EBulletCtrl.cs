@@ -6,22 +6,38 @@ public class EBulletCtrl : MonoBehaviour
 {
     private Rigidbody rb;
     public float Edmg = 1;
-    public float bulletSpeed = 300;
+    public float bulletSpeed = 600;
 
     void Start()
     {
         rb = GetComponent<Rigidbody>();
-
         rb.AddForce(transform.forward * bulletSpeed);
-        //Debug.Log("Bullet created. Will be destroyed in 3 seconds.");
 
-        Destroy(gameObject, 3f);
-        //Debug.Log("Bullet destroyed!");
+        Destroy(gameObject, 3f); // 3초 뒤 파괴
     }
 
-    void Update()
+    private void OnTriggerEnter(Collider other)
     {
-        // Debugging bullet position
-       
+        // EnemyBullet이 Player와 충돌했을 때
+        if (other.CompareTag("Player"))
+        {
+            // Player1Ctrl 스크립트를 가져와서 직접 데미지 처리
+            Player1Ctrl playerCtrl = other.GetComponent<Player1Ctrl>();
+            if (playerCtrl != null)
+            {
+                playerCtrl.Hp -= Edmg; // 플레이어 HP 감소
+                Debug.Log($"Player hit! Remaining HP: {playerCtrl.Hp}");
+            }
+
+            // 발사체 파괴
+            Debug.Log("Bullet Destroyed!");
+            Destroy(gameObject);
+            
+
+
+        }
     }
+
+    
+
 }
