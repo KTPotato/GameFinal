@@ -676,6 +676,7 @@ GameObject:
   - component: {fileID: 4703457937602483715}
   - component: {fileID: 963172900526797666}
   - component: {fileID: 1209563700256497234}
+  - component: {fileID: 8862994397760866277}
   m_Layer: 0
   m_Name: TurtleShell
   m_TagString: Enemy
@@ -692,7 +693,7 @@ Transform:
   m_GameObject: {fileID: 6489251017956467968}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -10.79, y: 1, z: 10.59}
+  m_LocalPosition: {x: -13.1, y: 1, z: 15.03}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -757,7 +758,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   health: 50
   attackRange: 1.5
-  stoppingDistance: 0.5
+  detectionRange: 10
+  exp: {fileID: 5558064135593686556, guid: 08f9c045c4e8ed241869e48f02778726, type: 3}
 --- !u!54 &1209563700256497234
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -783,8 +785,29 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 80
   m_CollisionDetection: 0
+--- !u!65 &8862994397760866277
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6489251017956467968}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.0755997, y: 1.5197308, z: 0.9942579}
+  m_Center: {x: -0.037799835, y: 0.2598654, z: -0.0028710365}
 --- !u!1 &6651297116146384301
 GameObject:
   m_ObjectHideFlags: 0
