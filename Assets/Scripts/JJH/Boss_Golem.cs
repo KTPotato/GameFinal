@@ -9,7 +9,7 @@ public class Boss_Golem : MonoBehaviour
 {
     public NavMeshAgent bossagent;
     public float maxHp = 200;
-    public float Hp = 200;
+    public float Hp;
 
     private Animator animator;
 
@@ -46,6 +46,7 @@ public class Boss_Golem : MonoBehaviour
 
     public void Start()
     {
+        Hp = 200;
         bossagent = GetComponent<NavMeshAgent>();
         animator = GetComponent<Animator>();
     }

@@ -9,7 +9,7 @@ public class Boss_Orc : MonoBehaviour
 {
     public NavMeshAgent bossagent;
     public float maxHp = 200;
-    public float Hp = 200;
+    public float Hp;
 
     private Animator animator;
 
@@ -48,7 +48,7 @@ public class Boss_Orc : MonoBehaviour
     {
         bossagent = GetComponent<NavMeshAgent>();
         animator = GetComponent<Animator>();
-        Hp = 100;
+        Hp = 200;
     }
 
     public void Update()

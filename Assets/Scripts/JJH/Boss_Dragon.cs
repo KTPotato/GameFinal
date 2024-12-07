@@ -60,7 +60,7 @@ public class Boss_Dragon : MonoBehaviour
 
     private void Start()
     {
-
+        Hp = 200;
         bossagent = GetComponent<NavMeshAgent>();
         animator = GetComponent<Animator>();
         StartCoroutine(InitializeAfterDelay());
