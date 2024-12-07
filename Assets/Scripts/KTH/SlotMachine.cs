@@ -79,6 +79,14 @@ public class SlotMachine : MonoBehaviour
 
     public void ClickBtn ( int index )
     {
+        Debug.Log($"ClickBtn 호출됨: index = {index}, ResultIndexList.Count = {ResultIndexList.Count}");
+
+        if (index < 0 || index >= ResultIndexList.Count)
+        {
+            Debug.LogError($"잘못된 index 값: {index}. ResultIndexList 범위를 초과했습니다.");
+            return;
+        }
+
         DisplayResultImage.sprite = SkillSprite[ResultIndexList[index]];
     }
 }
