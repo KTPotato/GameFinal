@@ -12,7 +12,6 @@ public class Monster : MonoBehaviour
     public float health = 50f; // 몬스터 체력
     public float attackRange = 1.5f; // 공격 범위
     public float detectionRange = 10f; // 플레이어를 감지하는 범위
-    public GameObject exp;
 
     private bool _lockOn;
 
@@ -70,15 +69,6 @@ public class Monster : MonoBehaviour
         }
     }
 
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.tag == "PlayerBullet")
-        {
-            TakeDamage(other.GetComponent<BulletCtrl>().Pdmg);
-            Destroy(other.gameObject);
-        }
-    }
-
     // 몬스터가 데미지를 받을 때 호출되는 메서드
     public void TakeDamage(float damage)
     {
@@ -95,22 +85,6 @@ public class Monster : MonoBehaviour
     private void Die()
     {
         Debug.Log("Monster died!");
-        int rand = Random.Range(5, 8); // 랜덤으로 생성할 경험치 구슬 개수 설정
-
-        for (int i = 0; i < rand; i++)
-        {
-            // 경험치 구슬을 몬스터 주변의 랜덤한 위치에 생성
-            Vector3 randomOffset = new Vector3(
-                Random.Range(-1f, 1f),  // X축 랜덤 위치
-                Random.Range(0f, 1f),  // Y축 약간 위로 띄우기
-                Random.Range(-1f, 1f)  // Z축 랜덤 위치
-            );
-
-            Vector3 spawnPosition = transform.position + randomOffset;
-
-            Instantiate(exp, spawnPosition, Quaternion.identity);
-        }
-
         Destroy(gameObject); // 몬스터 오브젝트 파괴
     }
 }
