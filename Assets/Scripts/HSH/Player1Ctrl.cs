@@ -14,7 +14,6 @@ public class Player1Ctrl : MonoBehaviour
     private Animator ani;
     private Rigidbody rb;
 
-
     private Ray mouseRay; //마우스 ray
     private Plane plane; //ray의 충돌을 확인할 바닥
 
@@ -106,7 +105,6 @@ public class Player1Ctrl : MonoBehaviour
         }
         
     }
-
     void FireBullet()
     {
         if(Input.GetMouseButton(0) && !isAttack && Hp > 0)
@@ -194,8 +192,18 @@ public class Player1Ctrl : MonoBehaviour
         //getEXP
         if(other.tag == "EXP")
         {
-            playerExp += other.GetComponent<Exp>().exp;
-            Debug.Log(playerExp);
+            if(playerExp < playerMaxExp)
+            {
+                playerExp += other.GetComponent<Exp>().exp;
+            }
+            else if(playerExp >= playerMaxExp)
+            {
+                playerLevel += 1;
+                playerExp -= playerMaxExp;
+                playerMaxExp += 50;
+            }
+
+            //Debug.Log(playerExp);
         }
     }
     void HpCheck()
