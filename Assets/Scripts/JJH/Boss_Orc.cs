@@ -11,6 +11,8 @@ public class Boss_Orc : MonoBehaviour
     public float maxHp = 200;
     public float Hp;
 
+    public float dmg;
+
     private Animator animator;
 
     private bool isDead = false;

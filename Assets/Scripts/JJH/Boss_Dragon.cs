@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.UI;
@@ -11,6 +12,7 @@ public class Boss_Dragon : MonoBehaviour
     public NavMeshAgent bossagent;
     public float maxHp = 200;
     public float Hp = 200;
+    public float dmg;
 
     private Animator animator;
 
@@ -560,15 +562,16 @@ public class Boss_Dragon : MonoBehaviour
     {
         isBlocking = true;
         animator.SetTrigger("Defend");  // 막기 애니메이션 트리거
-
+        DefendPoint.SetActive(true);
         StartCoroutine(ResetDamageCountAfterBlock());
+        //부딫힌 총알 삭제
     }
 
     private IEnumerator ResetDamageCountAfterBlock()
     {
         // 막기 애니메이션이 끝날 때까지 기다림
         yield return new WaitForSeconds(2f);  // 막기 애니메이션 시간 (2초 예시)
-
+        DefendPoint.SetActive(false);
         // 막기 종료 후 카운트 리셋
         damageCount = 0;
         isBlocking = false;  // 막기 상태 초기화

@@ -1282,6 +1282,7 @@ MonoBehaviour:
   bossagent: {fileID: 0}
   maxHp: 200
   Hp: 200
+  dmg: 5
   isFlying: 0
   damageCount: 0
   isInFlightAnimation: 0
@@ -1331,7 +1332,7 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
@@ -4182,9 +4183,10 @@ GameObject:
   m_Component:
   - component: {fileID: 2179959646587239481}
   - component: {fileID: 1538923254274943802}
+  - component: {fileID: 3221676532119864307}
   m_Layer: 0
   m_Name: DrivePoint
-  m_TagString: Untagged
+  m_TagString: EnemyBullet
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4219,12 +4221,25 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
   m_Size: {x: 500, y: 500, z: 400}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &3221676532119864307
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 961509025917473665}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 92a9564d16845b946a2263c2d222ad99, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dmg: 5
 --- !u!1 &2962951890395143493
 GameObject:
   m_ObjectHideFlags: 0
@@ -4267,6 +4282,7 @@ GameObject:
   - component: {fileID: 502060464041355787}
   - component: {fileID: 3776103739919693278}
   - component: {fileID: 9208010874223813466}
+  - component: {fileID: 3198932936630836737}
   m_Layer: 0
   m_Name: DefendPoint
   m_TagString: Untagged
@@ -4337,6 +4353,18 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 126
   m_CollisionDetection: 0
+--- !u!114 &3198932936630836737
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5462903509285808635}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 060a1218e50d5274a9e9b3f70e2d6919, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &6443215664790376863
 GameObject:
   m_ObjectHideFlags: 0
@@ -4378,9 +4406,10 @@ GameObject:
   m_Component:
   - component: {fileID: 2649405661435703424}
   - component: {fileID: 5675151934958159366}
+  - component: {fileID: 7002152978152449393}
   m_Layer: 0
   m_Name: BitePoint
-  m_TagString: Untagged
+  m_TagString: EnemyBullet
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4415,9 +4444,22 @@ SphereCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
   m_Radius: 150
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &7002152978152449393
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8627016573718595556}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 92a9564d16845b946a2263c2d222ad99, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dmg: 5

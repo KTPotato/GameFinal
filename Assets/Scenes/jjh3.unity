@@ -519,10 +519,30 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 961509025917473665, guid: eb58e8f2831a51f45a44a261e6710cdd, type: 3}
+      propertyPath: m_TagString
+      value: EnemyBullet
+      objectReference: {fileID: 0}
+    - target: {fileID: 1538923254274943802, guid: eb58e8f2831a51f45a44a261e6710cdd, type: 3}
+      propertyPath: m_IsTrigger
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2524214399017214661, guid: eb58e8f2831a51f45a44a261e6710cdd, type: 3}
       propertyPath: hpImage
       value: 
       objectReference: {fileID: 1986844456}
+    - target: {fileID: 3667452197845789188, guid: eb58e8f2831a51f45a44a261e6710cdd, type: 3}
+      propertyPath: m_IsTrigger
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5675151934958159366, guid: eb58e8f2831a51f45a44a261e6710cdd, type: 3}
+      propertyPath: m_IsTrigger
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8627016573718595556, guid: eb58e8f2831a51f45a44a261e6710cdd, type: 3}
+      propertyPath: m_TagString
+      value: EnemyBullet
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

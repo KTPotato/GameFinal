@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 95433748489988412}
   - component: {fileID: 8008122692500603571}
   - component: {fileID: 3299868203001444232}
+  - component: {fileID: 8933323999950605668}
   m_Layer: 0
   m_Name: HP_Rock
   m_TagString: Untagged
@@ -29,7 +30,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1260152368072798}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0.15921654, z: -0, w: 0.9872437}
+  m_LocalRotation: {x: 0, y: -0.1592179, z: 0, w: 0.98724353}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.01, y: 0.01, z: 0.01}
   m_ConstrainProportionsScale: 0
@@ -157,3 +158,16 @@ CapsuleCollider:
   m_Height: 195.88199
   m_Direction: 1
   m_Center: {x: 0.00000012027832, y: -17.005693, z: -21.38406}
+--- !u!114 &8933323999950605668
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1260152368072798}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 06589e7030f6d134c8c078187fd119af, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dmg: 8
