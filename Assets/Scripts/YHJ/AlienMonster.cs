@@ -103,17 +103,27 @@ public class AlienMonster : MonoBehaviour
     }
 
     // 몬스터 사망 처리
+    // 몬스터 사망 처리
     private void Die()
     {
         Debug.Log("AlienMonster died!");
-        //int Rand = Random.Range(5, 8);
-        //for (int i = 0; i < Rand; i++)
-        //{
-        //    Instantiate(exp);
-        //}
-        
+        int rand = Random.Range(5, 8); // 랜덤으로 생성할 경험치 구슬 개수 설정
+
+        for (int i = 0; i < rand; i++)
+        {
+            // 경험치 구슬을 몬스터 주변의 랜덤한 위치에 생성
+            Vector3 randomOffset = new Vector3(
+                Random.Range(-1f, 1f),  // X축 랜덤 위치
+                Random.Range(0f, 1f),  // Y축 약간 위로 띄우기
+                Random.Range(-1f, 1f)  // Z축 랜덤 위치
+            );
+
+            Vector3 spawnPosition = transform.position + randomOffset;
+
+            Instantiate(exp, spawnPosition, Quaternion.identity);
+        }
+
         Destroy(gameObject); // 몬스터 오브젝트 파괴
-
-
     }
+
 }

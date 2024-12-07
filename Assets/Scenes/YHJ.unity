@@ -385,13 +385,21 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1977880602031615824, guid: a281aaaef0214dbbb7a0c5e5d4d370d1, type: 3}
+      propertyPath: exp
+      value: 
+      objectReference: {fileID: 5558064135593686556, guid: 08f9c045c4e8ed241869e48f02778726, type: 3}
+    - target: {fileID: 1977880602031615824, guid: a281aaaef0214dbbb7a0c5e5d4d370d1, type: 3}
+      propertyPath: _target
+      value: 
+      objectReference: {fileID: 1732520849}
     - target: {fileID: 4530003306004163418, guid: a281aaaef0214dbbb7a0c5e5d4d370d1, type: 3}
       propertyPath: m_Name
       value: Alien
       objectReference: {fileID: 0}
     - target: {fileID: 4530003306004526970, guid: a281aaaef0214dbbb7a0c5e5d4d370d1, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 19.9
+      value: -16.57
       objectReference: {fileID: 0}
     - target: {fileID: 4530003306004526970, guid: a281aaaef0214dbbb7a0c5e5d4d370d1, type: 3}
       propertyPath: m_LocalPosition.y
@@ -399,7 +407,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4530003306004526970, guid: a281aaaef0214dbbb7a0c5e5d4d370d1, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -68.7
+      value: 7.16
       objectReference: {fileID: 0}
     - target: {fileID: 4530003306004526970, guid: a281aaaef0214dbbb7a0c5e5d4d370d1, type: 3}
       propertyPath: m_LocalRotation.w
@@ -547,6 +555,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 4677290397317558448, guid: 24a0663f813d4beb91fc0c6b1e8fef36, type: 3}
+      propertyPath: exp
+      value: 
+      objectReference: {fileID: 5558064135593686556, guid: 08f9c045c4e8ed241869e48f02778726, type: 3}
     - target: {fileID: 6265206175713501824, guid: 24a0663f813d4beb91fc0c6b1e8fef36, type: 3}
       propertyPath: m_LocalPosition.x
       value: -13.1
@@ -939,6 +951,11 @@ MonoBehaviour:
   health: 30
   attackRange: 2
   detectionRange: 2
+--- !u!1 &1732520849 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1953271650171834, guid: dbf7a0c9d76b77a40af3104feac0641d, type: 3}
+  m_PrefabInstance: {fileID: 2064297779}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &2064297779
 PrefabInstance:
   m_ObjectHideFlags: 0
