@@ -36,6 +36,7 @@ public class Player1Ctrl : MonoBehaviour
 
     private bool isAttack = false;
     private bool canMove = true;
+    public bool isLevelUp = false;
 
     [SerializeField]private Image hpImage;
     [SerializeField] private TMP_Text hpText;
@@ -201,6 +202,7 @@ public class Player1Ctrl : MonoBehaviour
                 playerLevel += 1;
                 playerExp -= playerMaxExp;
                 playerMaxExp += 50;
+                isLevelUp = true;
             }
 
             //Debug.Log(playerExp);
