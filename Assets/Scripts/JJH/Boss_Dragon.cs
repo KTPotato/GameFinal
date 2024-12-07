@@ -67,6 +67,12 @@ public class Boss_Dragon : MonoBehaviour
         animator = GetComponent<Animator>();
         StartCoroutine(InitializeAfterDelay());
     }
+    public void SpawnPlayer()
+    {
+        allTargets.Clear();
+        GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
+        allTargets.AddRange(players);
+    }
     private IEnumerator InitializeAfterDelay()
     {
         bossagent.speed = 0;
@@ -74,6 +80,7 @@ public class Boss_Dragon : MonoBehaviour
         bossagent.speed = 3.5f;
         isInitialized = true;
     }
+
     public void Update()
     {
         if (isDead || isTakingHit) return;

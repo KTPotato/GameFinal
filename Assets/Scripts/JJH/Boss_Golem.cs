@@ -51,9 +51,9 @@ public class Boss_Golem : MonoBehaviour
         Hp = 200;
         bossagent = GetComponent<NavMeshAgent>();
         animator = GetComponent<Animator>();
+
+
     }
-
-
 
     public void Update()
     {
@@ -70,7 +70,6 @@ public class Boss_Golem : MonoBehaviour
         allTargets.Clear();
         GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
         allTargets.AddRange(players);
-
         float minimumDistance = float.MaxValue;
         Transform target = null;
 
