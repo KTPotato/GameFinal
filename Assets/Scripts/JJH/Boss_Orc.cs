@@ -342,19 +342,20 @@ public class Boss_Orc : MonoBehaviour
         Destroy(gameObject, 2f);
     }
 
-    private void OnCollisionEnter(Collision collision)
+    private void OnTriggerEnter(Collider other)
     {
-        if (collision.collider.CompareTag("Bullet"))
+        if (other.tag == "PlayerBullet")
         {
-            TakeDamage(1);
+            Hp -= other.GetComponent<BulletCtrl>().Pdmg;
+            TakeDamage();
+            Destroy(other.gameObject);
         }
     }
 
-    public void TakeDamage(float damage)
+    public void TakeDamage()
     {
         if (isDead || isTakingHit) return;
 
-        Hp -= damage;
         Debug.Log("¸ÂÀ½");
         if (!isPatternLocked)
         {

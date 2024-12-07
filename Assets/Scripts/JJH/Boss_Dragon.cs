@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.AI;
@@ -213,9 +214,8 @@ public class Boss_Dragon : MonoBehaviour
         // 스스로의 콜라이더 끄기
         isFlying = true; // Fly 상태로 전환
         isInFlightAnimation = true;
-
-        animator.SetBool("Fly", true);
         bossagent.isStopped = true;
+        animator.SetBool("Fly", true);
         isAttacking = false; // 현재 진행 중인 공격 패턴 중단
         stateStartTime = Time.time; // Fly 상태 시작 시간 초기화
         StartCoroutine(FalseFight());
@@ -223,8 +223,9 @@ public class Boss_Dragon : MonoBehaviour
 
     private IEnumerator FalseFight()
     {
-        yield return new WaitForSeconds(7f);
+        yield return new WaitForSeconds(6.5f);
         isInFlightAnimation = false;
+        bossagent.isStopped = false;
     }
     private void TransitionToUnder()
     {
@@ -250,9 +251,10 @@ public class Boss_Dragon : MonoBehaviour
 
     private IEnumerator FlyToWalk()
     {
-        yield return new WaitForSeconds(5f);  // 5초 후 Walk로 전환
+        yield return new WaitForSeconds(4.5f);  // 5초 후 Walk로 전환
         isFlying = false;  
         isInFlightAnimation = false;
+        bossagent.isStopped = false;
         // 스스로의 콜라이더 켜기
         Collider[] colliders = GetComponents<Collider>();
         foreach (Collider collider in colliders)
@@ -511,19 +513,19 @@ public class Boss_Dragon : MonoBehaviour
         Destroy(gameObject, 2f);
     }
 
-    private void OnCollisionEnter(Collision collision)
+    private void OnTriggerEnter(Collider other)
     {
-        if (collision.collider.CompareTag("Bullet"))
+        if (other.tag == "PlayerBullet")
         {
-            TakeDamage(1);
+            Hp -= other.GetComponent<BulletCtrl>().Pdmg;
+            TakeDamage();
+            Destroy(other.gameObject);
         }
     }
 
-    public void TakeDamage(float damage)
+    public void TakeDamage()
     {
         if (isDead || isTakingHit) return;
-
-        Hp -= damage;
 
         Debug.Log("맞음");
         damageCount++;  // 타격 횟수 증가
