@@ -20,3 +20,6 @@ public class UiController : MonoBehaviour
         
     }
 }
+
+
+//player isLeveUp¿ª false∑Œ
