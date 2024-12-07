@@ -57,8 +57,8 @@ public class Player1Ctrl : MonoBehaviour
         PlayerMove();
         FireBullet();
         Die();
-        //HpCheck();
-        //EXPCheck();
+        HpCheck();
+        EXPCheck();
     }
     void PlayerMove()
     {
@@ -208,16 +208,16 @@ public class Player1Ctrl : MonoBehaviour
             //Debug.Log(playerExp);
         }
     }
-    //void HpCheck()
-    //{
-    //    hpImage.fillAmount = Hp / maxHp;
-    //    hpText.text = Hp.ToString() + "/" + maxHp.ToString();
+    void HpCheck()
+    {
+        hpImage.fillAmount = Hp / maxHp;
+        hpText.text = Hp.ToString() + "/" + maxHp.ToString();
 
-    //}
-    //void EXPCheck()
-    //{
-    //    expImage.fillAmount = playerExp / playerMaxExp;
-    //    expText.text = "Lv" + playerLevel.ToString();
-    //}
+    }
+    void EXPCheck()
+    {
+        expImage.fillAmount = playerExp / playerMaxExp;
+        expText.text = "Lv" + playerLevel.ToString();
+    }
 
 }
