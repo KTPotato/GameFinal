@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 using System.Linq;
+using UnityEngine.UI;
 
 public class Boss_Orc : MonoBehaviour
 {
     public NavMeshAgent bossagent;
-    public float Hp;
+    public float maxHp = 200;
+    public float Hp = 200;
 
     private Animator animator;
 
@@ -39,7 +41,9 @@ public class Boss_Orc : MonoBehaviour
 
     public GameObject PunchPoint;
     public GameObject AXEPoint;
-    
+
+    [SerializeField] private Image hpImage;
+
     public void Start()
     {
         bossagent = GetComponent<NavMeshAgent>();
@@ -56,6 +60,7 @@ public class Boss_Orc : MonoBehaviour
             Die();
             return;
         }
+        HpCheck();
 
         allTargets.Clear();
         GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
@@ -384,5 +389,9 @@ public class Boss_Orc : MonoBehaviour
         yield return new WaitForSeconds(patternPauseTime);
         canTakeHit = true;
         isTakingHit = false;
+    }
+    void HpCheck()
+    {
+        hpImage.fillAmount = Hp / maxHp;
     }
 }

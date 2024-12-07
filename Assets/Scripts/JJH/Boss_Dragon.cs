@@ -1,16 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Unity.VisualScripting;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.UI;
 
 
 public class Boss_Dragon : MonoBehaviour
 {
     public NavMeshAgent bossagent;
-    public float Hp;
+    public float maxHp = 200;
+    public float Hp = 200;
 
     private Animator animator;
 
@@ -56,11 +56,13 @@ public class Boss_Dragon : MonoBehaviour
 
     public bool isInitialized = false;
 
+    [SerializeField] private Image hpImage;
+
     private void Start()
     {
+
         bossagent = GetComponent<NavMeshAgent>();
         animator = GetComponent<Animator>();
-        Hp = 200;
         StartCoroutine(InitializeAfterDelay());
     }
     private IEnumerator InitializeAfterDelay()
@@ -79,6 +81,8 @@ public class Boss_Dragon : MonoBehaviour
             Die();
             return;
         }
+
+        HpCheck();
 
         if (!animator.GetBool("Fly") && !isFlying)
         {
@@ -581,5 +585,10 @@ public class Boss_Dragon : MonoBehaviour
         yield return new WaitForSeconds(patternPauseTime);
         canTakeHit = true;
         isTakingHit = false;
+    }
+
+    void HpCheck()
+    {
+        hpImage.fillAmount = Hp / maxHp;
     }
 }

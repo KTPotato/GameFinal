@@ -861,7 +861,7 @@ GameObject:
   - component: {fileID: 2345053915056826597}
   m_Layer: 0
   m_Name: GruntHP
-  m_TagString: Untagged
+  m_TagString: EnemyBullet
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -918,6 +918,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bossagent: {fileID: 0}
+  maxHp: 200
   Hp: 0
   allTargets: []
   hitCooldown: 10
@@ -925,6 +926,7 @@ MonoBehaviour:
   throwPoint: {fileID: 8294515500629596576}
   PunchPoint: {fileID: 3977597367896963126}
   AXEPoint: {fileID: 3377253554882255268}
+  hpImage: {fileID: 0}
 --- !u!195 &770332685319287434
 NavMeshAgent:
   m_ObjectHideFlags: 0

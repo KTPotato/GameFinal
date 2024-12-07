@@ -303,7 +303,7 @@ GameObject:
   - component: {fileID: 4625517532959184997}
   m_Layer: 0
   m_Name: HP_Golem
-  m_TagString: Untagged
+  m_TagString: EnemyBullet
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -412,6 +412,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bossagent: {fileID: 0}
+  maxHp: 200
   Hp: 0
   allTargets: []
   isAttackingAnimation: 0
@@ -420,6 +421,7 @@ MonoBehaviour:
   throwPoint2: {fileID: 8487224442911993767}
   PunchPoint: {fileID: 6327263935758023143}
   hitCooldown: 10
+  hpImage: {fileID: 0}
 --- !u!195 &4625517532959184997
 NavMeshAgent:
   m_ObjectHideFlags: 0

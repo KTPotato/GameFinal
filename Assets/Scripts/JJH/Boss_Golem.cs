@@ -3,11 +3,13 @@ using UnityEngine.AI;
 using UnityEngine;
 using System.Collections;
 using System.Linq;
+using UnityEngine.UI;
 
 public class Boss_Golem : MonoBehaviour
 {
     public NavMeshAgent bossagent;
-    public float Hp;
+    public float maxHp = 200;
+    public float Hp = 200;
 
     private Animator animator;
 
@@ -40,11 +42,12 @@ public class Boss_Golem : MonoBehaviour
     private Queue<int> recentPatterns = new Queue<int>(); // 최근 패턴 기록
     private int maxRepeat = 2; // 동일 패턴 최대 반복 횟수
 
+    [SerializeField] private Image hpImage;
+
     public void Start()
     {
         bossagent = GetComponent<NavMeshAgent>();
         animator = GetComponent<Animator>();
-        Hp = 100;
     }
 
 
@@ -58,6 +61,8 @@ public class Boss_Golem : MonoBehaviour
             Die();
             return;
         }
+
+        HpCheck();
 
         allTargets.Clear();
         GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
@@ -363,5 +368,10 @@ public class Boss_Golem : MonoBehaviour
         yield return new WaitForSeconds(patternPauseTime); // 일정 시간 동안 피격 후 패턴이 끊어지지 않도록 유지
         canTakeHit = true; // 다시 피격 가능하도록 설정
         isTakingHit = false; // GetHit 상태 비활성화
+    }
+
+    void HpCheck()
+    {
+        hpImage.fillAmount = Hp / maxHp;
     }
 }
