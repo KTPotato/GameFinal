@@ -45,7 +45,7 @@ public class Boss_Orc : MonoBehaviour
     public GameObject AXEPoint;
 
     [SerializeField] private Image hpImage;
-    public GameObject HpBar;
+        public GameObject HpBar;
     public void Start()
     {
         bossagent = GetComponent<NavMeshAgent>();
@@ -377,12 +377,19 @@ public class Boss_Orc : MonoBehaviour
                 animator.SetBool("Walk", false);
                 animator.SetTrigger("GetHit");
                 Debug.Log("패턴중지");
+                bossagent.speed = 0;
                 StartCoroutine(LockPatternForDuration(patternLockTime));
                 StartCoroutine(TakeDamageCooldown());
+                StartCoroutine(Stop());
             }
         }
     }
 
+    private IEnumerator Stop()
+    {
+        yield return new WaitForSeconds(2f);
+        bossagent.speed = 2f;
+    }
     private IEnumerator LockPatternForDuration(float duration)
     {
         isPatternLocked = true;
