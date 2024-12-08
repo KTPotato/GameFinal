@@ -20,7 +20,7 @@ public class spinballPosCtrl : MonoBehaviour
     {
         ballLevel = player.GetComponent<Player1Ctrl>().spinballLevel;
         transform.position = player.transform.position + new Vector3(0,0.7f,0);
-        transform.Rotate(transform.up);
+        transform.Rotate(transform.up * 0.5f);
         if(transform.childCount != ballLevel * 2)
         {
             if (ballLevel >= 1)
@@ -41,6 +41,7 @@ public class spinballPosCtrl : MonoBehaviour
                     Ball.transform.SetParent(transform, false);
                     Ball.transform.rotation = rotation;
                     Ball.transform.position = transform.position + Ball.transform.forward * 5;
+                    Ball.GetComponent<BulletCtrl>().Pdmg = player.GetComponent<Player1Ctrl>().dmg;
                 }
                 for (int i = 1; i <= ballLevel; i++)
                 {
@@ -51,6 +52,7 @@ public class spinballPosCtrl : MonoBehaviour
                     Ball.transform.SetParent(transform, false);
                     Ball.transform.rotation = rotation;
                     Ball.transform.position = transform.position + Ball.transform.forward * 5;
+                    Ball.GetComponent<BulletCtrl>().Pdmg = player.GetComponent<Player1Ctrl>().dmg;
                 }
             }
         }
