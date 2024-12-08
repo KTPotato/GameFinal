@@ -25,6 +25,10 @@ public class Exp : MonoBehaviour
         if (distance < 10)
         {
             transform.Translate((player.transform.position - transform.position).normalized * speed * Time.deltaTime);
+        }else if (GameObject.FindWithTag("Enemy") == null)
+        {
+            transform.Translate((player.transform.position - transform.position).normalized * speed * Time.deltaTime);
+
         }
     }
     private void OnTriggerEnter(Collider other)

@@ -38,15 +38,10 @@ public class Player1Ctrl : MonoBehaviour
     private bool canMove = true;
     public bool isLevelUp = false;
 
-
-    private GameObject GO_hpImage;
-    private GameObject GO_hpText;
-    private GameObject GO_expImage;
-    private GameObject GO_expText;
-    [SerializeField] private Image hpImage;
-    [SerializeField] private TMP_Text hpText;
-    [SerializeField] private Image expImage;
-    [SerializeField] private TMP_Text expText;
+    public Image hpImage;
+    public TMP_Text hpText;
+    public Image expImage;
+    public TMP_Text expText;
 
 
 
@@ -54,29 +49,6 @@ public class Player1Ctrl : MonoBehaviour
     void Awake()
     {
         ani = GetComponent<Animator>();
-
-        GO_hpImage = GameObject.FindGameObjectWithTag("HpBar");
-        GO_hpText = GameObject.FindGameObjectWithTag("HpBarText");
-        GO_expImage = GameObject.FindGameObjectWithTag("ExpBar");
-        GO_expText = GameObject.FindGameObjectWithTag("ExpBarText");
-
-        if (hpImage == null)
-        {
-            Debug.Log("hpimage");
-            hpImage = GO_hpImage.GetComponent<Image>();
-        }
-        if (hpText == null)
-        {
-            hpText = GO_hpText.GetComponent<TMP_Text>();
-        }
-        if (expImage == null)
-        {
-            expImage = GO_expImage.GetComponent<Image>();
-        }
-        if (expText == null)
-        {
-            expText = GO_expText.GetComponent<TMP_Text>();
-        }
     }
 
     // Update is called once per frame

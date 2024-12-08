@@ -13,7 +13,13 @@ public class BulletCtrl : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         rb.AddForce(transform.forward * bulletSpeed);
     }
-
+    private void Update()
+    {
+        if (transform.position.x > 50 || transform.position.x < -50 || transform.position.z > 50 || transform.position.z < -50)
+        {
+            Destroy(gameObject);
+        }
+    }
     void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.CompareTag("Enemy"))

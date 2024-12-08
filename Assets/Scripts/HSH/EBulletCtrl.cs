@@ -15,7 +15,13 @@ public class EBulletCtrl : MonoBehaviour
 
         Destroy(gameObject, 3f); // 3초 뒤 파괴
     }
-
+    private void Update()
+    {
+        if (transform.position.x > 50 || transform.position.x < -50 || transform.position.z > 50 || transform.position.z < -50)
+        {
+            Destroy(gameObject);
+        }
+    }
     private void OnTriggerEnter(Collider other)
     {
         // EnemyBullet이 Player와 충돌했을 때
