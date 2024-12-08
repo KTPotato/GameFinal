@@ -25,7 +25,7 @@ public class Boss_Orc : MonoBehaviour
     private float patternPauseTime = 2f; // 피격 후 패턴 일시 중단 시간 (2초)
 
     // 공격 관련 변수
-    private float attackRange = 3f;
+    private float attackRange = 8f;
     private float attackCooldown = 3f;
     private float lastAttackTime = 0f;
 
@@ -102,7 +102,7 @@ public class Boss_Orc : MonoBehaviour
             else
             {
                 animator.SetFloat("WR_Point", 0.2f);
-                bossagent.speed = 2f;
+                bossagent.speed = 3.5f;
             }
         }
         else
@@ -388,7 +388,7 @@ public class Boss_Orc : MonoBehaviour
     private IEnumerator Stop()
     {
         yield return new WaitForSeconds(2f);
-        bossagent.speed = 2f;
+        bossagent.speed = 3.5f;
     }
     private IEnumerator LockPatternForDuration(float duration)
     {

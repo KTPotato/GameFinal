@@ -27,7 +27,7 @@ public class Boss_Dragon : MonoBehaviour
     private float patternPauseTime = 2f; // 피격 후 패턴 일시 중단 시간 (2초)
 
     // 공격 관련 변수
-    private float attackRange = 9f;
+    private float attackRange = 10f;
     private float attackCooldown = 4f;
     private float lastAttackTime = 0f;
 
