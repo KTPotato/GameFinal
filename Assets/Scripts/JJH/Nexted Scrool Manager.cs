@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
-public class Nested_Scrool_Manager : MonoBehaviour
+public class Nexted_Scrool_Manager : MonoBehaviour
 {
     public Scrollbar scrollbar;
     public Button nextButton;
@@ -65,6 +65,7 @@ public class Nested_Scrool_Manager : MonoBehaviour
     {
         // 현재 활성화된 캐릭터 패널 인덱스 저장
         PlayerPrefs.SetInt("ActiveCharacterIndex", targetIndex);
+        Debug.Log("보스 인덱스" + targetIndex);
         PlayerPrefs.Save();
 
         // 다음 씬으로 이동

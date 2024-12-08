@@ -8,7 +8,7 @@ using UnityEngine.UI;
 public class Boss_Golem : MonoBehaviour
 {
     public NavMeshAgent bossagent;
-    public float maxHp = 200;
+    public float maxHp;
     public float Hp;
 
     public float dmg;
@@ -45,14 +45,17 @@ public class Boss_Golem : MonoBehaviour
     private int maxRepeat = 2; // 동일 패턴 최대 반복 횟수
 
     [SerializeField] private Image hpImage;
+    public GameObject HpBar;
 
     public void Start()
     {
-        Hp = 200;
+        maxHp = 5000;
+        Hp = 5000;
         bossagent = GetComponent<NavMeshAgent>();
         animator = GetComponent<Animator>();
 
-
+        HpBar = GameObject.FindGameObjectWithTag("Hp");
+        hpImage = HpBar.GetComponent<Image>();
     }
 
     public void Update()
@@ -350,14 +353,20 @@ public class Boss_Golem : MonoBehaviour
                 isTakingHit = true; // GetHit 상태 활성화
                 animator.SetBool("Walk", false);
                 animator.SetTrigger("GetHit");
+                bossagent.speed = 0;
                 Debug.Log("패턴중지");
                 // 패턴 진행 중 일시적으로 패턴을 멈추고 일정 시간 동안 패턴이 끊어지지 않도록 설정
                 StartCoroutine(LockPatternForDuration(patternLockTime));
                 StartCoroutine(TakeDamageCooldown());
+                StartCoroutine(Stop());
             }
         }
     }
-
+    private IEnumerator Stop()
+    {
+        yield return new WaitForSeconds(2f);
+        bossagent.speed = 2.5f;
+    }
     private IEnumerator LockPatternForDuration(float duration)
     {
         isPatternLocked = true;

@@ -414,7 +414,7 @@ MonoBehaviour:
   bossagent: {fileID: 0}
   maxHp: 200
   Hp: 0
-  dmg: 4
+  dmg: 6
   allTargets: []
   isAttackingAnimation: 0
   rockPrefab: {fileID: 1260152368072798, guid: 4bf449b1b6e781140a548b42020600f6, type: 3}
@@ -1028,7 +1028,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 06589e7030f6d134c8c078187fd119af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dmg: 4
+  dmg: 6
 --- !u!1 &7030942033790332174
 GameObject:
   m_ObjectHideFlags: 0

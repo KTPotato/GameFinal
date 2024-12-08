@@ -10,8 +10,8 @@ using UnityEngine.UI;
 public class Boss_Dragon : MonoBehaviour
 {
     public NavMeshAgent bossagent;
-    public float maxHp = 5000;
-    public float Hp = 5000;
+    public float maxHp;
+    public float Hp;
     public float dmg;
 
     private Animator animator;
@@ -59,13 +59,18 @@ public class Boss_Dragon : MonoBehaviour
     public bool isInitialized = false;
 
     [SerializeField] private Image hpImage;
+    public GameObject HpBar;
 
     private void Start()
     {
+        maxHp = 5000;
         Hp = 5000;
         bossagent = GetComponent<NavMeshAgent>();
         animator = GetComponent<Animator>();
         StartCoroutine(InitializeAfterDelay());
+
+        HpBar = GameObject.FindGameObjectWithTag("Hp");
+        hpImage = HpBar.GetComponent<Image>();
     }
     public void SpawnPlayer()
     {
@@ -96,7 +101,7 @@ public class Boss_Dragon : MonoBehaviour
         if (!animator.GetBool("Fly") && !isFlying)
         {
             // 상태 전환 체크
-            if (Time.time - stateStartTime >= 40f && !isFlying)
+            if (Time.time - stateStartTime >= 60f && !isFlying)
             {
                 TransitionToFly();
                 return;
@@ -104,7 +109,7 @@ public class Boss_Dragon : MonoBehaviour
         }
             if (animator.GetBool("Fly") && isFlying)
         {
-            if (Time.time - stateStartTime >= 40f)
+            if (Time.time - stateStartTime >= 30f)
             {
                 TransitionToUnder();
                 return;
@@ -317,7 +322,7 @@ public class Boss_Dragon : MonoBehaviour
             Vector3 targetPosition = FlamePoint.position + FlamePoint.forward;
             Quaternion targetRotation = FlamePoint.rotation * Quaternion.Euler(30f, -90f, 0f);
 
-            targetPosition.x -= 1.6f;
+            targetPosition.x -= 2.6f;
             targetPosition.y -= 0.7f;
 
             flameEffect.transform.position = Vector3.Lerp(flameEffect.transform.position, targetPosition, elapsedTime / timeToMove);
