@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class BoxMonster : MonoBehaviour
@@ -52,13 +51,19 @@ public class BoxMonster : MonoBehaviour
         {
             if (distanceToPlayer > attackRange)
             {
-                _animator.SetBool("isWalking", false);
+                _animator.SetBool("isWalking", true);
                 _animator.SetBool("isAttacking", false);
             }
             else
             {
                 _animator.SetBool("isWalking", false);
                 _animator.SetBool("isAttacking", true);
+
+                // 공격 로직 추가
+                if (_canAttack)
+                {
+                    AttackPlayer();
+                }
             }
         }
         else
