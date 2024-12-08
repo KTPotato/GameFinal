@@ -8,7 +8,7 @@ using UnityEngine.UI;
 public class Boss_Golem : MonoBehaviour
 {
     public NavMeshAgent bossagent;
-    public float maxHp = 200;
+    public float maxHp;
     public float Hp;
 
     public float dmg;
@@ -45,14 +45,17 @@ public class Boss_Golem : MonoBehaviour
     private int maxRepeat = 2; // 동일 패턴 최대 반복 횟수
 
     [SerializeField] private Image hpImage;
+    public GameObject HpBar;
 
     public void Start()
     {
-        Hp = 200;
+        maxHp = 5000;
+        Hp = 5000;
         bossagent = GetComponent<NavMeshAgent>();
         animator = GetComponent<Animator>();
 
-
+        HpBar = GameObject.FindGameObjectWithTag("Hp");
+        hpImage = HpBar.GetComponent<Image>();
     }
 
     public void Update()

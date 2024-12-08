@@ -920,7 +920,7 @@ MonoBehaviour:
   bossagent: {fileID: 0}
   maxHp: 200
   Hp: 0
-  dmg: 3
+  dmg: 5
   allTargets: []
   hitCooldown: 10
   axePrefab: {fileID: 1384599918884536, guid: d5780c26e1f23b24fbae8791850eb06b, type: 3}
@@ -1068,7 +1068,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d7cf013b7aff724488a4bd0d99ebbbf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dmg: 3
+  dmg: 5
 --- !u!1 &3977597367896963126
 GameObject:
   m_ObjectHideFlags: 0
@@ -1135,7 +1135,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d7cf013b7aff724488a4bd0d99ebbbf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dmg: 3
+  dmg: 5
 --- !u!1 &4784004478780923239
 GameObject:
   m_ObjectHideFlags: 0

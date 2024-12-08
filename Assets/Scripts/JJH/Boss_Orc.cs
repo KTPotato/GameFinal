@@ -8,7 +8,7 @@ using UnityEngine.UI;
 public class Boss_Orc : MonoBehaviour
 {
     public NavMeshAgent bossagent;
-    public float maxHp = 200;
+    public float maxHp;
     public float Hp;
 
     public float dmg;
@@ -45,12 +45,16 @@ public class Boss_Orc : MonoBehaviour
     public GameObject AXEPoint;
 
     [SerializeField] private Image hpImage;
-
+    public GameObject HpBar;
     public void Start()
     {
         bossagent = GetComponent<NavMeshAgent>();
         animator = GetComponent<Animator>();
-        Hp = 200;
+        maxHp = 5000;
+        Hp = 5000;
+
+        HpBar = GameObject.FindGameObjectWithTag("Hp");
+        hpImage = HpBar.GetComponent<Image>();
     }
 
     public void Update()

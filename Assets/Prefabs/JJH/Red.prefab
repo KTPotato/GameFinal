@@ -1280,9 +1280,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bossagent: {fileID: 0}
-  maxHp: 200
+  maxHp: 5000
   Hp: 200
-  dmg: 5
+  dmg: 7
   isFlying: 0
   damageCount: 0
   isInFlightAnimation: 0
@@ -4239,7 +4239,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 92a9564d16845b946a2263c2d222ad99, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dmg: 5
+  dmg: 7
 --- !u!1 &2962951890395143493
 GameObject:
   m_ObjectHideFlags: 0
@@ -4462,4 +4462,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 92a9564d16845b946a2263c2d222ad99, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dmg: 5
+  dmg: 7
