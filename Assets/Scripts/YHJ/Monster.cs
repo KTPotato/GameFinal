@@ -121,7 +121,7 @@ public class Monster : MonoBehaviour
     private void Die()
     {
         Debug.Log("Monster died!");
-        int rand = Random.Range(5, 8); // 랜덤한 경험치 아이템 생성
+        int rand = Random.Range(8, 15); // 랜덤한 경험치 아이템 생성
 
         for (int i = 0; i < rand; i++)
         {
