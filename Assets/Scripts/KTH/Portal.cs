@@ -88,13 +88,6 @@ public class Portal : MonoBehaviour
             DontDestroyOnLoad(player); // Player 객체를 씬 전환 후에도 유지
         }
 
-        // Canvas 객체를 찾아서 씬 전환 시 유지하도록 설정
-        GameObject canvas = GameObject.FindGameObjectWithTag("GameController");
-        if (canvas != null)
-        {
-            DontDestroyOnLoad(canvas); // Canvas 객체를 씬 전환 후에도 유지
-        }
-
         // 다음 씬 로드
         SceneManager.LoadScene(nextSceneIndex);
     }

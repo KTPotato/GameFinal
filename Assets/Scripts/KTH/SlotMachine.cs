@@ -17,8 +17,7 @@ public class SlotMachine : MonoBehaviour
     }
     public DisplayItemSlot[] DisplayItemSlots;
 
-    public Image DisplayResultImage;
-
+    public GameObject SlotMachineUI; // UI 전체를 비활성화할 오브젝트
     public List<int> StartList = new List<int>();
     public List<int> ResultIndexList = new List<int>();
     int ItemCnt = 3;
@@ -69,6 +68,9 @@ public class SlotMachine : MonoBehaviour
         {
             StartCoroutine(StartSlot(i));
         }
+
+        // UI가 활성화된 상태에서 게임을 일시정지
+        Time.timeScale = 0f;
     }
 
     IEnumerator StartSlot(int SlotIndex)
@@ -80,7 +82,7 @@ public class SlotMachine : MonoBehaviour
             {
                 SlotSkillObject[SlotIndex].transform.localPosition += new Vector3(0, 300f, 0);
             }
-            yield return new WaitForSeconds(0.02f);
+            yield return new WaitForSecondsRealtime(0.02f); // 게임이 일시정지 상태에서도 동작하도록 WaitForSecondsRealtime 사용
         }
         for (int i = 0; i < Slot.Length; i++)
         {
@@ -98,9 +100,6 @@ public class SlotMachine : MonoBehaviour
             return;
         }
 
-        // 선택된 스킬을 표시
-        DisplayResultImage.sprite = SkillSprite[ResultIndexList[index]];
-
         // 선택된 스킬 효과 적용
         if (skillEffects.TryGetValue(ResultIndexList[index], out var skillEffect))
         {
@@ -111,5 +110,9 @@ public class SlotMachine : MonoBehaviour
         {
             Debug.LogWarning($"스킬 효과를 찾을 수 없습니다: index = {ResultIndexList[index]}");
         }
+
+        // UI 비활성화 및 게임 재개
+        SlotMachineUI.SetActive(false);
+        Time.timeScale = 1f;
     }
 }

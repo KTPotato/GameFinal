@@ -10,8 +10,8 @@ using UnityEngine.UI;
 public class Boss_Dragon : MonoBehaviour
 {
     public NavMeshAgent bossagent;
-    public float maxHp = 200;
-    public float Hp = 200;
+    public float maxHp = 5000;
+    public float Hp = 5000;
     public float dmg;
 
     private Animator animator;
@@ -62,7 +62,7 @@ public class Boss_Dragon : MonoBehaviour
 
     private void Start()
     {
-        Hp = 200;
+        Hp = 5000;
         bossagent = GetComponent<NavMeshAgent>();
         animator = GetComponent<Animator>();
         StartCoroutine(InitializeAfterDelay());
