@@ -68,7 +68,7 @@ public class Nested_Scrool_Manager : MonoBehaviour
         PlayerPrefs.Save();
 
         // 다음 씬으로 이동
-        SceneManager.LoadScene("jjh2"); // "NextSceneName"을 이동할 씬 이름으로 변경
+        SceneManager.LoadScene("Kang1"); // "NextSceneName"을 이동할 씬 이름으로 변경
     }
 
 }
