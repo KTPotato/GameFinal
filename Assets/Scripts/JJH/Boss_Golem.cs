@@ -25,7 +25,7 @@ public class Boss_Golem : MonoBehaviour
     private float patternPauseTime = 2f; // 피격 후 패턴 일시 중단 시간 (2초)
 
     // 공격 관련 변수
-    private float attackRange = 3f;
+    private float attackRange = 8f;
     private float attackCooldown = 3f;
     private float lastAttackTime = 0f;
 
