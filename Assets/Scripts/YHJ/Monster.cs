@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -12,9 +11,12 @@ public class Monster : MonoBehaviour
     public float health = 50f; // 몬스터 체력
     public float attackRange = 1.5f; // 공격 범위
     public float detectionRange = 10f; // 플레이어를 감지하는 범위
-    public GameObject exp;
+    public float attackDamage = 10f; // 플레이어에게 줄 데미지
+    public float attackCooldown = 1.5f; // 공격 쿨다운 시간
+    public GameObject exp; // 경험치 아이템 프리팹
 
     private bool _lockOn;
+    private bool _canAttack = true; // 공격 가능 여부
 
     void Start()
     {
@@ -60,6 +62,11 @@ public class Monster : MonoBehaviour
                 _monster.isStopped = true;
                 _animator.SetBool("isWalking", false);
                 _animator.SetBool("isAttacking", true);
+
+                if (_canAttack)
+                {
+                    AttackPlayer();
+                }
             }
         }
         else
@@ -68,6 +75,27 @@ public class Monster : MonoBehaviour
             _animator.SetBool("isWalking", false);
             _animator.SetBool("isAttacking", false);
         }
+    }
+
+    private void AttackPlayer()
+    {
+        _canAttack = false; // 공격 가능 상태 비활성화
+
+        Player1Ctrl playerCtrl = _target.GetComponent<Player1Ctrl>();
+        if (playerCtrl != null)
+        {
+            playerCtrl.Hp -= attackDamage; // 플레이어의 Hp 감소
+            Debug.Log($"Monster attacked! Player HP: {playerCtrl.Hp}");
+        }
+
+        // 공격 쿨다운 시작
+        StartCoroutine(AttackCooldown());
+    }
+
+    private IEnumerator AttackCooldown()
+    {
+        yield return new WaitForSeconds(attackCooldown);
+        _canAttack = true; // 쿨다운 후 공격 가능 상태로 전환
     }
 
     private void OnTriggerEnter(Collider other)
@@ -79,7 +107,6 @@ public class Monster : MonoBehaviour
         }
     }
 
-    // 몬스터가 데미지를 받을 때 호출되는 메서드
     public void TakeDamage(float damage)
     {
         health -= damage; // 체력 감소
@@ -87,32 +114,27 @@ public class Monster : MonoBehaviour
 
         if (health <= 0)
         {
-            Die(); // 체력이 0 이하일 경우 죽음 처리
+            Die(); // 체력이 0 이하일 경우 사망 처리
         }
     }
 
-    // 몬스터 사망 처리
-    // 몬스터 사망 처리
     private void Die()
     {
         Debug.Log("Monster died!");
-        int rand = Random.Range(5, 8); // 랜덤으로 생성할 경험치 구슬 개수 설정
+        int rand = Random.Range(8, 15); // 랜덤한 경험치 아이템 생성
 
         for (int i = 0; i < rand; i++)
         {
-            // 경험치 구슬을 몬스터 주변의 랜덤한 위치에 생성
             Vector3 randomOffset = new Vector3(
-                Random.Range(-1f, 1f),  // X축 랜덤 위치
-                Random.Range(0f, 1f),  // Y축 약간 위로 띄우기
-                Random.Range(-1f, 1f)  // Z축 랜덤 위치
+                Random.Range(-1f, 1f),
+                Random.Range(0f, 1f),
+                Random.Range(-1f, 1f)
             );
 
             Vector3 spawnPosition = transform.position + randomOffset;
-
             Instantiate(exp, spawnPosition, Quaternion.identity);
         }
 
         Destroy(gameObject); // 몬스터 오브젝트 파괴
     }
-
 }

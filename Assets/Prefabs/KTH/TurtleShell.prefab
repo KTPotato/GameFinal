@@ -759,6 +759,8 @@ MonoBehaviour:
   health: 50
   attackRange: 1.5
   detectionRange: 10
+  attackDamage: 10
+  attackCooldown: 1.5
   exp: {fileID: 5558064135593686556, guid: 08f9c045c4e8ed241869e48f02778726, type: 3}
 --- !u!54 &1209563700256497234
 Rigidbody:
