@@ -243,12 +243,10 @@ public class Player1Ctrl : MonoBehaviour
         //getEXP
         if (other.tag == "EXP")
         {
-            if (playerExp < playerMaxExp)
+            playerExp += other.GetComponent<Exp>().exp;
+            if (playerExp >= playerMaxExp)
             {
                 playerExp += other.GetComponent<Exp>().exp;
-            }
-            else if (playerExp >= playerMaxExp)
-            {
                 playerLevel += 1;
                 playerExp -= playerMaxExp;
                 playerMaxExp += 50;
