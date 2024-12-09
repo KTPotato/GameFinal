@@ -756,6 +756,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f82721be6e5134146980afbe5e1f5542, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  heart: {fileID: 2096376985261061956, guid: 757b4d8da2e790742b6b97814ad300d7, type: 3}
   health: 50
   attackRange: 1.5
   detectionRange: 10

@@ -7,10 +7,11 @@ public class Monster : MonoBehaviour
     private NavMeshAgent _monster;
     private GameObject _target;
     private Animator _animator;
+    public GameObject heart;
 
     public float health = 50f; // 몬스터 체력
     public float attackRange = 1.5f; // 공격 범위
-    public float detectionRange = 10f; // 플레이어를 감지하는 범위
+    public float detectionRange = 20f; // 플레이어를 감지하는 범위
     public float attackDamage = 10f; // 플레이어에게 줄 데미지
     public float attackCooldown = 1.5f; // 공격 쿨다운 시간
     public GameObject exp; // 경험치 아이템 프리팹
@@ -23,6 +24,7 @@ public class Monster : MonoBehaviour
         _monster = GetComponent<NavMeshAgent>();
         _animator = GetComponent<Animator>();
         _target = GameObject.FindWithTag("Player");
+        //heart = Resources.Load<GameObject>("Heart"); // Resources 폴더에서 Heart 프리팹 로드
 
         if (_monster == null || _animator == null || _target == null)
         {
@@ -123,6 +125,7 @@ public class Monster : MonoBehaviour
         Debug.Log("Monster died!");
         int rand = Random.Range(8, 15); // 랜덤한 경험치 아이템 생성
 
+        // 랜덤 위치에 경험치 아이템 생성
         for (int i = 0; i < rand; i++)
         {
             Vector3 randomOffset = new Vector3(
@@ -135,6 +138,16 @@ public class Monster : MonoBehaviour
             Instantiate(exp, spawnPosition, Quaternion.identity);
         }
 
+        // 5% 확률로 Heart 프리팹 생성
+        float dropChance = Random.Range(0f, 100f);
+        if (dropChance <= 5f)
+        {
+            Vector3 heartSpawnPosition = transform.position + Vector3.up; // 몬스터 위치 위에 생성
+            Instantiate(heart, heartSpawnPosition, Quaternion.identity);
+            Debug.Log("Heart dropped!");
+        }
+
         Destroy(gameObject); // 몬스터 오브젝트 파괴
     }
+
 }

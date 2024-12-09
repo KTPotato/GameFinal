@@ -12,11 +12,12 @@ public class BoxMonster : MonoBehaviour
     public float attackRange = 1.5f; // 공격 범위
     public float detectionRange = 10f; // 플레이어를 감지하는 범위
     public GameObject exp;
+    public GameObject heart;
     public float attackDamage = 10f; // 플레이어에게 줄 데미지
     public float attackCooldown = 1.5f; // 공격 쿨다운 시간
 
     private bool _isPlayerNearby; // 플레이어 감지 여부
-
+    
     void Start()
     {
         _animator = GetComponent<Animator>();
@@ -133,6 +134,14 @@ public class BoxMonster : MonoBehaviour
             Vector3 spawnPosition = transform.position + randomOffset;
 
             Instantiate(exp, spawnPosition, Quaternion.identity);
+        }
+        // 5% 확률로 Heart 프리팹 생성
+        float dropChance = Random.Range(0f, 100f);
+        if (dropChance <= 5f)
+        {
+            Vector3 heartSpawnPosition = transform.position + Vector3.up; // 몬스터 위치 위에 생성
+            Instantiate(heart, heartSpawnPosition, Quaternion.identity);
+            Debug.Log("Heart dropped!");
         }
 
         Destroy(gameObject); // 몬스터 오브젝트 파괴
