@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -13,6 +14,7 @@ public class AlienMonster : MonoBehaviour
     public float attackCooldown = 1f;   // 공격 쿨타임
     public float health;        // 몬스터 체력
     public GameObject exp;
+    public GameObject heart;
     
 
     private NavMeshAgent agent;         // NavMeshAgent 컴포넌트
@@ -140,6 +142,15 @@ public class AlienMonster : MonoBehaviour
             Vector3 spawnPosition = transform.position + randomOffset;
 
             Instantiate(exp, spawnPosition, Quaternion.identity);
+        }
+
+        // 5% 확률로 Heart 프리팹 생성
+        float dropChance = Random.Range(0f, 100f);
+        if (dropChance <= 5f)
+        {
+            Vector3 heartSpawnPosition = transform.position + Vector3.up; // 몬스터 위치 위에 생성
+            Instantiate(heart, heartSpawnPosition, Quaternion.identity);
+            Debug.Log("Heart dropped!");
         }
 
         Destroy(gameObject); // 몬스터 오브젝트 파괴
