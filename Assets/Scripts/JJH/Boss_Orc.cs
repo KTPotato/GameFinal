@@ -55,8 +55,14 @@ public class Boss_Orc : MonoBehaviour
 
         HpBar = GameObject.FindGameObjectWithTag("Hp");
         hpImage = HpBar.GetComponent<Image>();
+        bossagent.isStopped = true;
+        StartCoroutine(StartStop());
     }
-
+    private IEnumerator StartStop()
+    {
+        yield return new WaitForSeconds(1.5f);
+        bossagent.isStopped = false;
+    }
     public void Update()
     {
         if (isDead || isTakingHit) return;
@@ -94,10 +100,10 @@ public class Boss_Orc : MonoBehaviour
             float distanceToTarget = Vector3.Distance(transform.position, target.position);
 
             // 거리 조건에 따라 WR_Point 값 업데이트
-            if (distanceToTarget > 10f)
+            if (distanceToTarget > 20f)
             {
                 animator.SetFloat("WR_Point", 0.7f);
-                bossagent.speed = 10f;
+                bossagent.speed = 7f;
             }
             else
             {
@@ -114,7 +120,6 @@ public class Boss_Orc : MonoBehaviour
         {
             if (minimumDistance <= attackRange)
             {
-                bossagent.isStopped = true;
                 animator.SetBool("Walk", false);
                 
                 if (!isAttacking && Time.time - lastAttackTime >= attackCooldown && !isPatternPaused)
@@ -136,7 +141,6 @@ public class Boss_Orc : MonoBehaviour
             }
             else
             {
-                bossagent.isStopped = false;
                 animator.SetBool("Walk", true);
                 bossagent.SetDestination(target.position);
             }

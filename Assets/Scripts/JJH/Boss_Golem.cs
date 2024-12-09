@@ -56,6 +56,13 @@ public class Boss_Golem : MonoBehaviour
 
         HpBar = GameObject.FindGameObjectWithTag("Hp");
         hpImage = HpBar.GetComponent<Image>();
+        bossagent.isStopped = true;
+        StartCoroutine(StartStop());
+    }
+    private IEnumerator StartStop()
+    {
+        yield return new WaitForSeconds(1.5f);
+        bossagent.isStopped = false;
     }
 
     public void Update()
@@ -95,7 +102,6 @@ public class Boss_Golem : MonoBehaviour
         {
             if (minimumDistance <= attackRange)
             {
-                bossagent.isStopped = true;
                 animator.SetBool("Walk", false);
 
                 if (!isAttacking && Time.time - lastAttackTime >= attackCooldown && !isPatternPaused)
@@ -117,7 +123,6 @@ public class Boss_Golem : MonoBehaviour
             }
             else
             {
-                bossagent.isStopped = false;
                 animator.SetBool("Walk", true);
                 bossagent.SetDestination(target.position);
             }

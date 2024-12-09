@@ -144,11 +144,11 @@ public class Boss_Dragon : MonoBehaviour
             // 초기화가 완료되었을 때만 스피드를 업데이트
             if (isInitialized)
             {
-                if (distanceToTarget > 20f)
+                if (distanceToTarget > 30f)
                 {
                     animator.SetFloat("WR_Point", 0.7f);
                     animator.SetFloat("FG_Point", 0.7f);
-                    bossagent.speed = 10f;
+                    bossagent.speed = 7f;
                 }
                 else
                 {
@@ -319,11 +319,12 @@ public class Boss_Dragon : MonoBehaviour
 
         while (elapsedTime < timeToMove)
         {
-            Vector3 targetPosition = FlamePoint.position + FlamePoint.forward;
+            Vector3 targetPosition = FlamePoint.position;
             Quaternion targetRotation = FlamePoint.rotation * Quaternion.Euler(30f, -90f, 0f);
 
-            targetPosition.x -= 2.6f;
-            targetPosition.y -= 0.7f;
+            targetPosition.x = FlamePoint.position.x;
+            targetPosition.y = FlamePoint.position.y;
+            targetPosition.z = FlamePoint.position.z;
 
             flameEffect.transform.position = Vector3.Lerp(flameEffect.transform.position, targetPosition, elapsedTime / timeToMove);
             flameEffect.transform.rotation = Quaternion.Slerp(flameEffect.transform.rotation, targetRotation, elapsedTime / timeToMove);
@@ -483,10 +484,13 @@ public class Boss_Dragon : MonoBehaviour
         while (elapsedTime < timeToMove)
         {
             // FlamePoint의 현재 위치를 추적 (회전은 45도 추가된 값을 사용)
-            Vector3 targetPosition = FlamePoint.position + FlamePoint.forward;
+            Vector3 targetPosition = FlamePoint.position;
             Quaternion targetRotation = FlamePoint.rotation * Quaternion.Euler(15f, -90f, 0f);
-            targetPosition.x -= 1.6f;
-            targetPosition.y -= 0.7f;
+
+            targetPosition.x = FlamePoint.position.x;
+            targetPosition.y = FlamePoint.position.y;
+            targetPosition.z = FlamePoint.position.z;
+
             // Lerp를 사용하여 flameEffect가 FlamePoint로 이동하도록 설정
             flameEffect.transform.position = Vector3.Lerp(flameEffect.transform.position, targetPosition, elapsedTime / timeToMove);
             flameEffect.transform.rotation = Quaternion.Slerp(flameEffect.transform.rotation, targetRotation, elapsedTime / timeToMove);
@@ -539,6 +543,17 @@ public class Boss_Dragon : MonoBehaviour
             TakeDamage();
             Destroy(other.gameObject);
         }
+        if (isBlocking && IsDefendPoint(other))
+        {
+            // 방어 중이고 DefendPoint에 충돌했을 경우 체력 감소 방지
+            Debug.Log("Defend active: No damage taken.");
+            return; // 데미지 무효화
+        }
+    }
+    private bool IsDefendPoint(Collider other)
+    {
+        // DefendPoint와 충돌했는지 확인
+        return other.bounds.Intersects(DefendPoint.GetComponent<Collider>().bounds);
     }
 
     public void TakeDamage()
@@ -558,6 +573,7 @@ public class Boss_Dragon : MonoBehaviour
         {
             if (canTakeHit)
             {
+                bossagent.speed = 0;
                 canTakeHit = false;
                 isTakingHit = true;
                 animator.SetBool("Walk", false);
@@ -598,6 +614,7 @@ public class Boss_Dragon : MonoBehaviour
     private IEnumerator TakeDamageCooldown()
     {
         yield return new WaitForSeconds(patternPauseTime);
+        bossagent.speed = 3.5f;
         canTakeHit = true;
         isTakingHit = false;
     }
