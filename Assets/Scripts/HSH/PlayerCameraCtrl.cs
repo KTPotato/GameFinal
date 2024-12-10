@@ -7,7 +7,7 @@ using static UnityEngine.GraphicsBuffer;
 public class PlayerCameraCtrl : MonoBehaviour
 {
     [SerializeField] private float distance = -15;
-    [SerializeField] private float height = 10;
+    [SerializeField] private float height = 15;
     [SerializeField] private float dampingTrace = 20;
 
 
