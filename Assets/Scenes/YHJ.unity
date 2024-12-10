@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.51221365, g: 0.6244273, b: 0.7578964, a: 1}
+  m_IndirectSpecularColor: {r: 0.5122137, g: 0.6244275, b: 0.7578974, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -229,6 +229,11 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &575986080 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1512148224729488641, guid: a50dc8fc460c47aa9033b698c00b2133, type: 3}
+  m_PrefabInstance: {fileID: 1656828087}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &733053724
 GameObject:
   m_ObjectHideFlags: 0
@@ -439,6 +444,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3cd05195b3d2b7445a934993e242c5cf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  distance: -15
+  height: 15
+  dampingTrace: 20
   player: {fileID: 1589010850}
 --- !u!1 &1394275347
 GameObject:
@@ -591,10 +599,26 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2800221824719420353, guid: a50dc8fc460c47aa9033b698c00b2133, type: 3}
+      propertyPath: m_IsTrigger
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7532218678216042356, guid: a50dc8fc460c47aa9033b698c00b2133, type: 3}
       propertyPath: heart
       value: 
       objectReference: {fileID: 2096376985261061956, guid: 757b4d8da2e790742b6b97814ad300d7, type: 3}
+    - target: {fileID: 7532218678216042356, guid: a50dc8fc460c47aa9033b698c00b2133, type: 3}
+      propertyPath: firePoint
+      value: 
+      objectReference: {fileID: 575986080}
+    - target: {fileID: 7532218678216042356, guid: a50dc8fc460c47aa9033b698c00b2133, type: 3}
+      propertyPath: bulletPrefab
+      value: 
+      objectReference: {fileID: 1492949230377883319, guid: c57d90d9bc3396647a69de79d36d81a1, type: 3}
+    - target: {fileID: 7532218678216042356, guid: a50dc8fc460c47aa9033b698c00b2133, type: 3}
+      propertyPath: detectionRange
+      value: 10
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
