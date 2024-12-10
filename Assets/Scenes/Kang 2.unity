@@ -882,6 +882,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3cd05195b3d2b7445a934993e242c5cf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  distance: -15
+  height: 15
+  dampingTrace: 20
   player: {fileID: 0}
 --- !u!1 &314792083
 GameObject:
@@ -4314,10 +4317,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyPrefabs:
-  - {fileID: 6165489984287314789, guid: 7e08864a55f4155408c2670426b81c09, type: 3}
+  - {fileID: 6489251017956467968, guid: 932caf7df235da140a0729cb29160fa7, type: 3}
   - {fileID: 1512148224729317677, guid: a50dc8fc460c47aa9033b698c00b2133, type: 3}
+  - {fileID: 6165489984287314789, guid: 7e08864a55f4155408c2670426b81c09, type: 3}
   spawnPointPrefab: {fileID: 695228078078476267, guid: 5f715beb01f0acf488389317d0614e5d, type: 3}
-  numberOfSpawnPoints: 5
+  numberOfSpawnPoints: 15
   enemiesPerSpawnPoint: 1
   spawnArea: {x: 25, y: 25}
   enemyTag: Enemy
