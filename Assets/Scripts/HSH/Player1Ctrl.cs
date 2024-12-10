@@ -175,6 +175,8 @@ public class Player1Ctrl : MonoBehaviour
         }
         if (Hp <= 0)
         {
+            gameObject.GetComponent<Collider>().enabled = false;
+            gameObject.GetComponent<Rigidbody>().useGravity = false;
             Destroy(gameObject, 3);
             ani.Play("Die");
         }
