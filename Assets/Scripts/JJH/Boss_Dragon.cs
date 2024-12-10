@@ -556,7 +556,11 @@ public class Boss_Dragon : MonoBehaviour
         return other.bounds.Intersects(DefendPoint.GetComponent<Collider>().bounds);
     }
 
-    public void TakeDamage()
+    private void OnTriggerExit(Collider other)
+    {
+        Hp -= other.GetComponent<BulletCtrl>().Pdmg;
+    }
+        public void TakeDamage()
     {
         if (isDead || isTakingHit) return;
 

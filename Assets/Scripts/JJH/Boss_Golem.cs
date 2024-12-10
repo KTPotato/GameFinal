@@ -344,7 +344,10 @@ public class Boss_Golem : MonoBehaviour
             Destroy(other.gameObject);
         }
     }
-
+    private void OnTriggerExit(Collider other)
+    {
+        Hp -= other.GetComponent<BulletCtrl>().Pdmg;
+    }
     public void TakeDamage()
     {
         if (isDead || isTakingHit) return;
