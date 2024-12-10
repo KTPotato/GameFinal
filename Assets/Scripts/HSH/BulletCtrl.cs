@@ -61,7 +61,7 @@ public class BulletCtrl : MonoBehaviour
     {
         if(gameObject.name == "PlayerBullet(Clone)")
         {
-            if (other.tag != "Player" && other.tag != "PlayerBullet" && other.tag != "EnemyBullet" && other.tag != "EXP" && other.tag != "Heart")
+            if (other.tag != "Player" && other.tag != "PlayerBullet" && other.tag != "EnemyBullet" && other.tag != "EXP" && other.tag != "Heart" && other.tag != "spinball")
             {
                 Destroy(gameObject);
             }
