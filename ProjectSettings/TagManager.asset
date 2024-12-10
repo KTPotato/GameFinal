@@ -21,6 +21,7 @@ TagManager:
   - ExpBarText
   - Hp
   - Heart
+  - spinball
   layers:
   - Default
   - TransparentFX
