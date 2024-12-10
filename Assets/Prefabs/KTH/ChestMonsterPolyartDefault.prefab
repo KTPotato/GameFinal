@@ -346,11 +346,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   health: 30
-  attackRange: 2
-  detectionRange: 2
+  detectionRange: 10
   exp: {fileID: 5558064135593686556, guid: 08f9c045c4e8ed241869e48f02778726, type: 3}
   heart: {fileID: 2096376985261061956, guid: 757b4d8da2e790742b6b97814ad300d7, type: 3}
-  attackDamage: 10
+  bulletPrefab: {fileID: 1492949230377883319, guid: c57d90d9bc3396647a69de79d36d81a1, type: 3}
+  firePoint: {fileID: 1512148224729488641}
+  bulletSpeed: 10
   attackCooldown: 1.5
 --- !u!65 &2800221824719420353
 BoxCollider:

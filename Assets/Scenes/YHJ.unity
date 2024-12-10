@@ -599,14 +599,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 2800221824719420353, guid: a50dc8fc460c47aa9033b698c00b2133, type: 3}
-      propertyPath: m_IsTrigger
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7532218678216042356, guid: a50dc8fc460c47aa9033b698c00b2133, type: 3}
-      propertyPath: heart
-      value: 
-      objectReference: {fileID: 2096376985261061956, guid: 757b4d8da2e790742b6b97814ad300d7, type: 3}
     - target: {fileID: 7532218678216042356, guid: a50dc8fc460c47aa9033b698c00b2133, type: 3}
       propertyPath: firePoint
       value: 
