@@ -108,6 +108,16 @@ public class Monster : MonoBehaviour
             Destroy(other.gameObject);
         }
     }
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.tag == "spinball")
+        {
+            TakeDamage(other.GetComponent<BulletCtrl>().Pdmg);
+        }
+    }
+
+
+
 
     public void TakeDamage(float damage)
     {

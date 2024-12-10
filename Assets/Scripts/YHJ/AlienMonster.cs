@@ -109,6 +109,15 @@ public class AlienMonster : MonoBehaviour
         }
     }
 
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.tag == "spinball")
+        {
+            TakeDamage(other.GetComponent<BulletCtrl>().Pdmg);
+        }
+    }
+
+
 
     // 몬스터가 데미지를 받을 때 호출되는 메서드
     public void TakeDamage(float damage)
