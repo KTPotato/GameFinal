@@ -725,6 +725,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3cd05195b3d2b7445a934993e242c5cf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  distance: -15
+  height: 15
+  dampingTrace: 20
   player: {fileID: 1776739446}
 --- !u!1001 &848922024
 PrefabInstance:

@@ -18,9 +18,13 @@ public class spinballPosCtrl : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if(player == null)
+        {
+            Destroy(gameObject);
+        }
         ballLevel = player.GetComponent<Player1Ctrl>().spinballLevel;
         transform.position = player.transform.position + new Vector3(0,0.7f,0);
-        transform.Rotate(transform.up * 0.5f);
+        transform.Rotate(transform.up * 100 * Time.deltaTime);
         if(transform.childCount != ballLevel * 2)
         {
             if (ballLevel >= 1)
