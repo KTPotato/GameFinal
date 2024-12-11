@@ -23,6 +23,7 @@ public class RouletteMachine : MonoBehaviour
     int ItemCnt = 3;
     int[] answer = { 2, 3, 1 };
 
+    public bool SkillUp;
     // 스킬 타입과 증가 값을 저장할 딕셔너리
     private Dictionary<int, (string skillType, float value)> skillEffects = new Dictionary<int, (string, float)>
     {
@@ -38,9 +39,38 @@ public class RouletteMachine : MonoBehaviour
 
     void Start()
     {
-        // 자동으로 슬롯 시작
         StartCoroutine(AutomateSlotRotation());
     }
+
+    private void Update()
+    {
+        if (SkillUp)
+        {
+            // 각 슬롯의 상태를 초기화 (슬롯 이미지 초기화 및 버튼 비활성화)
+            for (int i = 0; i < Slot.Length; i++)
+            {
+                // 슬롯에 표시된 이미지 초기화
+                foreach (var slotImage in DisplayItemSlots[i].SlotSprite)
+                {
+                    slotImage.sprite = null;  // 기본 스프라이트로 초기화 (기본 이미지를 설정)
+                }
+
+                // 버튼 비활성화
+                Slot[i].interactable = false;
+            }
+
+            // 기존의 결과 리스트 초기화 (슬롯의 결과를 랜덤으로 다시 설정)
+            ResultIndexList.Clear();
+            for (int i = 0; i < Slot.Length; i++)
+            {
+                ResultIndexList.Add(Random.Range(0, SkillSprite.Length));  // 새로운 랜덤 결과 설정
+            }
+            StartCoroutine(AutomateSlotRotation());
+            SkillUp = false;
+        }
+
+    }
+
 
     IEnumerator AutomateSlotRotation()
     {
@@ -52,6 +82,7 @@ public class RouletteMachine : MonoBehaviour
             yield return StartCoroutine(StartSlot(i)); // 슬롯 회전 시작
         }
     }
+
 
     IEnumerator StartSlot(int SlotIndex)
     {
@@ -84,6 +115,7 @@ public class RouletteMachine : MonoBehaviour
         Slot[SlotIndex].onClick.AddListener(() => ApplySkillEffect(resultIndex)); // 클릭 시 ApplySkillEffect 호출
     }
 
+
     void UpdateSlotUI(int SlotIndex, int resultIndex)
     {
         // 해당 슬롯의 스프라이트 업데이트
@@ -105,5 +137,8 @@ public class RouletteMachine : MonoBehaviour
 
         // 적용된 효과에 대한 로그 출력 (디버깅용)
         Debug.Log($"Skill: {skillType} - Effect Value: {value}");
+
+        SkillUp = true;
+        SlotMachineUI.SetActive(false);
     }
 }
