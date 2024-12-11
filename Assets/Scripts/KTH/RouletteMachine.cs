@@ -60,7 +60,7 @@ public class RouletteMachine : MonoBehaviour
                 }
 
                 // 버튼 비활성화
-                Slot[i].interactable = false;
+                //Slot[i].interactable = false;
             }
 
             // 기존의 결과 리스트 초기화 (슬롯의 결과를 랜덤으로 다시 설정)
@@ -81,6 +81,8 @@ public class RouletteMachine : MonoBehaviour
 
     IEnumerator AutomateSlotRotation()
     {
+        Time.timeScale = 0f;
+
         // 각 슬롯을 일정 시간 동안 회전시킴
         for (int i = 0; i < Slot.Length; i++)
         {
@@ -126,6 +128,7 @@ public class RouletteMachine : MonoBehaviour
         Slot[SlotIndex].interactable = true;
         Slot[SlotIndex].onClick.RemoveAllListeners(); // 기존 리스너 제거
         Slot[SlotIndex].onClick.AddListener(() => ApplySkillEffect(resultIndex)); // 클릭 시 ApplySkillEffect 호출
+
     }
 
 
@@ -153,5 +156,7 @@ public class RouletteMachine : MonoBehaviour
 
         SkillUp = true;
         SlotMachineUI.SetActive(false);
+
+        Time.timeScale = 1f;
     }
 }

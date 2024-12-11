@@ -26,6 +26,7 @@ public class UiController : MonoBehaviour
 
     void Start()
     {
+        DontDestroyOnLoad(SlotMachine);
         // Player1Ctrl 인스턴스를 찾아서 저장
         playerCtrl = FindObjectOfType<Player1Ctrl>();
 
@@ -54,13 +55,13 @@ public class UiController : MonoBehaviour
         }
     }
 
-    public void HideSlotMachine()
-    {
-        if (SlotMachine != null)
-        {
-            SlotMachine.SetActive(false); // 스킬 선택 후 SlotMachine UI를 비활성화
-        }
-    }
+    //public void HideSlotMachine()
+    //{
+    //    if (SlotMachine != null)
+    //    {
+    //        SlotMachine.SetActive(false); // 스킬 선택 후 SlotMachine UI를 비활성화
+    //    }
+    //}
 }
 
 
