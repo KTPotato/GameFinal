@@ -38,40 +38,10 @@ public class SlotMachine : MonoBehaviour
 
     void Start()
     {
-        for (int i = 0; i < ItemCnt * Slot.Length; i++)
-        {
-            StartList.Add(i);
-        }
+       
 
-        for (int i = 0; i < Slot.Length; i++)
-        {
-            for (int j = 0; j < ItemCnt; j++)
-            {
-                Slot[i].interactable = false;
-
-                int randomIndex = Random.Range(0, StartList.Count);
-                if (i == 0 && j == 1 || i == 1 && j == 0 || i == 2 && j == 2)
-                {
-                    ResultIndexList.Add(StartList[randomIndex]);
-                }
-                DisplayItemSlots[i].SlotSprite[j].sprite = SkillSprite[StartList[randomIndex]];
-
-                if (j == 0)
-                {
-                    DisplayItemSlots[i].SlotSprite[ItemCnt].sprite = SkillSprite[StartList[randomIndex]];
-                }
-                StartList.RemoveAt(randomIndex);
-            }
-        }
-
-        for (int i = 0; i < Slot.Length; i++)
-        {
-            StartCoroutine(StartSlot(i));
-        }
-
-        // UI가 활성화된 상태에서 게임을 일시정지
-        Time.timeScale = 0f;
     }
+
 
     IEnumerator StartSlot(int SlotIndex)
     {
@@ -92,27 +62,6 @@ public class SlotMachine : MonoBehaviour
 
     public void ClickBtn(int index)
     {
-        Debug.Log($"ClickBtn 호출됨: index = {index}, ResultIndexList.Count = {ResultIndexList.Count}");
 
-        if (index < 0 || index >= ResultIndexList.Count)
-        {
-            Debug.LogError($"잘못된 index 값: {index}. ResultIndexList 범위를 초과했습니다.");
-            return;
-        }
-
-        // 선택된 스킬 효과 적용
-        if (skillEffects.TryGetValue(ResultIndexList[index], out var skillEffect))
-        {
-            PlayerData.Instance.UpdatePlayerStats(skillEffect.skillType, skillEffect.value);
-            Debug.Log($"스킬 {skillEffect.skillType}이(가) {skillEffect.value}만큼 업데이트되었습니다.");
-        }
-        else
-        {
-            Debug.LogWarning($"스킬 효과를 찾을 수 없습니다: index = {ResultIndexList[index]}");
-        }
-
-        // UI 비활성화 및 게임 재개
-        SlotMachineUI.SetActive(false);
-        Time.timeScale = 1f;
     }
 }
