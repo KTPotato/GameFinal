@@ -49,10 +49,14 @@ public class RouletteMachine : MonoBehaviour
             // 각 슬롯의 상태를 초기화 (슬롯 이미지 초기화 및 버튼 비활성화)
             for (int i = 0; i < Slot.Length; i++)
             {
-                // 슬롯에 표시된 이미지 초기화
+                // 슬롯에 표시된 이미지 초기화 (회전 중 이미지만 초기화)
                 foreach (var slotImage in DisplayItemSlots[i].SlotSprite)
                 {
-                    slotImage.sprite = null;  // 기본 스프라이트로 초기화 (기본 이미지를 설정)
+                    // 회전 중일 때는 계속 랜덤하게 이미지를 표시
+                    if (slotImage.sprite == null)
+                    {
+                        slotImage.sprite = SkillSprite[Random.Range(0, SkillSprite.Length)];
+                    }
                 }
 
                 // 버튼 비활성화
@@ -65,11 +69,14 @@ public class RouletteMachine : MonoBehaviour
             {
                 ResultIndexList.Add(Random.Range(0, SkillSprite.Length));  // 새로운 랜덤 결과 설정
             }
-            StartCoroutine(AutomateSlotRotation());
-            SkillUp = false;
-        }
 
+            // 슬롯 회전 자동화 시작
+            StartCoroutine(AutomateSlotRotation());
+
+            SkillUp = false;  // SkillUp을 false로 변경하여 상태 초기화
+        }
     }
+
 
 
     IEnumerator AutomateSlotRotation()
@@ -93,6 +100,12 @@ public class RouletteMachine : MonoBehaviour
             if (SlotSkillObject[SlotIndex].transform.localPosition.y < 50f)
             {
                 SlotSkillObject[SlotIndex].transform.localPosition += new Vector3(0, 300f, 0);
+            }
+
+            // 회전 중 랜덤 이미지 업데이트
+            foreach (var slotImage in DisplayItemSlots[SlotIndex].SlotSprite)
+            {
+                slotImage.sprite = SkillSprite[Random.Range(0, SkillSprite.Length)];
             }
             yield return new WaitForSecondsRealtime(0.02f);
         }
