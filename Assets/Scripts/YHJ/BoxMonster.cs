@@ -108,6 +108,7 @@ public class BoxMonster : MonoBehaviour
 
             // 총알 회전 방향 설정
             bullet.transform.forward = fireDirection;
+            bullet.GetComponent<EBulletCtrl>().bulletSpeed = bulletSpeed;
         }
     }
 

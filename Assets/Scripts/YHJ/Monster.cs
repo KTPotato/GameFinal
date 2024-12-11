@@ -16,7 +16,7 @@ public class Monster : MonoBehaviour
     public float attackCooldown = 1.5f; // 공격 쿨다운 시간
     public GameObject exp; // 경험치 아이템 프리팹
 
-    private bool _lockOn;
+    private bool _lockOn = false;
     private bool _canAttack = true; // 공격 가능 여부
 
     void Start()
@@ -44,10 +44,7 @@ public class Monster : MonoBehaviour
         {
             _lockOn = true;
         }
-        else
-        {
-            _lockOn = false;
-        }
+        
 
         if (_lockOn)
         {
@@ -124,6 +121,7 @@ public class Monster : MonoBehaviour
         health -= damage; // 체력 감소
         Debug.Log($"Monster took {damage} damage. Remaining health: {health}");
 
+        _lockOn = true;
         if (health <= 0)
         {
             Die(); // 체력이 0 이하일 경우 사망 처리
