@@ -26,6 +26,7 @@ public class AlienMonster : MonoBehaviour
     {
         agent = GetComponent<NavMeshAgent>(); // NavMeshAgent 초기화
         _target = GameObject.FindWithTag("Player");
+        _animator = GetComponent<Animator>();
     }
 
     void Update()
@@ -63,7 +64,7 @@ public class AlienMonster : MonoBehaviour
     void AttackPlayer()
     {
         attackTimer += Time.deltaTime;
-
+        
         if (attackTimer >= attackCooldown)
         {
             if (projectilePrefab == null)
@@ -81,6 +82,7 @@ public class AlienMonster : MonoBehaviour
             // 발사체 생성
             GameObject projectile = Instantiate(projectilePrefab, FirePoint.position, FirePoint.rotation);
             Debug.Log($"Projectile created at: {FirePoint.position}");
+            _animator.Play("Attack01");
 
             // EBulletCtrl 스크립트를 찾아 초기화
             EBulletCtrl bulletCtrl = projectile.GetComponent<EBulletCtrl>();

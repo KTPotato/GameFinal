@@ -5,11 +5,11 @@ public class BoxMonster : MonoBehaviour
 {
     private GameObject _target;
     private Animator _animator;
-    private bool _lockOn;
+    private bool _lockOn = false;
     private bool _canAttack = true; // 공격 가능 여부
 
     public float health = 50f; // 몬스터 체력
-    public float detectionRange = 10f; // 플레이어를 감지하는 범위
+    public float detectionRange = 15f; // 플레이어를 감지하는 범위
     public GameObject exp;
     public GameObject heart;
     public GameObject bulletPrefab; // 발사할 총알 프리팹
@@ -17,7 +17,7 @@ public class BoxMonster : MonoBehaviour
     public float bulletSpeed = 10f; // 총알 속도
     public float attackCooldown = 2f; // 공격 쿨다운 시간
 
-    private bool _isPlayerNearby; // 플레이어 감지 여부
+    private bool _isPlayerNearby = false; // 플레이어 감지 여부
 
     void Start()
     {
@@ -43,10 +43,7 @@ public class BoxMonster : MonoBehaviour
         {
             _isPlayerNearby = true;
         }
-        else
-        {
-            _isPlayerNearby = false;
-        }
+        
 
         // 플레이어가 범위 안에 있을 때 공격
         if (_isPlayerNearby && _canAttack)
@@ -60,7 +57,7 @@ public class BoxMonster : MonoBehaviour
         _canAttack = false; // 공격 가능 상태 비활성화
 
         // 공격 애니메이션 재생
-        _animator.SetTrigger("Attack");
+        _animator.Play("Attack02");
 
         // 총알 발사 로직
         FireBullets();
@@ -149,6 +146,7 @@ public class BoxMonster : MonoBehaviour
     {
         health -= damage; // 체력 감소
         Debug.Log($"BoxMonster took {damage} damage. Remaining health: {health}");
+        _isPlayerNearby = true;
 
         if (health <= 0)
         {

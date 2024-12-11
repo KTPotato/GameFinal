@@ -38,9 +38,10 @@ public class EBulletCtrl : MonoBehaviour
             // ¹ß»çÃ¼ ÆÄ±«
             Debug.Log("Bullet Destroyed!");
             Destroy(gameObject);
-            
-
-
+        }
+        else if(other.tag != "EnemyBullet" && other.tag != "Bullet"&& other.tag != "Enemy"&& other.tag != "PlayerBullet"&& other.tag != "EXP"&& other.tag != "Hp"&& other.tag != "Heart"&& other.tag != "spinball")
+        {
+            Destroy(gameObject);
         }
     }
 

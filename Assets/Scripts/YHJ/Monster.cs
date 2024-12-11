@@ -86,7 +86,7 @@ public class Monster : MonoBehaviour
             playerCtrl.Hp -= attackDamage; // 플레이어의 Hp 감소
             Debug.Log($"Monster attacked! Player HP: {playerCtrl.Hp}");
         }
-
+        _animator.Play("Attack01");
         // 공격 쿨다운 시작
         StartCoroutine(AttackCooldown());
     }
