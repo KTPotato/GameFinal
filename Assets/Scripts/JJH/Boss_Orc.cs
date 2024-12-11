@@ -50,8 +50,8 @@ public class Boss_Orc : MonoBehaviour
     {
         bossagent = GetComponent<NavMeshAgent>();
         animator = GetComponent<Animator>();
-        maxHp = 5000;
-        Hp = 5000;
+        maxHp = 2000;
+        Hp = 2000;
 
         HpBar = GameObject.FindGameObjectWithTag("Hp");
         hpImage = HpBar.GetComponent<Image>();

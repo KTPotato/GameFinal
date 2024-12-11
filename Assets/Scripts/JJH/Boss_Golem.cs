@@ -49,8 +49,8 @@ public class Boss_Golem : MonoBehaviour
 
     public void Start()
     {
-        maxHp = 5000;
-        Hp = 5000;
+        maxHp = 3500;
+        Hp = 3500;
         bossagent = GetComponent<NavMeshAgent>();
         animator = GetComponent<Animator>();
 
