@@ -2721,6 +2721,56 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 08f9c045c4e8ed241869e48f02778726, type: 3}
+--- !u!1 &634833439
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 634833441}
+  - component: {fileID: 634833440}
+  m_Layer: 5
+  m_Name: GameOver
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &634833440
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 634833439}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b1d4b09381e106b4e8932fb9f05f9822, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gameOverUI: {fileID: 1548918351}
+  allTargets: []
+--- !u!224 &634833441
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 634833439}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 960, y: 540}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1001 &635237034
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6159,14 +6209,13 @@ GameObject:
   - component: {fileID: 1548918356}
   - component: {fileID: 1548918355}
   - component: {fileID: 1548918354}
-  - component: {fileID: 1548918353}
   m_Layer: 5
   m_Name: Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1548918352
 RectTransform:
   m_ObjectHideFlags: 0
@@ -6187,20 +6236,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1548918353
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1548918351}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b1d4b09381e106b4e8932fb9f05f9822, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  player: {fileID: 1953271650171834, guid: 449c96c7fcb7c33419820f12508a9523, type: 3}
-  gameOverUI: {fileID: 1548918351}
 --- !u!114 &1548918354
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6245,7 +6280,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1548918353}
+      - m_Target: {fileID: 634833440}
         m_TargetAssemblyTypeName: GameOverManager, Assembly-CSharp
         m_MethodName: LoadMainMenu
         m_Mode: 1
@@ -9094,6 +9129,7 @@ SceneRoots:
   - {fileID: 290020600}
   - {fileID: 112218728}
   - {fileID: 1673852813}
+  - {fileID: 634833441}
   - {fileID: 402416352}
   - {fileID: 743618710}
   - {fileID: 1574761284}

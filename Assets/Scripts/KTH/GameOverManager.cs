@@ -1,11 +1,12 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class GameOverManager : MonoBehaviour
 {
-    [Header("References")]
-    public GameObject player;      // Player 오브젝트
     public GameObject gameOverUI;  // Game Over UI 오브젝트
+
+    public List<GameObject> allTargets = new List<GameObject>();
 
     private bool isGameOver = false;
 
@@ -20,21 +21,42 @@ public class GameOverManager : MonoBehaviour
 
     void Update()
     {
-        // Player가 삭제되었는지 확인
-        if (player == null && !isGameOver)
+        if (isGameOver) return; // 게임 오버 상태면 더 이상 체크하지 않음
+
+        allTargets.Clear();
+        GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
+        allTargets.AddRange(players);
+
+        bool isTargetExist = false; // 매 프레임마다 초기화
+
+        foreach (GameObject obj in allTargets)
+        {
+            // 자신을 제외한 오브젝트가 있는지 확인
+            if (obj.GetInstanceID() != gameObject.GetInstanceID())
+            {
+                isTargetExist = true;
+                break;
+            }
+        }
+
+        if (!isTargetExist) // 타겟이 없을 때만 Game Over 처리
         {
             ActivateGameOverUI();
+        }
+        else
+        {
+            Debug.Log("플레이어가 있습니다.");
         }
     }
 
     public void ActivateGameOverUI()
     {
-        isGameOver = true;
+        isGameOver = true; // Game Over 상태로 설정
 
         // Game Over UI 활성화
         if (gameOverUI != null)
         {
-            gameOverUI.SetActive(true);
+            gameOverUI.SetActive(true); // 활성화로 변경
         }
 
         // 게임 멈춤 (선택 사항)
