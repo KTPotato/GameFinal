@@ -9,6 +9,15 @@ public class GameOverManager : MonoBehaviour
 
     private bool isGameOver = false;
 
+    void Start()
+    {
+        // Game Over UI를 시작 시 비활성화
+        if (gameOverUI != null)
+        {
+            gameOverUI.SetActive(false);
+        }
+    }
+
     void Update()
     {
         // Player가 삭제되었는지 확인
@@ -18,7 +27,7 @@ public class GameOverManager : MonoBehaviour
         }
     }
 
-    private void ActivateGameOverUI()
+    public void ActivateGameOverUI()
     {
         isGameOver = true;
 
