@@ -69,19 +69,19 @@ public class AlienMonster : MonoBehaviour
         {
             if (projectilePrefab == null)
             {
-                Debug.LogError("Projectile Prefab is not assigned!");
+                //Debug.LogError("Projectile Prefab is not assigned!");
                 return;
             }
 
             if (FirePoint == null)
             {
-                Debug.LogError("FirePoint is not assigned!");
+                //Debug.LogError("FirePoint is not assigned!");
                 return;
             }
 
             // 발사체 생성
             GameObject projectile = Instantiate(projectilePrefab, FirePoint.position, FirePoint.rotation);
-            Debug.Log($"Projectile created at: {FirePoint.position}");
+            //Debug.Log($"Projectile created at: {FirePoint.position}");
             _animator.Play("Attack01");
 
             // EBulletCtrl 스크립트를 찾아 초기화
@@ -93,7 +93,7 @@ public class AlienMonster : MonoBehaviour
             }
             else
             {
-                Debug.LogError("EBulletCtrl script is missing on the projectile prefab!");
+                //Debug.LogError("EBulletCtrl script is missing on the projectile prefab!");
             }
 
             attackTimer = 0f; // 타이머 초기화
@@ -124,9 +124,9 @@ public class AlienMonster : MonoBehaviour
     // 몬스터가 데미지를 받을 때 호출되는 메서드
     public void TakeDamage(float damage)
     {
-        Debug.Log($"TakeDamage called with damage: {damage}");
+        //Debug.Log($"TakeDamage called with damage: {damage}");
         health -= damage; // 체력 감소
-        Debug.Log($"Remaining health: {health}");
+        //Debug.Log($"Remaining health: {health}");
 
         if (health <= 0)
         {
@@ -138,7 +138,7 @@ public class AlienMonster : MonoBehaviour
     // 몬스터 사망 처리
     private void Die()
     {
-        Debug.Log("AlienMonster died!");
+        //Debug.Log("AlienMonster died!");
         int rand = Random.Range(5, 8); // 랜덤으로 생성할 경험치 구슬 개수 설정
 
         for (int i = 0; i < rand; i++)
@@ -161,7 +161,7 @@ public class AlienMonster : MonoBehaviour
         {
             Vector3 heartSpawnPosition = transform.position + Vector3.up; // 몬스터 위치 위에 생성
             Instantiate(heart, heartSpawnPosition, Quaternion.identity);
-            Debug.Log("Heart dropped!");
+            //Debug.Log("Heart dropped!");
         }
 
         Destroy(gameObject); // 몬스터 오브젝트 파괴

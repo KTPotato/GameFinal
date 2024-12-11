@@ -46,6 +46,9 @@ public class Boss_Orc : MonoBehaviour
 
     [SerializeField] private Image hpImage;
         public GameObject HpBar;
+
+    public GameObject gameclearui;
+
     public void Start()
     {
         bossagent = GetComponent<NavMeshAgent>();
@@ -57,6 +60,9 @@ public class Boss_Orc : MonoBehaviour
         hpImage = HpBar.GetComponent<Image>();
         bossagent.isStopped = true;
         StartCoroutine(StartStop());
+
+        gameclearui = GameObject.FindGameObjectWithTag("clear").GetComponent<clear>().clearUI;
+
     }
     private IEnumerator StartStop()
     {
@@ -354,6 +360,8 @@ public class Boss_Orc : MonoBehaviour
 
         GetComponent<Collider>().enabled = false;
 
+        gameclearui.SetActive(true);
+
         Destroy(gameObject, 2f);
     }
 
@@ -374,7 +382,7 @@ public class Boss_Orc : MonoBehaviour
     {
         if (isDead || isTakingHit) return;
 
-        Debug.Log("맞음");
+        //Debug.Log("맞음");
         if (!isPatternLocked)
         {
             if (canTakeHit)
@@ -383,7 +391,7 @@ public class Boss_Orc : MonoBehaviour
                 isTakingHit = true;
                 animator.SetBool("Walk", false);
                 animator.SetTrigger("GetHit");
-                Debug.Log("패턴중지");
+                //Debug.Log("패턴중지");
                 bossagent.speed = 0;
                 StartCoroutine(LockPatternForDuration(patternLockTime));
                 StartCoroutine(TakeDamageCooldown());

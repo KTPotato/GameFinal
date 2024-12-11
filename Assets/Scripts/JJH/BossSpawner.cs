@@ -26,7 +26,7 @@ public class BossSpawner : MonoBehaviour
         }
         else
         {
-            Debug.LogError("Invalid character index, cannot spawn boss.");
+            //Debug.LogError("Invalid character index, cannot spawn boss.");
         }
     }
 }

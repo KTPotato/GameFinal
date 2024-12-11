@@ -26,7 +26,7 @@ public class BoxMonster : MonoBehaviour
 
         if (_animator == null || _target == null || bulletPrefab == null || firePoint == null)
         {
-            Debug.LogError("필요한 컴포넌트가 설정되지 않았습니다!");
+            //Debug.LogError("필요한 컴포넌트가 설정되지 않았습니다!");
         }
 
         _isPlayerNearby = false;
@@ -86,21 +86,21 @@ public class BoxMonster : MonoBehaviour
             GameObject bullet = Instantiate(bulletPrefab, firePoint.position, Quaternion.identity);
             if (bullet == null)
             {
-                Debug.LogError("총알 생성 실패!");
+                //Debug.LogError("총알 생성 실패!");
                 continue;
             }
 
-            Debug.Log($"총알 생성: {bullet.name} at {firePoint.position}");
+            //Debug.Log($"총알 생성: {bullet.name} at {firePoint.position}");
 
             Rigidbody bulletRb = bullet.GetComponent<Rigidbody>();
             if (bulletRb != null)
             {
                 bulletRb.velocity = fireDirection * bulletSpeed;
-                Debug.Log($"총알 속도 설정 완료: {bulletRb.velocity}");
+                //Debug.Log($"총알 속도 설정 완료: {bulletRb.velocity}");
             }
             else
             {
-                Debug.LogError("총알에 Rigidbody가 없습니다!");
+                //Debug.LogError("총알에 Rigidbody가 없습니다!");
             }
 
             // 총알 회전 방향 설정
@@ -115,11 +115,11 @@ public class BoxMonster : MonoBehaviour
         {
             TakeDamage(other.GetComponent<BulletCtrl>().Pdmg);
             Destroy(other.gameObject);
-            Debug.Log($"몬스터와 플레이어의 총알 충돌: {other.name}");
+            //Debug.Log($"몬스터와 플레이어의 총알 충돌: {other.name}");
         }
         else if (other.tag == "MonsterBullet")
         {
-            Debug.LogWarning($"몬스터의 총알과 몬스터가 충돌: {other.name}");
+            //Debug.LogWarning($"몬스터의 총알과 몬스터가 충돌: {other.name}");
         }
     }
 
@@ -128,7 +128,7 @@ public class BoxMonster : MonoBehaviour
         if (other.tag == "spinball")
         {
             TakeDamage(other.GetComponent<BulletCtrl>().Pdmg);
-            Debug.Log($"몬스터가 spinball과 충돌: {other.name}");
+            //Debug.Log($"몬스터가 spinball과 충돌: {other.name}");
         }
     }
 
@@ -145,7 +145,7 @@ public class BoxMonster : MonoBehaviour
     public void TakeDamage(float damage)
     {
         health -= damage; // 체력 감소
-        Debug.Log($"BoxMonster took {damage} damage. Remaining health: {health}");
+        //Debug.Log($"BoxMonster took {damage} damage. Remaining health: {health}");
         _isPlayerNearby = true;
 
         if (health <= 0)
@@ -157,7 +157,7 @@ public class BoxMonster : MonoBehaviour
     // 몬스터 사망 처리
     private void Die()
     {
-        Debug.Log("BoxMonster died!");
+        //Debug.Log("BoxMonster died!");
         int rand = Random.Range(5, 8); // 랜덤으로 생성할 경험치 구슬 개수 설정
 
         for (int i = 0; i < rand; i++)
@@ -179,7 +179,7 @@ public class BoxMonster : MonoBehaviour
         {
             Vector3 heartSpawnPosition = transform.position + Vector3.up; // 몬스터 위치 위에 생성
             Instantiate(heart, heartSpawnPosition, Quaternion.identity);
-            Debug.Log("Heart dropped!");
+            //Debug.Log("Heart dropped!");
         }
 
         Destroy(gameObject); // 몬스터 오브젝트 파괴

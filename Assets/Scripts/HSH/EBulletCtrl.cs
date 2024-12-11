@@ -32,11 +32,11 @@ public class EBulletCtrl : MonoBehaviour
             if (playerCtrl != null)
             {
                 playerCtrl.Hp -= Edmg; // 플레이어 HP 감소
-                Debug.Log($"Player hit! Remaining HP: {playerCtrl.Hp}");
+                //Debug.Log($"Player hit! Remaining HP: {playerCtrl.Hp}");
             }
 
             // 발사체 파괴
-            Debug.Log("Bullet Destroyed!");
+            //Debug.Log("Bullet Destroyed!");
             Destroy(gameObject);
         }
         else if(other.tag != "EnemyBullet" && other.tag != "Bullet"&& other.tag != "Enemy"&& other.tag != "PlayerBullet"&& other.tag != "EXP"&& other.tag != "Hp"&& other.tag != "Heart"&& other.tag != "spinball")

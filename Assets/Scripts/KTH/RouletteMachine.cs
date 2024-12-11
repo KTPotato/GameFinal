@@ -152,7 +152,7 @@ public class RouletteMachine : MonoBehaviour
         PlayerData.Instance.UpdatePlayerStats(skillType, value);
 
         // 적용된 효과에 대한 로그 출력 (디버깅용)
-        Debug.Log($"Skill: {skillType} - Effect Value: {value}");
+        //Debug.Log($"Skill: {skillType} - Effect Value: {value}");
 
         SkillUp = true;
         SlotMachineUI.SetActive(false);

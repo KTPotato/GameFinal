@@ -35,7 +35,7 @@ public class BulletCtrl : MonoBehaviour
                 AlienMonster alienMonster = collision.gameObject.GetComponent<AlienMonster>();
                 if (alienMonster != null)
                 {
-                    Debug.Log("AlienMonster hit!");
+                    //Debug.Log("AlienMonster hit!");
                     alienMonster.TakeDamage(Pdmg);
                     Destroy(gameObject);
                     return; // 처리 완료 후 종료
@@ -45,7 +45,7 @@ public class BulletCtrl : MonoBehaviour
                 Monster normalMonster = collision.gameObject.GetComponent<Monster>();
                 if (normalMonster != null)
                 {
-                    Debug.Log("Monster hit!");
+                    //Debug.Log("Monster hit!");
                     normalMonster.TakeDamage(Pdmg);
                     Destroy(gameObject);
                     return; // 처리 완료 후 종료

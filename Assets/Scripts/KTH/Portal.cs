@@ -13,7 +13,7 @@ public class Portal : MonoBehaviour
         // 충돌한 객체가 플레이어인지 확인
         if (other.CompareTag("Player"))
         {
-            Debug.Log("플레이어가 포탈에 진입했습니다.");
+            //Debug.Log("플레이어가 포탈에 진입했습니다.");
             isPlayerInPortal = true;
 
             // 3초 대기 후 씬 전환 코루틴 시작
@@ -29,7 +29,7 @@ public class Portal : MonoBehaviour
         // 플레이어가 포탈에서 벗어나면 처리
         if (other.CompareTag("Player"))
         {
-            Debug.Log("플레이어가 포탈에서 나갔습니다.");
+            //Debug.Log("플레이어가 포탈에서 나갔습니다.");
             isPlayerInPortal = false;
 
             // 코루틴 중단
@@ -59,7 +59,7 @@ public class Portal : MonoBehaviour
         }
 
         // 3초 동안 포탈에 머물렀다면 씬 전환
-        Debug.Log("3초 동안 포탈에 머물렀습니다. 다음 씬으로 이동합니다.");
+        //Debug.Log("3초 동안 포탈에 머물렀습니다. 다음 씬으로 이동합니다.");
         LoadNextScene();
     }
 
@@ -77,7 +77,7 @@ public class Portal : MonoBehaviour
         // 다음 씬이 마지막 씬을 넘어가면 첫 번째 씬으로 돌아가도록 설정
         if (nextSceneIndex >= totalScenes)
         {
-            Debug.Log("마지막 씬입니다. 다시 첫 번째 씬으로 이동합니다.");
+            //Debug.Log("마지막 씬입니다. 다시 첫 번째 씬으로 이동합니다.");
             nextSceneIndex = 0; // 첫 번째 씬으로 돌아감
         }
 

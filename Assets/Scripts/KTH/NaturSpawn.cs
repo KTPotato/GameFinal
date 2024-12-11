@@ -27,19 +27,19 @@ public class NaturSpawn : MonoBehaviour
     {
         if (ground == null)
         {
-            Debug.LogError("Ground object needs a MeshCollider component.");
+            //Debug.LogError("Ground object needs a MeshCollider component.");
             return;
         }
 
         if (!ground.sharedMesh)
         {
-            Debug.LogError("Ground object does not have a valid shared mesh.");
+            //Debug.LogError("Ground object does not have a valid shared mesh.");
             return;
         }
 
         if (navMeshSurface == null)
         {
-            Debug.LogError("NavMeshSurface component is not assigned.");
+            //Debug.LogError("NavMeshSurface component is not assigned.");
             return;
         }
 
@@ -65,7 +65,7 @@ public class NaturSpawn : MonoBehaviour
     {
         if (prefabsWithY.Length == 0)
         {
-            Debug.LogWarning("No prefabs set!");
+            //Debug.LogWarning("No prefabs set!");
             return;
         }
 

@@ -4,6 +4,7 @@ using UnityEngine;
 using System.Collections;
 using System.Linq;
 using UnityEngine.UI;
+using Unity.VisualScripting;
 
 public class Boss_Golem : MonoBehaviour
 {
@@ -46,7 +47,7 @@ public class Boss_Golem : MonoBehaviour
 
     [SerializeField] private Image hpImage;
     public GameObject HpBar;
-
+    public GameObject gameclearui;
     public void Start()
     {
         maxHp = 3500;
@@ -58,6 +59,8 @@ public class Boss_Golem : MonoBehaviour
         hpImage = HpBar.GetComponent<Image>();
         bossagent.isStopped = true;
         StartCoroutine(StartStop());
+
+        gameclearui = GameObject.FindGameObjectWithTag("clear").GetComponent<clear>().clearUI;
     }
     private IEnumerator StartStop()
     {
@@ -331,7 +334,7 @@ public class Boss_Golem : MonoBehaviour
         bossagent.isStopped = true;
 
         GetComponent<Collider>().enabled = false;
-
+        gameclearui.SetActive(true);
         Destroy(gameObject, 2f);
     }
 
@@ -352,7 +355,7 @@ public class Boss_Golem : MonoBehaviour
     {
         if (isDead || isTakingHit) return;
 
-        Debug.Log("맞음");
+        //Debug.Log("맞음");
         if (!isPatternLocked)
         {
             if (canTakeHit)
@@ -362,7 +365,7 @@ public class Boss_Golem : MonoBehaviour
                 animator.SetBool("Walk", false);
                 animator.SetTrigger("GetHit");
                 bossagent.speed = 0;
-                Debug.Log("패턴중지");
+                //Debug.Log("패턴중지");
                 // 패턴 진행 중 일시적으로 패턴을 멈추고 일정 시간 동안 패턴이 끊어지지 않도록 설정
                 StartCoroutine(LockPatternForDuration(patternLockTime));
                 StartCoroutine(TakeDamageCooldown());

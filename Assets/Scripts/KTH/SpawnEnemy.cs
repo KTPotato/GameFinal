@@ -24,7 +24,7 @@ public class SpawnEnemy : MonoBehaviour
     {
         if (spawnPointPrefab == null || enemyPrefabs == null || enemyPrefabs.Count < 2 || portalPrefab == null || ground == null)
         {
-            Debug.LogError("필수 프리팹 또는 오브젝트가 설정되지 않았습니다.");
+            //Debug.LogError("필수 프리팹 또는 오브젝트가 설정되지 않았습니다.");
             return;
         }
 
@@ -37,7 +37,7 @@ public class SpawnEnemy : MonoBehaviour
         // 모든 몬스터가 제거되었는지 확인하고 다음 단계로 진행
         if (!isSpawning && GameObject.FindGameObjectsWithTag(enemyTag).Length == 0)
         {
-            Debug.Log("모든 몬스터가 제거되었습니다. 다음 단계로 진행합니다.");
+            //Debug.Log("모든 몬스터가 제거되었습니다. 다음 단계로 진행합니다.");
             SpawnNextPhase();
         }
     }
@@ -63,7 +63,7 @@ public class SpawnEnemy : MonoBehaviour
     {
         if (currentPhase > 2) // 3단계를 완료하면 더 이상 소환하지 않음
         {
-            Debug.Log("모든 단계를 완료했습니다. 포탈을 생성합니다.");
+            //Debug.Log("모든 단계를 완료했습니다. 포탈을 생성합니다.");
             SpawnPortal();
             return;
         }
@@ -89,7 +89,7 @@ public class SpawnEnemy : MonoBehaviour
     {
         if (portalSpawned)
         {
-            Debug.Log("포탈은 이미 생성되었습니다.");
+            //Debug.Log("포탈은 이미 생성되었습니다.");
             return;
         }
 
@@ -107,16 +107,16 @@ public class SpawnEnemy : MonoBehaviour
                 // 포탈 생성
                 Instantiate(portalPrefab, portalPosition, Quaternion.identity);
                 portalSpawned = true; // 포탈 생성 플래그 설정
-                Debug.Log("포탈이 생성되었습니다!");
+                //Debug.Log("포탈이 생성되었습니다!");
             }
             else
             {
-                Debug.LogError("Ground 오브젝트에 Renderer 컴포넌트가 없습니다.");
+                //Debug.LogError("Ground 오브젝트에 Renderer 컴포넌트가 없습니다.");
             }
         }
         else
         {
-            Debug.LogError("Ground 오브젝트가 설정되지 않았습니다.");
+            //Debug.LogError("Ground 오브젝트가 설정되지 않았습니다.");
         }
     }
 

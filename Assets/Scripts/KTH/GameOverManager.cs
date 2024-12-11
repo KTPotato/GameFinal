@@ -45,7 +45,7 @@ public class GameOverManager : MonoBehaviour
         }
         else
         {
-            Debug.Log("플레이어가 있습니다.");
+            //Debug.Log("플레이어가 있습니다.");
         }
     }
 
@@ -62,7 +62,7 @@ public class GameOverManager : MonoBehaviour
         // 게임 멈춤 (선택 사항)
         Time.timeScale = 0f;
 
-        Debug.Log("Game Over! UI Activated because the Player was destroyed.");
+        //Debug.Log("Game Over! UI Activated because the Player was destroyed.");
     }
 
     // 버튼 클릭 시 호출될 메서드

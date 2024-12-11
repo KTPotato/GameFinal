@@ -602,14 +602,14 @@ MonoBehaviour:
   - {fileID: 1246921780}
   - {fileID: 828208187}
   SkillSprite:
-  - {fileID: 21300000, guid: 616f01aa4daf2d441997cbf9f382f673, type: 3}
-  - {fileID: 21300000, guid: cfb860807493e0d40987fd8392f0961c, type: 3}
-  - {fileID: 21300000, guid: 8029a294d9c2ca04fa7f8d6fe4be9f75, type: 3}
-  - {fileID: 21300000, guid: 59d23b19bb8bc74449246e6ee195b0d2, type: 3}
-  - {fileID: 21300000, guid: 279db7531a911f74db69beafa530060f, type: 3}
-  - {fileID: 21300000, guid: 580b7ca7c3bcc6c41b4595656c011584, type: 3}
-  - {fileID: 21300000, guid: b0528f41c805bed4d9dbf2f7bc99af8d, type: 3}
-  - {fileID: 21300000, guid: f5f385cf024fdd545848c0576543684f, type: 3}
+  - {fileID: 21300000, guid: 83defd527d3575946a8635801c7c3e26, type: 3}
+  - {fileID: 21300000, guid: 6666c6273d2b5a64294863a9d34c9991, type: 3}
+  - {fileID: 21300000, guid: 072396fccf80a374ebd837659a17a203, type: 3}
+  - {fileID: 21300000, guid: 576c34ec39d8b9d4e8c90096f7d6e838, type: 3}
+  - {fileID: 21300000, guid: f927015af8edb1d4898f40d81e50526a, type: 3}
+  - {fileID: 21300000, guid: 52b0e3c5e1d060944a0d081a01372f78, type: 3}
+  - {fileID: 21300000, guid: e4bc7f9429a7eb646b73d257d2bea10c, type: 3}
+  - {fileID: 21300000, guid: 546854537e079a243b100a34212554fc, type: 3}
   DisplayItemSlots:
   - SlotSprite:
     - {fileID: 1009675077}

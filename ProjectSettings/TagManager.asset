@@ -22,6 +22,7 @@ TagManager:
   - Hp
   - Heart
   - spinball
+  - clear
   layers:
   - Default
   - TransparentFX

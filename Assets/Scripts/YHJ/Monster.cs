@@ -28,7 +28,7 @@ public class Monster : MonoBehaviour
 
         if (_monster == null || _animator == null || _target == null)
         {
-            Debug.LogError("필요한 컴포넌트가 설정되지 않았습니다!");
+            //Debug.LogError("필요한 컴포넌트가 설정되지 않았습니다!");
         }
 
         _lockOn = false;
@@ -84,7 +84,7 @@ public class Monster : MonoBehaviour
         if (playerCtrl != null)
         {
             playerCtrl.Hp -= attackDamage; // 플레이어의 Hp 감소
-            Debug.Log($"Monster attacked! Player HP: {playerCtrl.Hp}");
+            //Debug.Log($"Monster attacked! Player HP: {playerCtrl.Hp}");
         }
         _animator.Play("Attack01");
         // 공격 쿨다운 시작
@@ -119,7 +119,7 @@ public class Monster : MonoBehaviour
     public void TakeDamage(float damage)
     {
         health -= damage; // 체력 감소
-        Debug.Log($"Monster took {damage} damage. Remaining health: {health}");
+        //Debug.Log($"Monster took {damage} damage. Remaining health: {health}");
 
         _lockOn = true;
         if (health <= 0)
@@ -130,7 +130,7 @@ public class Monster : MonoBehaviour
 
     private void Die()
     {
-        Debug.Log("Monster died!");
+        //Debug.Log("Monster died!");
         int rand = Random.Range(8, 15); // 랜덤한 경험치 아이템 생성
 
         // 랜덤 위치에 경험치 아이템 생성
@@ -152,7 +152,7 @@ public class Monster : MonoBehaviour
         {
             Vector3 heartSpawnPosition = transform.position + Vector3.up; // 몬스터 위치 위에 생성
             Instantiate(heart, heartSpawnPosition, Quaternion.identity);
-            Debug.Log("Heart dropped!");
+            //Debug.Log("Heart dropped!");
         }
 
         Destroy(gameObject); // 몬스터 오브젝트 파괴

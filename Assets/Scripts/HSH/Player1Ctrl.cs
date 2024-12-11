@@ -234,7 +234,7 @@ public class Player1Ctrl : MonoBehaviour
             }
             else if (other.gameObject.name == "EnemyBullet(Clone)")
             {
-                Debug.Log("맞음");
+                //Debug.Log("맞음");
 
                 Hp -= other.GetComponent<EBulletCtrl>().Edmg;
                 Destroy(other.gameObject);

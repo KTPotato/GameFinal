@@ -61,6 +61,8 @@ public class Boss_Dragon : MonoBehaviour
     [SerializeField] private Image hpImage;
     public GameObject HpBar;
 
+    public GameObject gameclearui;
+
     private void Start()
     {
         maxHp = 5000;
@@ -71,6 +73,9 @@ public class Boss_Dragon : MonoBehaviour
 
         HpBar = GameObject.FindGameObjectWithTag("Hp");
         hpImage = HpBar.GetComponent<Image>();
+
+        gameclearui = GameObject.FindGameObjectWithTag("clear").GetComponent<clear>().clearUI;
+
     }
     public void SpawnPlayer()
     {
@@ -532,6 +537,8 @@ public class Boss_Dragon : MonoBehaviour
 
         GetComponent<Collider>().enabled = false;
 
+        gameclearui.SetActive(true);
+
         Destroy(gameObject, 2f);
     }
 
@@ -546,7 +553,7 @@ public class Boss_Dragon : MonoBehaviour
         if (isBlocking && IsDefendPoint(other))
         {
             // 방어 중이고 DefendPoint에 충돌했을 경우 체력 감소 방지
-            Debug.Log("Defend active: No damage taken.");
+            //Debug.Log("Defend active: No damage taken.");
             return; // 데미지 무효화
         }
     }
@@ -564,7 +571,7 @@ public class Boss_Dragon : MonoBehaviour
     {
         if (isDead || isTakingHit) return;
 
-        Debug.Log("맞음");
+        //Debug.Log("맞음");
         damageCount++;  // 타격 횟수 증가
 
         // 타격 횟수가 8번에 도달하면 막기 시전
@@ -582,7 +589,7 @@ public class Boss_Dragon : MonoBehaviour
                 isTakingHit = true;
                 animator.SetBool("Walk", false);
                 animator.SetTrigger("GetHit");
-                Debug.Log("패턴중지");
+                //Debug.Log("패턴중지");
 
 
                 StartCoroutine(LockPatternForDuration(patternLockTime));
