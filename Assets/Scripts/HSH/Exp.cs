@@ -20,7 +20,7 @@ public class Exp : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        if (player == null) return;
         distance = Vector3.Distance(player.transform.position, transform.position);
         if (distance < 10)
         {
