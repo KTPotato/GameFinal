@@ -624,7 +624,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b1d4b09381e106b4e8932fb9f05f9822, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameOverUI: {fileID: 0}
+  gameOverUI: {fileID: 1399591403}
   allTargets: []
 --- !u!224 &663600780
 RectTransform:
@@ -1975,7 +1975,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 663600779}
         m_TargetAssemblyTypeName: GameOverManager, Assembly-CSharp
         m_MethodName: LoadMainMenu
         m_Mode: 1

@@ -106,7 +106,7 @@ public class Boss_Dragon : MonoBehaviour
         if (!animator.GetBool("Fly") && !isFlying)
         {
             // 상태 전환 체크
-            if (Time.time - stateStartTime >= 60f && !isFlying)
+            if (Time.time - stateStartTime >= 70f && !isFlying)
             {
                 TransitionToFly();
                 return;
@@ -234,7 +234,6 @@ public class Boss_Dragon : MonoBehaviour
         {
             collider.enabled = false;
         }
-        // 스스로의 콜라이더 끄기
         isFlying = true; // Fly 상태로 전환
         isInFlightAnimation = true;
         bossagent.isStopped = true;
@@ -260,7 +259,7 @@ public class Boss_Dragon : MonoBehaviour
         // 먼저 비행 상태를 끝내는 트리거를 설정
         animator.SetTrigger("Land");
 
-
+        isFlying = false;
         isInFlightAnimation = true;
 
         // 비행 애니메이션이 끝났을 때 Walk 상태로 전환하도록
@@ -278,7 +277,7 @@ public class Boss_Dragon : MonoBehaviour
         isFlying = false;  
         isInFlightAnimation = false;
         bossagent.isStopped = false;
-        // 스스로의 콜라이더 켜기
+        //// 스스로의 콜라이더 켜기
         Collider[] colliders = GetComponents<Collider>();
         foreach (Collider collider in colliders)
         {

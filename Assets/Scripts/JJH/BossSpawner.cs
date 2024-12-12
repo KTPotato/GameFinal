@@ -21,7 +21,7 @@ public class BossSpawner : MonoBehaviour
         if (characterIndex >= 0 && characterIndex < bossPrefabs.Length)
         {
             // 보스를 y = 2 위치로 생성
-            Vector3 spawnPosition = new Vector3(0, 2, -20); // x, y, z 좌표 설정
+            Vector3 spawnPosition = new Vector3(0, 2, 20); // x, y, z 좌표 설정
             Instantiate(bossPrefabs[characterIndex], spawnPosition, Quaternion.identity);
         }
         else
