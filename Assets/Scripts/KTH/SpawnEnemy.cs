@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
+using UnityEditor.VersionControl;
 using UnityEngine;
 
 public class SpawnEnemy : MonoBehaviour
@@ -45,7 +47,7 @@ public class SpawnEnemy : MonoBehaviour
     // 랜덤한 위치에 스폰 포인트 생성
     void GenerateSpawnPoints()
     {
-        for (int i = 0; i < numberOfSpawnPoints; i++)
+            for (int i = 0; i < numberOfSpawnPoints; i++)
         {
             Vector3 randomPosition = new Vector3(
                 Random.Range(-spawnArea.x, spawnArea.x),
@@ -53,8 +55,8 @@ public class SpawnEnemy : MonoBehaviour
                 Random.Range(-spawnArea.y, spawnArea.y)
             );
 
-            GameObject spawnPoint = Instantiate(spawnPointPrefab, randomPosition, Quaternion.identity);
-            spawnPoints.Add(spawnPoint);
+                GameObject spawnPoint = Instantiate(spawnPointPrefab, randomPosition, Quaternion.identity);
+                spawnPoints.Add(spawnPoint) ;
         }
     }
 

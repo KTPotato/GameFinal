@@ -23,6 +23,8 @@ public class NaturSpawn : MonoBehaviour
 
     private List<Vector3> spawnPositions = new List<Vector3>(); // 이미 배치된 위치
 
+    private SpawnEnemy SpawnEnemy;
+
     void Start()
     {
         if (ground == null)
@@ -59,6 +61,7 @@ public class NaturSpawn : MonoBehaviour
         {
             spawnPositions.Add(prefab.transform.position);
         }
+        
     }
 
     void SpawnPrefabsRandomly()
@@ -99,7 +102,7 @@ public class NaturSpawn : MonoBehaviour
         }
     }
 
-    Vector3 GetRandomPositionOnMesh()
+    public Vector3 GetRandomPositionOnMesh()
     {
         Mesh mesh = ground.sharedMesh;
         Vector3[] vertices = mesh.vertices;

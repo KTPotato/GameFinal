@@ -19,6 +19,8 @@ public class BoxMonster : MonoBehaviour
 
     private bool _isPlayerNearby = false; // 플레이어 감지 여부
 
+
+
     void Start()
     {
         _animator = GetComponent<Animator>();
@@ -34,6 +36,7 @@ public class BoxMonster : MonoBehaviour
 
     void Update()
     {
+
         if (_target == null) return;
 
         float distanceToPlayer = Vector3.Distance(transform.position, _target.transform.position);

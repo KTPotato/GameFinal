@@ -23,6 +23,8 @@ TagManager:
   - Heart
   - spinball
   - clear
+  - ground
+  - spawnpoint
   layers:
   - Default
   - TransparentFX
